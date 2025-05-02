@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Happy Birthday, Diana!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f6f0f7; /* Light pastel pink */
+            color: #333;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Header */
+        header {
+            background-color: #9b4d96; /* Kuromi purple */
+            color: white;
+            padding: 20px;
+            font-size: 2.5em;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-bottom: 5px solid #fff;
+        }
+
+        /* Main Content */
+        main {
+            padding: 40px;
+        }
+
+        /* Cute Bows */
+        .bow {
+            position: absolute;
+            background-image: url('https://i.imgur.com/tA7aPg4.png'); /* Your provided bow icon */
+            background-size: contain;
+            background-repeat: no-repeat;
+            width: 40px;
+            height: 40px;
+            z-index: 10;
+        }
+
+        /* Bows scattered in corners and edges */
+        .bow.top-left { top: 20px; left: 20px; }
+        .bow.top-right { top: 20px; right: 20px; }
+        .bow.bottom-left { bottom: 20px; left: 20px; }
+        .bow.bottom-right { bottom: 20px; right: 20px; }
+
+        /* Footer */
+        footer {
+            background-color: #9b4d96;
+            color: white;
+            padding: 20px;
+            font-size: 1.2em;
+            border-top: 5px solid #fff;
+        }
+
+        /* Buttons and Interactive Elements */
+        button {
+            background-color: #f5a9bc; /* Soft pink */
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff83b3;
+        }
+
+        /* Countdown Styling */
+        .countdown {
+            font-size: 1.5em;
+            color: #9b4d96;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Happy Birthday, Diana! 🎉
+    </header>
+
+    <main>
+        <p>Wishing you the most magical day full of love and joy! 💖</p>
+        <p class="countdown">Countdown to your special day:</p>
+
+        <!-- Countdown Timer (Simple JS Version) -->
+        <div id="countdown"></div>
+
+        <!-- Surprise Message -->
+        <button onclick="alert('Surprise! I love you more than words can say! 💜')">Click for a surprise!</button>
+        
+        <!-- Photo Gallery (Optional) -->
+        <div class="gallery">
+            <img src="your-photo1.jpg" alt="Photo 1" style="width: 200px; margin: 10px;">
+            <img src="your-photo2.jpg" alt="Photo 2" style="width: 200px; margin: 10px;">
+        </div>
+    </main>
+
+    <!-- Bows -->
+    <div class="bow top-left"></div>
+    <div class="bow top-right"></div>
+    <div class="bow bottom-left"></div>
+    <div class="bow bottom-right"></div>
+
+    <footer>
+        Made with 💜 by [Your Name]
+    </footer>
+
+    <!-- Countdown Timer Script -->
+    <script>
+        var countDownDate = new Date("May 15, 2025 00:00:00").getTime(); // Set to her birthday
+
+        var x = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("countdown").innerHTML = "It's her birthday! 🎉";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
