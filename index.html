@@ -20,10 +20,16 @@
             background-color: #f6f0f7; /* Light pastel pink */
             color: #333;
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
             position: relative;
         }
 
-        /* Header */
+        /* Header Styling */
         header {
             background-color: #9b4d96; /* Kuromi purple */
             color: white;
@@ -31,12 +37,20 @@
             font-size: 2.5em;
             text-transform: uppercase;
             font-weight: bold;
-            border-bottom: 5px solid #fff;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Main Content */
+        /* Main Content Styling */
         main {
+            width: 100%;
+            max-width: 600px;
             padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         /* Cute Bows */
@@ -50,29 +64,33 @@
             z-index: 10;
         }
 
-        /* Bows scattered in corners and edges */
+        /* Bows scattered in corners */
         .bow.top-left { top: 20px; left: 20px; }
         .bow.top-right { top: 20px; right: 20px; }
         .bow.bottom-left { bottom: 20px; left: 20px; }
         .bow.bottom-right { bottom: 20px; right: 20px; }
 
-        /* Footer */
+        /* Footer Styling (removed) */
         footer {
             background-color: #9b4d96;
             color: white;
-            padding: 20px;
+            padding: 15px;
             font-size: 1.2em;
-            border-top: 5px solid #fff;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Buttons and Interactive Elements */
+        /* Buttons Styling */
         button {
             background-color: #f5a9bc; /* Soft pink */
             border: none;
-            padding: 10px 20px;
+            padding: 15px 30px;
             font-size: 1.2em;
-            border-radius: 20px;
+            border-radius: 30px;
             cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
@@ -83,6 +101,19 @@
         .countdown {
             font-size: 1.5em;
             color: #9b4d96;
+            margin-top: 20px;
+        }
+
+        /* Optional Image Gallery */
+        .gallery {
+            margin-top: 30px;
+        }
+
+        .gallery img {
+            width: 200px;
+            margin: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -98,13 +129,13 @@
         <!-- Countdown Timer (Simple JS Version) -->
         <div id="countdown"></div>
 
-        <!-- Surprise Message -->
+        <!-- Surprise Button -->
         <button onclick="alert('Surprise! I love you more than words can say! 💜')">Click for a surprise!</button>
         
         <!-- Photo Gallery (Optional) -->
         <div class="gallery">
-            <img src="your-photo1.jpg" alt="Photo 1" style="width: 200px; margin: 10px;">
-            <img src="your-photo2.jpg" alt="Photo 2" style="width: 200px; margin: 10px;">
+            <img src="your-photo1.jpg" alt="Photo 1">
+            <img src="your-photo2.jpg" alt="Photo 2">
         </div>
     </main>
 
@@ -114,13 +145,9 @@
     <div class="bow bottom-left"></div>
     <div class="bow bottom-right"></div>
 
-    <footer>
-        Made with 💜 by [Your Name]
-    </footer>
-
     <!-- Countdown Timer Script -->
     <script>
-        var countDownDate = new Date("May 15, 2025 00:00:00").getTime(); // Set to her birthday
+        var countDownDate = new Date("May 2, 2025 00:00:00").getTime(); // Updated to 5/2/2025
 
         var x = setInterval(function() {
             var now = new Date().getTime();
