@@ -107,12 +107,11 @@
             height: auto;
             border-radius: 12px;
             object-fit: cover;
-            filter: brightness(0.8) blur(2px);
-            transition: filter 0.3s ease-in-out;
+            transition: transform 0.3s ease-in-out;
         }
 
         .gallery img:hover {
-            filter: brightness(1) blur(0);
+            transform: scale(1.05); /* Slight zoom effect on hover */
         }
     </style>
 </head>
@@ -144,4 +143,25 @@
     <div class="bow bottom-right"></div>
 
     <!-- Countdown Timer Script -->
-    <
+    <script>
+        var countDownDate = new Date("May 2, 2025 00:00:00").getTime(); // Updated to 5/2/2025
+
+        var x = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = countDownDate - now;
+
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("countdown").innerHTML = "It's her birthday! 🎉";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
