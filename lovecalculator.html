@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* ===== GENERAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1a1c2;
+            color: #333;
+            min-height: 100vh;
+            padding-left: 100px; /* Space for nav */
+            text-align: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ===== KUROMI NAVIGATION BAR ===== */
+        .nav-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100px;
+            background-color: #2a0a3a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            z-index: 1000;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+            border-right: 3px solid #ff9ec6;
+        }
+
+        .nav-item {
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            margin: 10px 0;
+            color: white;
+            font-size: 0.9em;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: #9b4d96;
+            transform: scale(1.05);
+        }
+
+        .nav-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+        .active {
+            background-color: #ff66a3;
+            font-weight: bold;
+        }
+
+        /* ===== MAIN CONTENT WRAPPER ===== */
+        .page-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* ===== HEADER STYLES ===== */
+        h1 {
+            color: #9b4d96;
+            font-family: 'Pacifico', cursive;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        /* ===== CALCULATOR STYLES ===== */
+        .calculator {
+            margin: 30px 0;
+        }
+
+        .input-group {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        input {
+            padding: 12px 20px;
+            border: 2px solid #f5a9bc;
+            border-radius: 30px;
+            font-size: 1em;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s;
+            min-width: 180px;
+        }
+
+        input:focus {
+            border-color: #9b4d96;
+        }
+
+        .heart-icon {
+            font-size: 1.8em;
+            color: #e91e63;
+        }
+
+        button {
+            background-color: #9b4d96;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            background-color: #7c3c79;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* ===== RESULT STYLES ===== */
+        .result {
+            margin-top: 30px;
+            display: none;
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .percentage {
+            font-size: 4em;
+            color: #e91e63;
+            font-weight: bold;
+            margin: 10px 0;
+            font-family: 'Pacifico', cursive;
+        }
+
+        .message {
+            font-size: 1.3em;
+            margin: 20px 0;
+            color: #9b4d96;
+            line-height: 1.6;
+        }
+
+        /* ===== KISS BUTTON STYLES ===== */
+        .kiss-btn {
+            background: linear-gradient(to right, #e91e63, #9b4d96);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 30px auto;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
+            display: none;
+        }
+
+        .kiss-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
+        }
+
+        /* ===== FLOATING HEARTS ===== */
+        .hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            color: #f5a9bc;
+            font-size: 30px;
+            opacity: 0.7;
+            animation: floatUp 10s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* ===== RESPONSIVE STYLES ===== */
+        @media (max-width: 768px) {
+            body {
+                padding-left: 80px;
+            }
+            .nav-container {
+                width: 80px;
+            }
+            .nav-item {
+                font-size: 0;
+                padding: 15px 0;
+            }
+            .nav-item img {
+                width: 40px;
+                height: 40px;
+                margin-bottom: 0;
+            }
+            .container {
+                padding: 30px 20px;
+                margin: 20px auto;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .input-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Kuromi Navigation Bar -->
+    <div class="nav-container">
+        <a href="index.html" class="nav-item home">
+            <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home">
+            Home
+        </a>
+        <a href="loveletters.html" class="nav-item letters">
+            <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters">
+            Love Letters
+        </a>
+        <a href="lovecalculator.html" class="nav-item calculator active">
+            <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator">
+            Love Calculator
+        </a>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="container">
+            <h1>Our Love Calculator</h1>
+            
+            <div class="calculator">
+                <div class="input-group">
+                    <input type="text" id="name1" placeholder="Your name">
+                    <span class="heart-icon">❤️</span>
+                    <input type="text" id="name2" placeholder="Their name">
+                </div>
+                
+                <button onclick="calculateLove()">Calculate Our Love</button>
+                
+                <div class="result" id="result">
+                    <div class="percentage" id="percentage"></div>
+                    <div class="message" id="message"></div>
+                    
+                    <button class="kiss-btn" id="kissBtn" onclick="sendKiss()">
+                        💋 Send Me a Kiss
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="hearts-container" id="hearts-container"></div>
+
+    <script>
+        // Highlight current page in nav
+        function setActiveNav() {
+            const currentPage = window.location.pathname.split('/').pop();
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === currentPage) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Create floating hearts background
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = 5 + Math.random() * 10 + 's';
+                heart.style.animationDelay = Math.random() * 3 + 's';
+                heart.style.fontSize = 15 + Math.random() * 25 + 'px';
+                container.appendChild(heart);
+            }
+        }
+        
+        // Calculate love percentage
+        function calculateLove() {
+            const name1 = document.getElementById('name1').value.trim() || "You";
+            const name2 = document.getElementById('name2').value.trim() || "Me";
+            const resultDiv = document.getElementById('result');
+            const percentageDiv = document.getElementById('percentage');
+            const messageDiv = document.getElementById('message');
+            const kissBtn = document.getElementById('kissBtn');
+            
+            // Simple algorithm that usually gives high percentages
+            const basePercentage = Math.min(100, 80 + (name1.length + name2.length) * 2);
+            const percentage = name1.toLowerCase() === "you" && name2.toLowerCase() === "me" ? 100 : basePercentage;
+            
+            // Display results
+            percentageDiv.textContent = percentage + '%';
+            
+            if (percentage === 100) {
+                messageDiv.innerHTML = "Soulmates forever! 💞<br>We're a perfect match in every way!";
+                kissBtn.style.display = 'inline-block';
+                
+                // Create celebration hearts
+                createHearts();
+                setTimeout(createHearts, 500);
+                setTimeout(createHearts, 1000);
+            } else if (percentage >= 90) {
+                messageDiv.innerHTML = `Incredible connection! 💖<br>${name1} and ${name2} are meant to be together!`;
+                kissBtn.style.display = 'none';
+            } else {
+                messageDiv.textContent = getLoveMessage(percentage, name1, name2);
+                kissBtn.style.display = 'none';
+            }
+            
+            resultDiv.style.display = 'block';
+        }
+        
+        // Get romantic message based on percentage
+        function getLoveMessage(p, name1, name2) {
+            if (p >= 90) return `Amazing chemistry! ${name1} and ${name2} have something special!`;
+            if (p >= 80) return `Strong potential! With some effort, ${name1} and ${name2} could be perfect!`;
+            if (p >= 70) return `Good foundation! ${name1} and ${name2} have the seeds of something beautiful!`;
+            return `Every love story is unique - ${name1} and ${name2} are just beginning theirs!`;
+        }
+        
+        // Send kiss function
+        function sendKiss() {
+            const kissBtn = document.getElementById('kissBtn');
+            kissBtn.textContent = "💋 Kiss Sent! 💋";
+            kissBtn.style.background = "linear-gradient(to right, #4CAF50, #2E7D32)";
+            
+            // Create floating kiss emojis
+            const container = document.getElementById('hearts-container');
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const kiss = document.createElement('div');
+                    kiss.className = 'heart';
+                    kiss.innerHTML = '💋';
+                    kiss.style.left = Math.random() * 100 + 'vw';
+                    kiss.style.animationDuration = 3 + Math.random() * 7 + 's';
+                    kiss.style.animationDelay = '0s';
+                    kiss.style.fontSize = 20 + Math.random() * 30 + 'px';
+                    container.appendChild(kiss);
+                }, i * 200);
+            }
+            
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                kissBtn.textContent = "💋 Send Me Another Kiss";
+                kissBtn.style.background = "linear-gradient(to right, #e91e63, #9b4d96)";
+            }, 2000);
+        }
+        
+        // Initialize on page load
+        window.onload = function() {
+            createHearts();
+            setActiveNav();
+        };
+    </script>
+</body>
+</html>

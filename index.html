@@ -3,59 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Happy Birthday, Baby Girl!</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
     <style>
-        /* General Reset */
+        /* ===== GENERAL STYLES ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Body Styling */
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f1a1c2; /* Darker pastel pink */
+            background-color: #f1a1c2;
             color: #333;
-            text-align: center;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+            padding-left: 100px; /* Space for nav */
+            text-align: center;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Header Styling */
-        header {
-            background-color: #9b4d96; /* Kuromi purple */
+        /* ===== KUROMI NAVIGATION BAR ===== */
+        .nav-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100px;
+            background-color: #2a0a3a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            z-index: 1000;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+            border-right: 3px solid #ff9ec6;
+        }
+
+        .nav-item {
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            margin: 10px 0;
             color: white;
-            padding: 20px;
-            font-size: 2.5em;
-            text-transform: uppercase;
+            font-size: 0.9em;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: #9b4d96;
+            transform: scale(1.05);
+        }
+
+        .nav-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+        .active {
+            background-color: #ff66a3;
             font-weight: bold;
-            border-radius: 12px;
-            margin: 20px auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ===== MAIN CONTENT WRAPPER ===== */
+        .page-wrapper {
             max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
             position: relative;
         }
 
-        /* Main Content Styling */
+        /* ===== HEADER STYLES ===== */
+        header {
+            background-color: #9b4d96;
+            color: white;
+            padding: 20px;
+            font-size: 2em;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* ===== MAIN CONTENT STYLES ===== */
         main {
             width: 100%;
-            max-width: 800px;
             padding: 40px;
             background-color: white;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            margin-bottom: 40px;
             position: relative;
-            margin: 0 auto 40px auto;
         }
 
-        /* Message Text */
+        /* ===== REST OF YOUR ORIGINAL STYLES ===== */
+        .celebration-status {
+            font-family: 'Pacifico', cursive;
+            font-size: 2em;
+            color: #e91e63;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
         .birthday-message {
             font-size: 1.5em;
             margin: 20px 0;
@@ -69,114 +124,11 @@
             color: #333;
         }
 
-        /* Buttons Styling */
-        button {
-            background-color: #f5a9bc; /* Soft pink */
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border-radius: 30px;
-            cursor: pointer;
-            margin: 15px 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        button:hover {
-            background-color: #ff83b3;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Celebration Status */
-        .celebration-status {
-            font-size: 2em;
-            color: #e91e63;
-            margin: 20px 0;
-            font-family: 'Pacifico', cursive;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        /* Single Image Gallery */
-        .gallery-container {
-            margin-top: 30px;
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .single-image {
-            width: 100%;
-            max-width: 500px;
-            border-radius: 12px;
-            object-fit: cover;
-            transition: transform 0.3s ease-in-out;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .single-image:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Quote Section */
-        .quote {
-            font-style: italic;
-            color: #9b4d96;
-            font-size: 1.2em;
-            margin: 30px 0;
-            padding: 20px;
-            border-left: 5px solid #f5a9bc;
-            background-color: #fff8fa;
-            text-align: left;
-            position: relative;
-        }
-
-        /* Floating Hearts Animation */
-        .hearts-container {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .heart {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            color: #f5a9bc;
-            font-size: 30px;
-            opacity: 0.7;
-            animation: floatUp 15s linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) scale(0.5) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.7;
-            }
-            90% {
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(-20vh) scale(1.2) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Special Birthday Card Animation */
         .birthday-card {
             perspective: 1000px;
             margin: 40px auto;
             width: 300px;
-            height: 200px;
+            height: 220px;
             cursor: pointer;
             position: relative;
         }
@@ -200,6 +152,7 @@
             backface-visibility: hidden;
             border-radius: 12px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -217,126 +170,259 @@
             padding: 20px;
             color: #333;
         }
-        
-        /* Cute Bows */
+
+        .surprise-message {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #9b4d96;
+            font-weight: 600;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .birthday-card:hover .surprise-message {
+            opacity: 1;
+        }
+
+        .nav-button {
+            background-color: #9b4d96;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 15px 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .nav-button:hover {
+            background-color: #7c3c79;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-container {
+            margin-top: 30px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .single-image {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            object-fit: cover;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .single-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .quote {
+            font-style: italic;
+            color: #9b4d96;
+            font-size: 1.2em;
+            margin: 30px 0;
+            padding: 20px;
+            border-left: 5px solid #f5a9bc;
+            background-color: #fff8fa;
+            text-align: left;
+            position: relative;
+        }
+
         .bow {
             position: absolute;
             width: 40px;
             height: 40px;
-            background-image: url('https://i.imgur.com/tA7aPg4.png');
-            background-size: 100% 100%;
-            background-position: center;
-            background-repeat: no-repeat;
+            background: url('https://i.imgur.com/tA7aPg4.png') center/contain no-repeat;
             z-index: 10;
         }
 
-        /* Bows positioning */
-        .bow.top-left { top: -15px; left: -15px; }
-        .bow.top-right { top: -15px; right: -15px; }
-        .bow.bottom-left { bottom: -15px; left: -15px; }
-        .bow.bottom-right { bottom: -15px; right: -15px; }
-        .bow.card-top { top: -15px; left: 50%; transform: translateX(-50%); }
-        .bow.quote-left { top: 10px; left: -15px; }
+        .hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
 
-        /* Responsive Adjustments */
+        .heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            color: #f5a9bc;
+            font-size: 30px;
+            opacity: 0.7;
+            animation: floatUp 15s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        .header-bow-left { top: -15px; left: -15px; }
+        .header-bow-right { top: -15px; right: -15px; }
+        .main-bow-tl { top: -15px; left: -15px; }
+        .main-bow-tr { top: -15px; right: -15px; }
+        .main-bow-bl { bottom: -15px; left: -15px; }
+        .main-bow-br { bottom: -15px; right: -15px; }
+        .card-bow-top { top: -15px; left: 50%; transform: translateX(-50%); }
+        .quote-bow-left { top: 10px; left: -15px; }
+
+        /* ===== RESPONSIVE STYLES ===== */
         @media (max-width: 768px) {
+            body {
+                padding-left: 80px;
+            }
+            .nav-container {
+                width: 80px;
+            }
+            .nav-item {
+                font-size: 0;
+                padding: 15px 0;
+            }
+            .nav-item img {
+                width: 40px;
+                height: 40px;
+                margin-bottom: 0;
+            }
             header {
-                font-size: 1.8em;
+                font-size: 1.5em;
                 padding: 15px;
             }
-            
             main {
                 padding: 25px;
             }
-            
             .birthday-message {
                 font-size: 1.2em;
+            }
+            .celebration-status {
+                font-size: 1.5em;
             }
         }
     </style>
 </head>
 <body>
-    <header style="position: relative;">
-        Happy Birthday, Baby Girl! 🎉
-        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">
-        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; right: -15px; width: 40px; height: 40px; z-index: 10;">
-    </header>
+    <!-- Kuromi Navigation Bar -->
+    <div class="nav-container">
+        <a href="index.html" class="nav-item home active">
+            <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home">
+            Home
+        </a>
+        <a href="loveletters.html" class="nav-item letters">
+            <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters">
+            Love Letters
+        </a>
+        <a href="lovecalculator.html" class="nav-item calculator">
+            <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator">
+            Love Calculator
+        </a>
+    </div>
 
-    <main style="position: relative;">
-        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">
-        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; right: -15px; width: 40px; height: 40px; z-index: 10;">
-        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; bottom: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">
-        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; bottom: -15px; right: -15px; width: 40px; height: 40px; z-index: 10;">
-        
-        <div class="celebration-status" id="celebration-status">It's your birthday! 🎉</div>
-        
-        <p class="birthday-message">Wishing you the most magical day full of love and joy! 💖</p>
-        <p class="birthday-submessage">Today is all about celebrating the amazing person you are!</p>
+    <div class="page-wrapper">
+        <header>
+            Happy Birthday, Baby Girl! 🎉
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-left">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-right">
+        </header>
 
-        <!-- Birthday Card -->
-        <div class="birthday-card" style="position: relative;">
-            <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; z-index: 10;">
-            <div class="card-inner">
-                <div class="card-front">
-                    <p>Hover to reveal a message ❤️</p>
-                </div>
-                <div class="card-back">
-                    <p>I love you more than life itself, my heart in human form 💜</p>
+        <main>
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tl">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tr">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-bl">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-br">
+            
+            <div class="celebration-status" id="celebration-status">It's your birthday! 🎉</div>
+            
+            <p class="birthday-message">Wishing you the most magical day full of love and joy! 💖</p>
+            <p class="birthday-submessage">Today is all about celebrating the amazing person you are!</p>
+
+            <div class="birthday-card">
+                <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-top">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <p>Hover to reveal a message ❤️</p>
+                    </div>
+                    <div class="card-back">
+                        <p>I love you more than life itself, my heart in human form 💜</p>
+                        <div class="surprise-message" id="surprise-message"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Buttons Section -->
-        <div>
-            <button onclick="showLoveMessage()">Click for a surprise!</button>
-        </div>
-        
-        <!-- Quote Section -->
-        <div class="quote" id="love-quote" style="position: relative;">
-            <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">
-            "Meeting you was fate, becoming your boyfriend was a choice, but falling in love with you was beyond my control. Happy Birthday to the one who owns my heart."
-        </div>
-        
-        <!-- Single Image Gallery -->
-        <div class="gallery-container">
-            <img src="https://i.imgur.com/PgBn8Pv.jpeg" alt="Birthday Image" class="single-image">
-        </div>
-    </main>
+            <a href="loveletters.html" class="nav-button">Read Love Letters 💌</a>
+            
+            <div class="quote" id="love-quote">
+                <img src="https://i.imgur.com/tA7aPg4.png" class="bow quote-bow-left">
+                "Meeting you was fate, becoming your boyfriend was a choice, but falling in love with you was beyond my control. Happy Birthday to the one who owns my heart."
+            </div>
+            
+            <div class="gallery-container">
+                <img src="https://i.imgur.com/PgBn8Pv.jpeg" alt="Birthday Image" class="single-image">
+            </div>
+        </main>
+    </div>
 
-    <!-- Floating Hearts -->
     <div class="hearts-container" id="hearts-container"></div>
 
-    <!-- Scripts -->
     <script>
         // Create floating hearts
         function createHearts() {
             const container = document.getElementById('hearts-container');
-            container.innerHTML = ''; // Clear any existing hearts
+            container.innerHTML = '';
             
             for (let i = 0; i < 30; i++) {
                 const heart = document.createElement('div');
-                heart.classList.add('heart');
+                heart.className = 'heart';
                 heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = 15 + Math.random() * 10 + 's';
-                heart.style.animationDelay = Math.random() * 5 + 's';
-                heart.style.fontSize = 20 + Math.random() * 20 + 'px';
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${15 + Math.random() * 10}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                heart.style.fontSize = `${20 + Math.random() * 20}px`;
                 container.appendChild(heart);
             }
         }
         
-        // Show love message
-        function showLoveMessage() {
+        // Random love messages for card hover
+        function getRandomMessage() {
             const messages = [
-                "I love you more than life itself, my heart in human form 💜",
-                "You're the reason for my smile every single day 💖",
-                "Thank you for being the most amazing girlfriend ever! 💕",
-                "You light up my world like nobody else ✨",
-                "Every moment with you is a blessing 🌹"
+                "You're the reason for my smile every day 💖",
+                "Thank you for being amazing! 💕",
+                "You light up my world ✨",
+                "Every moment with you is special 🌹",
+                "Your laugh is my favorite sound 😊",
+                "I fall more in love with you daily 💘",
+                "You make my heart skip a beat 💓",
+                "Your eyes mesmerize me every time 👀",
+                "I'm the luckiest to have you 🍀",
+                "You're my dream come true 💫"
             ];
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+
+        // Setup card hover effect
+        function setupCardHover() {
+            const card = document.querySelector('.birthday-card');
+            const messageElement = document.getElementById('surprise-message');
             
-            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-            alert(randomMessage);
+            card.addEventListener('mouseenter', () => {
+                messageElement.textContent = getRandomMessage();
+            });
         }
         
         // Function to change the love quote
@@ -350,38 +436,50 @@
                 "\"When I tell you I love you, I don't say it out of habit. I say it to remind you that you are the best thing that ever happened to me.\""
             ];
             
+            const quoteElement = document.getElementById('love-quote');
             const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            document.getElementById('love-quote').innerHTML = '<img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">' + randomQuote;
+            quoteElement.innerHTML = '<img src="https://i.imgur.com/tA7aPg4.png" class="bow quote-bow-left">' + randomQuote;
         }
         
-        // Initialize on page load
-        window.onload = function() {
-            createHearts();
-            changeQuote(); // Set initial random quote
-            
-            // Set interval to change quote every 20 seconds
-            setInterval(changeQuote, 20000);
-            
-            // Check if it's birthday
+        // Highlight current page in nav
+        function setActiveNav() {
+            const currentPage = window.location.pathname.split('/').pop();
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === currentPage) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Check birthday status
+        function checkBirthday() {
             const today = new Date();
-            const birthday = new Date("May 2, 2025");
+            const birthday = new Date("May 2, 2026");
+            const statusElement = document.getElementById('celebration-status');
             
-            // Compare month and day
             if (today.getMonth() === birthday.getMonth() && today.getDate() === birthday.getDate()) {
-                document.getElementById('celebration-status').innerHTML = "It's your birthday today! 🎉";
-                // Add extra celebration effects
+                statusElement.textContent = "It's your birthday today! 🎉";
                 document.body.style.backgroundImage = "linear-gradient(to bottom, #f1a1c2, #ffc8e5)";
             } else {
-                // Calculate days until birthday
                 let nextBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
                 if (today > nextBirthday) {
                     nextBirthday = new Date(today.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
                 }
-                
                 const daysUntil = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
-                document.getElementById('celebration-status').innerHTML = daysUntil + " days until your birthday! 🎂";
+                statusElement.textContent = `${daysUntil} days until your birthday! 🎂`;
             }
-        };
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            createHearts();
+            setupCardHover();
+            changeQuote();
+            checkBirthday();
+            setActiveNav();
+            setInterval(changeQuote, 20000);
+        });
     </script>
 </body>
 </html>
