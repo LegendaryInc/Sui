@@ -20,13 +20,11 @@
             background-color: #f1a1c2; /* Darker pastel pink */
             color: #333;
             text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            flex-direction: column;
+            padding: 20px;
             position: relative;
+            overflow-x: hidden;
         }
 
         /* Header Styling */
@@ -38,38 +36,38 @@
             text-transform: uppercase;
             font-weight: bold;
             border-radius: 12px;
-            margin-bottom: 30px;
+            margin: 20px auto;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            position: relative;
         }
 
         /* Main Content Styling */
         main {
             width: 100%;
-            max-width: 780px; /* 30% larger */
-            padding: 52px; /* 30% larger padding */
+            max-width: 800px;
+            padding: 40px;
             background-color: white;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             position: relative;
+            margin: 0 auto 40px auto;
         }
 
-        /* Cute Bows */
-        .bow {
-            position: absolute;
-            background-image: url('https://i.imgur.com/tA7aPg4.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            width: 40px;
-            height: 40px;
-            z-index: 10;
+        /* Message Text */
+        .birthday-message {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #9b4d96;
+            font-weight: 600;
         }
 
-        /* Bows on the edge of content */
-        .bow.top-left { top: -10px; left: -10px; }
-        .bow.top-right { top: -10px; right: -10px; }
-        .bow.bottom-left { bottom: -10px; left: -10px; }
-        .bow.bottom-right { bottom: -10px; right: -10px; }
+        .birthday-submessage {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: #333;
+        }
 
         /* Buttons Styling */
         button {
@@ -79,89 +77,298 @@
             font-size: 1.2em;
             border-radius: 30px;
             cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
+            margin: 15px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         button:hover {
             background-color: #ff83b3;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* Countdown Styling */
-        .countdown {
-            font-size: 1.5em;
-            color: #9b4d96;
-            margin-top: 20px;
+        /* Celebration Status */
+        .celebration-status {
+            font-size: 2em;
+            color: #e91e63;
+            margin: 20px 0;
+            font-family: 'Pacifico', cursive;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Image Section Styling */
-        .gallery {
+        /* Single Image Gallery */
+        .gallery-container {
             margin-top: 30px;
             overflow: hidden;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .gallery img {
+        .single-image {
             width: 100%;
-            height: auto;
+            max-width: 500px;
             border-radius: 12px;
             object-fit: cover;
             transition: transform 0.3s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .gallery img:hover {
-            transform: scale(1.05); /* Slight zoom effect on hover */
+        .single-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Quote Section */
+        .quote {
+            font-style: italic;
+            color: #9b4d96;
+            font-size: 1.2em;
+            margin: 30px 0;
+            padding: 20px;
+            border-left: 5px solid #f5a9bc;
+            background-color: #fff8fa;
+            text-align: left;
+            position: relative;
+        }
+
+        /* Floating Hearts Animation */
+        .hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            color: #f5a9bc;
+            font-size: 30px;
+            opacity: 0.7;
+            animation: floatUp 15s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-20vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Special Birthday Card Animation */
+        .birthday-card {
+            perspective: 1000px;
+            margin: 40px auto;
+            width: 300px;
+            height: 200px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .birthday-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-front {
+            background-color: #9b4d96;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .card-back {
+            background-color: #f5a9bc;
+            transform: rotateY(180deg);
+            padding: 20px;
+            color: #333;
+        }
+        
+        /* Cute Bows */
+        .bow {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-image: url('https://i.imgur.com/tA7aPg4.png');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 10;
+        }
+
+        /* Bows positioning */
+        .bow.top-left { top: -15px; left: -15px; }
+        .bow.top-right { top: -15px; right: -15px; }
+        .bow.bottom-left { bottom: -15px; left: -15px; }
+        .bow.bottom-right { bottom: -15px; right: -15px; }
+        .bow.card-top { top: -15px; left: 50%; transform: translateX(-50%); }
+        .bow.quote-left { top: 10px; left: -15px; }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            header {
+                font-size: 1.8em;
+                padding: 15px;
+            }
+            
+            main {
+                padding: 25px;
+            }
+            
+            .birthday-message {
+                font-size: 1.2em;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
+    <header style="position: relative;">
         Happy Birthday, Baby Girl! 🎉
+        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">
+        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; right: -15px; width: 40px; height: 40px; z-index: 10;">
     </header>
 
-    <main>
-        <p>Wishing you the most magical day full of love and joy! 💖</p>
-        <p class="countdown">Countdown to your special day:</p>
-
-        <!-- Countdown Timer (Simple JS Version) -->
-        <div id="countdown"></div>
-
-        <!-- Surprise Button -->
-        <button onclick="alert('I love you more than life itself, my heart in human form 💜')">Click for a surprise!</button>
+    <main style="position: relative;">
+        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">
+        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; right: -15px; width: 40px; height: 40px; z-index: 10;">
+        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; bottom: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">
+        <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; bottom: -15px; right: -15px; width: 40px; height: 40px; z-index: 10;">
         
-        <!-- Photo Gallery (Only one image) -->
-        <div class="gallery">
-            <img src="https://i.imgur.com/PgBn8Pv.jpeg" alt="Birthday Image">
+        <div class="celebration-status" id="celebration-status">It's your birthday! 🎉</div>
+        
+        <p class="birthday-message">Wishing you the most magical day full of love and joy! 💖</p>
+        <p class="birthday-submessage">Today is all about celebrating the amazing person you are!</p>
+
+        <!-- Birthday Card -->
+        <div class="birthday-card" style="position: relative;">
+            <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 40px; height: 40px; z-index: 10;">
+            <div class="card-inner">
+                <div class="card-front">
+                    <p>Hover to reveal a message ❤️</p>
+                </div>
+                <div class="card-back">
+                    <p>To the most beautiful soul I've ever known. You make every day brighter just by being you. I love you endlessly! ❤️</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons Section -->
+        <div>
+            <button onclick="showLoveMessage()">Click for a surprise!</button>
+            <button onclick="playBirthdaySong()">Play Birthday Song</button>
+        </div>
+        
+        <!-- Quote Section -->
+        <div class="quote" style="position: relative;">
+            <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">
+            "Meeting you was fate, becoming your boyfriend was a choice, but falling in love with you was beyond my control. Happy Birthday to the one who owns my heart."
+        </div>
+        
+        <!-- Single Image Gallery -->
+        <div class="gallery-container">
+            <img src="https://i.imgur.com/PgBn8Pv.jpeg" alt="Birthday Image" class="single-image">
         </div>
     </main>
 
-    <!-- Bows -->
-    <div class="bow top-left"></div>
-    <div class="bow top-right"></div>
-    <div class="bow bottom-left"></div>
-    <div class="bow bottom-right"></div>
+    <!-- Floating Hearts -->
+    <div class="hearts-container" id="hearts-container"></div>
 
-    <!-- Countdown Timer Script -->
+    <!-- Scripts -->
     <script>
-        var countDownDate = new Date("May 2, 2025 00:00:00").getTime(); // Updated to 5/2/2025
-
-        var x = setInterval(function() {
-            var now = new Date().getTime();
-            var distance = countDownDate - now;
-
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-            if (distance < 0) {
-                clearInterval(x);
-                document.getElementById("countdown").innerHTML = "It's your birthday! 🎉";
+        // Create floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            container.innerHTML = ''; // Clear any existing hearts
+            
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = 15 + Math.random() * 10 + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = 20 + Math.random() * 20 + 'px';
+                container.appendChild(heart);
             }
-        }, 1000);
+        }
+        
+        // Show love message
+        function showLoveMessage() {
+            const messages = [
+                "I love you more than life itself, my heart in human form 💜",
+                "You're the reason for my smile every single day 💖",
+                "Thank you for being the most amazing girlfriend ever! 💕",
+                "You light up my world like nobody else ✨",
+                "Every moment with you is a blessing 🌹"
+            ];
+            
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            alert(randomMessage);
+        }
+        
+        // Play birthday song
+        function playBirthdaySong() {
+            alert("🎵 If I could play a song, it would be the most beautiful birthday melody just for you! 🎵");
+        }
+        
+        // Initialize on page load
+        window.onload = function() {
+            createHearts();
+            
+            // Check if it's birthday
+            const today = new Date();
+            const birthday = new Date("May 2, 2025");
+            
+            // Compare month and day
+            if (today.getMonth() === birthday.getMonth() && today.getDate() === birthday.getDate()) {
+                document.getElementById('celebration-status').innerHTML = "It's your birthday today! 🎉";
+                // Add extra celebration effects
+                document.body.style.backgroundImage = "linear-gradient(to bottom, #f1a1c2, #ffc8e5)";
+            } else {
+                // Calculate days until birthday
+                let nextBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
+                if (today > nextBirthday) {
+                    nextBirthday = new Date(today.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
+                }
+                
+                const daysUntil = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+                document.getElementById('celebration-status').innerHTML = daysUntil + " days until your birthday! 🎂";
+            }
+        };
     </script>
 </body>
 </html>
