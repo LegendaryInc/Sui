@@ -18,7 +18,7 @@
             background-color: #f1a1c2;
             color: #333;
             min-height: 100vh;
-            padding-left: 100px; /* Space for nav */
+            padding-left: 100px;
             text-align: center;
             position: relative;
             overflow-x: hidden;
@@ -102,7 +102,7 @@
             position: relative;
         }
 
-        /* ===== REST OF YOUR ORIGINAL STYLES ===== */
+        /* ===== TEXT STYLES ===== */
         .celebration-status {
             font-family: 'Pacifico', cursive;
             font-size: 2em;
@@ -124,6 +124,13 @@
             color: #333;
         }
 
+        .countdown-message {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #9b4d96;
+        }
+
+        /* ===== CARD STYLES ===== */
         .birthday-card {
             perspective: 1000px;
             margin: 40px auto;
@@ -185,6 +192,7 @@
             opacity: 1;
         }
 
+        /* ===== BUTTON STYLES ===== */
         .nav-button {
             background-color: #9b4d96;
             color: white;
@@ -206,6 +214,7 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
+        /* ===== GALLERY STYLES ===== */
         .gallery-container {
             margin-top: 30px;
             overflow: hidden;
@@ -227,6 +236,7 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
+        /* ===== QUOTE STYLES ===== */
         .quote {
             font-style: italic;
             color: #9b4d96;
@@ -239,6 +249,7 @@
             position: relative;
         }
 
+        /* ===== DECORATIVE ELEMENTS ===== */
         .bow {
             position: absolute;
             width: 40px;
@@ -275,6 +286,7 @@
             100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
         }
 
+        /* ===== POSITIONING FOR BOWS ===== */
         .header-bow-left { top: -15px; left: -15px; }
         .header-bow-right { top: -15px; right: -15px; }
         .main-bow-tl { top: -15px; left: -15px; }
@@ -302,7 +314,7 @@
                 margin-bottom: 0;
             }
             header {
-                font-size: 1.5em;
+                font-size: 1.8em;
                 padding: 15px;
             }
             main {
@@ -349,9 +361,11 @@
             
             <div class="celebration-status" id="celebration-status">It's your birthday! 🎉</div>
             
-            <p class="birthday-message">Wishing you the most magical day full of love and joy! 💖</p>
-            <p class="birthday-submessage">Today is all about celebrating the amazing person you are!</p>
+            <div id="birthday-messages">
+                <!-- Birthday messages will be inserted here by JavaScript -->
+            </div>
 
+            <!-- Birthday Card with Hover Messages -->
             <div class="birthday-card">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-top">
                 <div class="card-inner">
@@ -365,19 +379,23 @@
                 </div>
             </div>
 
+            <!-- Navigation Button to Love Letters -->
             <a href="loveletters.html" class="nav-button">Read Love Letters 💌</a>
             
+            <!-- Quote Section -->
             <div class="quote" id="love-quote">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow quote-bow-left">
                 "Meeting you was fate, becoming your boyfriend was a choice, but falling in love with you was beyond my control. Happy Birthday to the one who owns my heart."
             </div>
             
+            <!-- Single Image Gallery -->
             <div class="gallery-container">
                 <img src="https://i.imgur.com/PgBn8Pv.jpeg" alt="Birthday Image" class="single-image">
             </div>
         </main>
     </div>
 
+    <!-- Floating Hearts -->
     <div class="hearts-container" id="hearts-container"></div>
 
     <script>
@@ -441,6 +459,44 @@
             quoteElement.innerHTML = '<img src="https://i.imgur.com/tA7aPg4.png" class="bow quote-bow-left">' + randomQuote;
         }
         
+        // Check birthday status and show appropriate messages
+        function checkBirthday() {
+            const today = new Date();
+            const birthday = new Date("May 2, 2026");
+            const statusElement = document.getElementById('celebration-status');
+            const messagesContainer = document.getElementById('birthday-messages');
+            
+            if (today.getMonth() === birthday.getMonth() && today.getDate() === birthday.getDate()) {
+                // It's the birthday!
+                statusElement.textContent = "It's your birthday today! 🎉";
+                document.body.style.backgroundImage = "linear-gradient(to bottom, #f1a1c2, #ffc8e5)";
+                
+                // Show birthday messages
+                messagesContainer.innerHTML = `
+                    <p class="birthday-message">Wishing you the most magical day full of love and joy! 💖</p>
+                    <p class="birthday-submessage">Today is all about celebrating the amazing person you are!</p>
+                `;
+                
+                // Extra celebration hearts
+                createHearts();
+                setTimeout(createHearts, 1000);
+                setTimeout(createHearts, 2000);
+            } else {
+                // Not the birthday yet
+                let nextBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
+                if (today > nextBirthday) {
+                    nextBirthday = new Date(today.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
+                }
+                const daysUntil = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
+                statusElement.textContent = `${daysUntil} days until your birthday! 🎂`;
+                
+                // Show countdown message
+                messagesContainer.innerHTML = `
+                    <p class="countdown-message">I'm counting down the days until I can celebrate you!</p>
+                `;
+            }
+        }
+
         // Highlight current page in nav
         function setActiveNav() {
             const currentPage = window.location.pathname.split('/').pop();
@@ -450,25 +506,6 @@
                     item.classList.add('active');
                 }
             });
-        }
-
-        // Check birthday status
-        function checkBirthday() {
-            const today = new Date();
-            const birthday = new Date("May 2, 2026");
-            const statusElement = document.getElementById('celebration-status');
-            
-            if (today.getMonth() === birthday.getMonth() && today.getDate() === birthday.getDate()) {
-                statusElement.textContent = "It's your birthday today! 🎉";
-                document.body.style.backgroundImage = "linear-gradient(to bottom, #f1a1c2, #ffc8e5)";
-            } else {
-                let nextBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
-                if (today > nextBirthday) {
-                    nextBirthday = new Date(today.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
-                }
-                const daysUntil = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
-                statusElement.textContent = `${daysUntil} days until your birthday! 🎂`;
-            }
         }
 
         // Initialize on page load
