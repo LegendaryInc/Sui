@@ -281,7 +281,7 @@
                     <p>Hover to reveal a message ❤️</p>
                 </div>
                 <div class="card-back">
-                    <p>To the most beautiful soul I've ever known. You make every day brighter just by being you. I love you endlessly! ❤️</p>
+                    <p>I love you more than life itself, my heart in human form 💜</p>
                 </div>
             </div>
         </div>
@@ -289,11 +289,10 @@
         <!-- Buttons Section -->
         <div>
             <button onclick="showLoveMessage()">Click for a surprise!</button>
-            <button onclick="playBirthdaySong()">Play Birthday Song</button>
         </div>
         
         <!-- Quote Section -->
-        <div class="quote" style="position: relative;">
+        <div class="quote" id="love-quote" style="position: relative;">
             <img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">
             "Meeting you was fate, becoming your boyfriend was a choice, but falling in love with you was beyond my control. Happy Birthday to the one who owns my heart."
         </div>
@@ -340,14 +339,28 @@
             alert(randomMessage);
         }
         
-        // Play birthday song
-        function playBirthdaySong() {
-            alert("🎵 If I could play a song, it would be the most beautiful birthday melody just for you! 🎵");
+        // Function to change the love quote
+        function changeQuote() {
+            const quotes = [
+                "\"Meeting you was fate, becoming your boyfriend was a choice, but falling in love with you was beyond my control. Happy Birthday to the one who owns my heart.\"",
+                "\"In your smile, I see something more beautiful than the stars. Happy birthday to the one who lights up my world.\"",
+                "\"Every moment with you feels like a dream I never want to wake up from. Happy birthday, my love.\"",
+                "\"You're not just my girlfriend, you're my today, my tomorrow, my forever. Happy birthday, beautiful.\"",
+                "\"Your love is the greatest gift I've ever received. Today, we celebrate the greatest gift the world received - you.\"",
+                "\"When I tell you I love you, I don't say it out of habit. I say it to remind you that you are the best thing that ever happened to me.\""
+            ];
+            
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('love-quote').innerHTML = '<img src="https://i.imgur.com/tA7aPg4.png" style="position: absolute; top: -15px; left: -15px; width: 40px; height: 40px; z-index: 10;">' + randomQuote;
         }
         
         // Initialize on page load
         window.onload = function() {
             createHearts();
+            changeQuote(); // Set initial random quote
+            
+            // Set interval to change quote every 20 seconds
+            setInterval(changeQuote, 20000);
             
             // Check if it's birthday
             const today = new Date();
