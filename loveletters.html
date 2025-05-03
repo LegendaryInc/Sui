@@ -215,6 +215,74 @@
         .main-bow-tr { top: -15px; right: -15px; }
         .main-bow-bl { bottom: -15px; left: -15px; }
         .main-bow-br { bottom: -15px; right: -15px; }
+        .password-bow-tl { top: -15px; left: -15px; }
+        .password-bow-tr { top: -15px; right: -15px; }
+        .password-bow-bl { bottom: -15px; left: -15px; }
+        .password-bow-br { bottom: -15px; right: -15px; }
+
+        /* ===== PASSWORD PROTECTION STYLES ===== */
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f1a1c2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .password-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+        }
+
+        .password-container h2 {
+            color: #9b4d96;
+            margin-bottom: 20px;
+            font-family: 'Pacifico', cursive;
+        }
+
+        .password-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #f5a9bc;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .password-form button {
+            background-color: #9b4d96;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .password-form button:hover {
+            background-color: #ff66a3;
+            transform: translateY(-2px);
+        }
+
+        .password-error {
+            color: #ff3366;
+            margin-top: 15px;
+            font-size: 0.9em;
+            display: none;
+        }
 
         /* ===== RESPONSIVE STYLES ===== */
         @media (max-width: 768px) {
@@ -244,10 +312,67 @@
                 padding: 20px;
                 font-size: 1em;
             }
+            .password-container {
+                padding: 30px 20px;
+            }
+        }
+        
+        /* Animation for password error */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        
+        .floating-hearts {
+            position: absolute;
+            font-size: 24px;
+            animation: float 3s ease-in-out infinite;
+            z-index: 5;
+            opacity: 0.7;
+        }
+        
+        #heart1 { top: 20px; right: 30%; animation-delay: 0s; }
+        #heart2 { bottom: 20px; left: 25%; animation-delay: 1s; }
+        #heart3 { top: 40%; right: 20px; animation-delay: 2s; }
+        #heart4 { bottom: 40%; left: 20px; animation-delay: 1.5s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
     </style>
 </head>
 <body>
+    <!-- Password Protection Overlay -->
+    <div id="password-overlay">
+        <div class="password-container">
+            <!-- Decorative bows on the password container -->
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow password-bow-tl">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow password-bow-tr">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow password-bow-bl">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow password-bow-br">
+            
+            <!-- Decorative floating hearts -->
+            <div class="floating-hearts" id="heart1">❤️</div>
+            <div class="floating-hearts" id="heart2">❤️</div>
+            <div class="floating-hearts" id="heart3">❤️</div>
+            <div class="floating-hearts" id="heart4">❤️</div>
+            
+            <h2>💌 Letters to My Baby 💌</h2>
+            <p>Please enter the password to view these love letters</p>
+            <div class="password-form">
+                <input type="password" id="password-input" placeholder="Enter password">
+                <div id="password-error" class="password-error">Incorrect password. Please try again.</div>
+                <button id="submit-password">Unlock Letters</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Kuromi Navigation Bar -->
     <div class="nav-container">
         <a href="index.html" class="nav-item home">
@@ -340,6 +465,65 @@
     <div class="hearts-container" id="hearts-container"></div>
 
     <script>
+        // Password protection
+        const passwordOverlay = document.getElementById('password-overlay');
+        const passwordInput = document.getElementById('password-input');
+        const passwordError = document.getElementById('password-error');
+        const submitPasswordBtn = document.getElementById('submit-password');
+        const correctPassword = "loveyou"; // Set your password here
+        
+        // Check if already authenticated in this session
+        window.addEventListener('load', () => {
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                passwordOverlay.style.display = 'none';
+                initializePageContent();
+            } else {
+                // Auto-focus on password input when page loads and not authenticated
+                passwordInput.focus();
+            }
+        });
+        
+        // Password submission handling
+        submitPasswordBtn.addEventListener('click', checkPassword);
+        passwordInput.addEventListener('keyup', function(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        });
+        
+        function checkPassword() {
+            if (passwordInput.value === correctPassword) {
+                sessionStorage.setItem('authenticated', 'true');
+                
+                // Add transition for smooth fade-out effect
+                passwordOverlay.style.opacity = '0';
+                passwordOverlay.style.transition = 'opacity 0.5s ease-in-out';
+                
+                // Wait for transition to complete before hiding
+                setTimeout(() => {
+                    passwordOverlay.style.display = 'none';
+                }, 500);
+                
+                initializePageContent();
+            } else {
+                passwordError.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+                
+                // Shake effect for wrong password
+                passwordInput.classList.add('shake');
+                setTimeout(() => {
+                    passwordInput.classList.remove('shake');
+                }, 500);
+            }
+        }
+        
+        function initializePageContent() {
+            // Initialize page content only after authentication
+            createHearts();
+            setActiveNav();
+        }
+        
         // Highlight current page in nav
         function setActiveNav() {
             const currentPage = window.location.pathname.split('/').pop();
@@ -382,12 +566,6 @@
                 container.appendChild(heart);
             }
         }
-        
-        // Initialize on page load
-        window.addEventListener('load', () => {
-            createHearts();
-            setActiveNav();
-        });
     </script>
 </body>
 </html>
