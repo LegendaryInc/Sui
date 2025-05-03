@@ -195,6 +195,22 @@
             transform: scale(1.05);
         }
         
+        .undo-btn {
+            background-color: #5a005a;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .undo-btn:hover {
+            background-color: #8e44ad;
+            transform: scale(1.05);
+        }
+        
         .watched-container {
             margin-top: 30px;
             background-color: #f0f8ff;
@@ -218,23 +234,37 @@
             background-color: #e6f2ff;
         }
         
+        .watched-movie-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
         .rating-display {
             color: #ffb700;
             font-weight: bold;
         }
 
-        /* Reset button styles */
+        /* Reset button and controls */
+        .reset-controls {
+            background-color: #ffecf2;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            border-left: 5px solid #ff4081;
+        }
+        
         .reset-btn {
             background-color: #ff4081;
             color: white;
             border: none;
             border-radius: 8px;
-            padding: 8px 16px;
+            padding: 10px 20px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 16px;
             transition: all 0.3s;
-            margin-bottom: 20px;
-            display: inline-block;
+            margin-top: 10px;
         }
         
         .reset-btn:hover {
@@ -259,6 +289,7 @@
         
         .confirmation-dialog p {
             margin-bottom: 20px;
+            font-size: 18px;
         }
         
         .dialog-buttons {
@@ -378,6 +409,7 @@
     <div class="overlay" id="overlay"></div>
     <div class="confirmation-dialog" id="confirmation-dialog">
         <p>Are you sure you want to reset all movie data?</p>
+        <p>This will clear all your ratings and watched statuses!</p>
         <div class="dialog-buttons">
             <button class="reset-btn" id="confirm-reset">Yes, Reset All</button>
             <button class="watched-btn" id="cancel-reset">Cancel</button>
@@ -399,8 +431,10 @@
             
             <h2 style="color: #9b4d96; text-align: center; margin-bottom: 20px;">Choose a genre for our next movie night!</h2>
             
-            <div style="text-align: right; margin-bottom: 20px;">
-                <button id="reset-all-btn" class="reset-btn">Reset All Data 🔄</button>
+            <!-- Fixed: More visible reset controls -->
+            <div class="reset-controls">
+                <h3 style="color: #9b4d96;">Movie Tracker Controls</h3>
+                <button id="reset-all-btn" class="reset-btn">Reset All Movie Data 🔄</button>
             </div>
             
             <div class="genre-container">
@@ -528,14 +562,20 @@
                             Watched ${genre.charAt(0).toUpperCase() + genre.slice(1)} Movies
                         </h3>`;
                 
-                html += watchedMovies.map(movie => `
+                html += watchedMovies.map(movie => {
+                    // Find actual index in the original array
+                    const actualIndex = movieDatabase[genre].findIndex(m => m.title === movie.title);
+                    return `
                     <div class="watched-movie">
                         <div class="movie-title">${movie.title}</div>
-                        <div class="rating-display">
-                            ${'★'.repeat(movie.rating)}${'☆'.repeat(5 - movie.rating)}
+                        <div class="watched-movie-actions">
+                            <div class="rating-display">
+                                ${'★'.repeat(movie.rating)}${'☆'.repeat(5 - movie.rating)}
+                            </div>
+                            <button class="undo-btn" data-genre="${genre}" data-index="${actualIndex}">Undo Watch</button>
                         </div>
                     </div>
-                `).join('');
+                `}).join('');
                 
                 html += `</div>`;
             }
@@ -544,7 +584,7 @@
             
             moviesDisplay.innerHTML = html;
             
-            // Add event listeners for stars and watched buttons
+            // Add event listeners for stars, watched buttons, and undo buttons
             addMovieEventListeners();
             
             // Scroll to movies
@@ -596,6 +636,21 @@
                     showMovies(genre);
                 });
             });
+            
+            // Undo button event listeners
+            document.querySelectorAll('.undo-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const genre = this.dataset.genre;
+                    const index = parseInt(this.dataset.index);
+                    
+                    // Find the movie in the database and mark as unwatched
+                    const movie = movieDatabase[genre][index];
+                    movie.watched = false;
+                    
+                    // Refresh the genre display
+                    showMovies(genre);
+                });
+            });
         }
 
         // Save movie data to localStorage
@@ -632,9 +687,6 @@
             
             // Show feedback
             alert('All movie data has been reset!');
-            
-            // Refresh display
-            createGenreCards();
         }
 
         // Create floating hearts
