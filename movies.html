@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Night Picker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* ===== GENERAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1a1c2;
+            color: #333;
+            min-height: 100vh;
+            padding-left: 100px; /* Space for nav */
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ===== KUROMI NAVIGATION BAR ===== */
+        .nav-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100px;
+            background-color: #2a0a3a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            z-index: 1000;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+            border-right: 3px solid #ff9ec6;
+        }
+
+        .nav-item {
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            margin: 10px 0;
+            color: white;
+            font-size: 0.9em;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: #9b4d96;
+            transform: scale(1.05);
+        }
+
+        .nav-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+        .active {
+            background-color: #ff66a3;
+            font-weight: bold;
+        }
+
+        /* ===== MAIN CONTENT WRAPPER ===== */
+        .page-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* ===== HEADER STYLES ===== */
+        header {
+            background-color: #9b4d96;
+            color: white;
+            padding: 20px;
+            font-size: 2em;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            text-align: center;
+        }
+
+        /* ===== MAIN CONTENT STYLES ===== */
+        main {
+            width: 100%;
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        /* ===== MOVIE PICKER STYLES ===== */
+        .genre-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .genre-card {
+            background-color: #f5a9bc;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        .genre-card:hover {
+            background-color: #e91e63;
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .genre-card h3 {
+            margin-bottom: 5px;
+            font-family: 'Pacifico', cursive;
+        }
+
+        .movies-container {
+            display: none;
+            background-color: #fff8fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 5px solid #9b4d96;
+        }
+
+        .movie-item {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .movie-item:hover {
+            background-color: #f1a1c2;
+            color: white;
+        }
+
+        .movie-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .star-rating {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .star {
+            color: #ccc;
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.2s;
+        }
+        
+        .star.active {
+            color: #ffb700;
+        }
+        
+        .watched-btn {
+            background-color: #9b4d96;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .watched-btn:hover {
+            background-color: #ff66a3;
+            transform: scale(1.05);
+        }
+        
+        .watched-container {
+            margin-top: 30px;
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #5a005a;
+        }
+        
+        .watched-movie {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .watched-movie:hover {
+            background-color: #e6f2ff;
+        }
+        
+        .rating-display {
+            color: #ffb700;
+            font-weight: bold;
+        }
+
+        /* Reset button styles */
+        .reset-btn {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .reset-btn:hover {
+            background-color: #c2185b;
+            transform: scale(1.05);
+        }
+        
+        .confirmation-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            z-index: 2000;
+            text-align: center;
+            display: none;
+            border: 3px solid #9b4d96;
+        }
+        
+        .confirmation-dialog p {
+            margin-bottom: 20px;
+        }
+        
+        .dialog-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1999;
+            display: none;
+        }
+
+        /* ===== DECORATIVE ELEMENTS ===== */
+        .bow {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('https://i.imgur.com/tA7aPg4.png') center/contain no-repeat;
+            z-index: 10;
+        }
+
+        .hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            color: #f5a9bc;
+            font-size: 30px;
+            opacity: 0.7;
+            animation: floatUp 15s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* ===== POSITIONING FOR BOWS ===== */
+        .header-bow-left { top: -15px; left: -15px; }
+        .header-bow-right { top: -15px; right: -15px; }
+        .main-bow-tl { top: -15px; left: -15px; }
+        .main-bow-tr { top: -15px; right: -15px; }
+        .main-bow-bl { bottom: -15px; left: -15px; }
+        .main-bow-br { bottom: -15px; right: -15px; }
+
+        /* ===== RESPONSIVE STYLES ===== */
+        @media (max-width: 768px) {
+            body {
+                padding-left: 80px;
+            }
+            .nav-container {
+                width: 80px;
+            }
+            .nav-item {
+                font-size: 0;
+                padding: 15px 0;
+            }
+            .nav-item img {
+                width: 40px;
+                height: 40px;
+                margin-bottom: 0;
+            }
+            header {
+                font-size: 1.5em;
+                padding: 15px;
+            }
+            main {
+                padding: 20px;
+            }
+            .genre-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Kuromi Navigation Bar -->
+    <div class="nav-container">
+        <a href="index.html" class="nav-item home">
+            <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home">
+            Home
+        </a>
+        <a href="loveletters.html" class="nav-item letters">
+            <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters">
+            Love Letters
+        </a>
+        <a href="lovecalculator.html" class="nav-item calculator">
+            <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator">
+            Love Calculator
+        </a>
+        <a href="movies.html" class="nav-item movies active">
+            <img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker">
+            Movie Picker
+        </a>
+    </div>
+
+    <!-- Confirmation dialog for reset -->
+    <div class="overlay" id="overlay"></div>
+    <div class="confirmation-dialog" id="confirmation-dialog">
+        <p>Are you sure you want to reset all movie data?</p>
+        <div class="dialog-buttons">
+            <button class="reset-btn" id="confirm-reset">Yes, Reset All</button>
+            <button class="watched-btn" id="cancel-reset">Cancel</button>
+        </div>
+    </div>
+
+    <div class="page-wrapper">
+        <header>
+            Movie Night Picker 🎬
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-left">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-right">
+        </header>
+
+        <main>
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tl">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tr">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-bl">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-br">
+            
+            <h2 style="color: #9b4d96; text-align: center; margin-bottom: 20px;">Choose a genre for our next movie night!</h2>
+            
+            <div style="text-align: right; margin-bottom: 20px;">
+                <button id="reset-all-btn" class="reset-btn">Reset All Data 🔄</button>
+            </div>
+            
+            <div class="genre-container">
+                <!-- Genre cards will be added by JavaScript -->
+            </div>
+            
+            <div id="movies-display">
+                <!-- Movies will be displayed here when genre is selected -->
+            </div>
+        </main>
+    </div>
+
+    <div class="hearts-container" id="hearts-container"></div>
+
+    <script>
+        // Updated movie database with watched status and ratings
+        const movieDatabase = {
+            romance: [
+                { title: "The Notebook", watched: false, rating: 0 },
+                { title: "Pride & Prejudice", watched: false, rating: 0 },
+                { title: "La La Land", watched: false, rating: 0 },
+                { title: "Eternal Sunshine of the Spotless Mind", watched: false, rating: 0 },
+                { title: "Before Sunrise", watched: false, rating: 0 }
+            ],
+            comedy: [
+                { title: "Superbad", watched: false, rating: 0 },
+                { title: "The Hangover", watched: false, rating: 0 },
+                { title: "Bridesmaids", watched: false, rating: 0 },
+                { title: "Step Brothers", watched: false, rating: 0 },
+                { title: "Anchorman", watched: false, rating: 0 }
+            ],
+            fantasy: [
+                { title: "The Lord of the Rings", watched: false, rating: 0 },
+                { title: "Harry Potter Series", watched: false, rating: 0 },
+                { title: "Pan's Labyrinth", watched: false, rating: 0 },
+                { title: "Stardust", watched: false, rating: 0 },
+                { title: "The Princess Bride", watched: false, rating: 0 }
+            ],
+            scifi: [
+                { title: "Interstellar", watched: false, rating: 0 },
+                { title: "Inception", watched: false, rating: 0 },
+                { title: "The Matrix", watched: false, rating: 0 },
+                { title: "Blade Runner 2049", watched: false, rating: 0 },
+                { title: "Arrival", watched: false, rating: 0 }
+            ],
+            horror: [
+                { title: "Get Out", watched: false, rating: 0 },
+                { title: "The Conjuring", watched: false, rating: 0 },
+                { title: "Hereditary", watched: false, rating: 0 },
+                { title: "A Quiet Place", watched: false, rating: 0 },
+                { title: "It Follows", watched: false, rating: 0 }
+            ],
+            animation: [
+                { title: "Spirited Away", watched: false, rating: 0 },
+                { title: "Your Name", watched: false, rating: 0 },
+                { title: "Howl's Moving Castle", watched: false, rating: 0 },
+                { title: "Wall-E", watched: false, rating: 0 },
+                { title: "The Incredibles", watched: false, rating: 0 }
+            ]
+        };
+
+        // Default movie database to use when resetting
+        const defaultMovieDatabase = JSON.parse(JSON.stringify(movieDatabase));
+
+        // Create genre cards
+        function createGenreCards() {
+            const container = document.querySelector('.genre-container');
+            container.innerHTML = '';
+            
+            for (const genre in movieDatabase) {
+                const genreCard = document.createElement('div');
+                genreCard.className = 'genre-card';
+                genreCard.innerHTML = `<h3>${genre.charAt(0).toUpperCase() + genre.slice(1)}</h3>`;
+                genreCard.addEventListener('click', () => showMovies(genre));
+                container.appendChild(genreCard);
+            }
+        }
+
+        // Show movies for selected genre - updated version
+        function showMovies(genre) {
+            const moviesDisplay = document.getElementById('movies-display');
+            const movies = movieDatabase[genre];
+            
+            // Filter unwatched movies
+            const unwatchedMovies = movies.filter(movie => !movie.watched);
+            
+            // Create movies container
+            let html = `
+                <div class="movies-container" style="display: block;">
+                    <h3 style="color: #9b4d96; margin-bottom: 15px; border-bottom: 2px solid #f5a9bc; padding-bottom: 5px;">
+                        ${genre.charAt(0).toUpperCase() + genre.slice(1)} Movies
+                    </h3>`;
+            
+            // Add unwatched movies
+            if (unwatchedMovies.length > 0) {
+                html += unwatchedMovies.map((movie, index) => {
+                    // Find actual index in the original array
+                    const actualIndex = movieDatabase[genre].findIndex(m => m.title === movie.title);
+                    return `
+                    <div class="movie-item" data-genre="${genre}" data-index="${actualIndex}">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-actions">
+                            <div class="star-rating" data-genre="${genre}" data-index="${actualIndex}">
+                                <span class="star ${movie.rating >= 1 ? 'active' : ''}" data-rating="1">★</span>
+                                <span class="star ${movie.rating >= 2 ? 'active' : ''}" data-rating="2">★</span>
+                                <span class="star ${movie.rating >= 3 ? 'active' : ''}" data-rating="3">★</span>
+                                <span class="star ${movie.rating >= 4 ? 'active' : ''}" data-rating="4">★</span>
+                                <span class="star ${movie.rating >= 5 ? 'active' : ''}" data-rating="5">★</span>
+                            </div>
+                            <button class="watched-btn" data-genre="${genre}" data-index="${actualIndex}">Watched</button>
+                        </div>
+                    </div>
+                `}).join('');
+            } else {
+                html += `<p style="text-align: center; color: #888;">No unwatched movies in this genre!</p>`;
+            }
+            
+            // Add watched movies section
+            const watchedMovies = movies.filter(movie => movie.watched);
+            
+            if (watchedMovies.length > 0) {
+                html += `
+                    <div class="watched-container">
+                        <h3 style="color: #5a005a; margin-bottom: 15px; border-bottom: 2px solid #9b4d96; padding-bottom: 5px;">
+                            Watched ${genre.charAt(0).toUpperCase() + genre.slice(1)} Movies
+                        </h3>`;
+                
+                html += watchedMovies.map(movie => `
+                    <div class="watched-movie">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="rating-display">
+                            ${'★'.repeat(movie.rating)}${'☆'.repeat(5 - movie.rating)}
+                        </div>
+                    </div>
+                `).join('');
+                
+                html += `</div>`;
+            }
+            
+            html += `</div>`;
+            
+            moviesDisplay.innerHTML = html;
+            
+            // Add event listeners for stars and watched buttons
+            addMovieEventListeners();
+            
+            // Scroll to movies
+            moviesDisplay.scrollIntoView({ behavior: 'smooth' });
+            
+            // Save to localStorage
+            saveMovieData();
+        }
+
+        // Add event listeners for movie interactions
+        function addMovieEventListeners() {
+            // Star rating event listeners
+            document.querySelectorAll('.star').forEach(star => {
+                star.addEventListener('click', function() {
+                    const genre = this.parentElement.dataset.genre;
+                    const index = parseInt(this.parentElement.dataset.index);
+                    const rating = parseInt(this.dataset.rating);
+                    
+                    // Find the movie in the database
+                    const movie = movieDatabase[genre][index];
+                    movie.rating = rating;
+                    
+                    // Update stars visual
+                    const stars = this.parentElement.querySelectorAll('.star');
+                    stars.forEach(s => {
+                        if (parseInt(s.dataset.rating) <= rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                    
+                    // Save to localStorage
+                    saveMovieData();
+                });
+            });
+            
+            // Watched button event listeners
+            document.querySelectorAll('.watched-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const genre = this.dataset.genre;
+                    const index = parseInt(this.dataset.index);
+                    
+                    // Find the movie in the database and mark as watched
+                    const movie = movieDatabase[genre][index];
+                    movie.watched = true;
+                    
+                    // Refresh the genre display
+                    showMovies(genre);
+                });
+            });
+        }
+
+        // Save movie data to localStorage
+        function saveMovieData() {
+            localStorage.setItem('movieDatabase', JSON.stringify(movieDatabase));
+        }
+
+        // Load movie data from localStorage
+        function loadMovieData() {
+            const savedData = localStorage.getItem('movieDatabase');
+            if (savedData) {
+                const parsedData = JSON.parse(savedData);
+                // Merge saved data with default data structure
+                for (const genre in parsedData) {
+                    if (movieDatabase[genre]) {
+                        movieDatabase[genre] = parsedData[genre];
+                    }
+                }
+            }
+        }
+
+        // Reset all movie data
+        function resetAllData() {
+            // Reset to default values
+            for (const genre in movieDatabase) {
+                movieDatabase[genre] = JSON.parse(JSON.stringify(defaultMovieDatabase[genre]));
+            }
+            
+            // Clear local storage
+            localStorage.removeItem('movieDatabase');
+            
+            // Reset display
+            document.getElementById('movies-display').innerHTML = '';
+            
+            // Show feedback
+            alert('All movie data has been reset!');
+            
+            // Refresh display
+            createGenreCards();
+        }
+
+        // Create floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${10 + Math.random() * 15}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                heart.style.fontSize = `${15 + Math.random() * 25}px`;
+                container.appendChild(heart);
+            }
+        }
+
+        // Highlight current page in nav
+        function setActiveNav() {
+            const currentPage = window.location.pathname.split('/').pop();
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === currentPage) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Show confirmation dialog
+        function showConfirmationDialog() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('confirmation-dialog').style.display = 'block';
+        }
+
+        // Hide confirmation dialog
+        function hideConfirmationDialog() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('confirmation-dialog').style.display = 'none';
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            createHearts();
+            loadMovieData(); // Load saved movie data first
+            createGenreCards();
+            setActiveNav();
+            
+            // Set up reset button
+            document.getElementById('reset-all-btn').addEventListener('click', showConfirmationDialog);
+            document.getElementById('confirm-reset').addEventListener('click', () => {
+                resetAllData();
+                hideConfirmationDialog();
+            });
+            document.getElementById('cancel-reset').addEventListener('click', hideConfirmationDialog);
+        });
+    </script>
+</body>
+</html>
