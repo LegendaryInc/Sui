@@ -1123,85 +1123,86 @@
                 });
         }
 
-        // Add a new movie to Google Sheets
-        function addNewMovie(genre, title) {
-            return new Promise((resolve, reject) => {
-                // Show more clear debug information
-                console.log(`Adding new movie: ${title} to genre ${genre}`);
-                
-                const scriptId = `add_script_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
-                const callbackName = `add_callback_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
-                
-                // Create the URL with parameters
-                const scriptUrl = new URL("https://script.google.com/macros/s/AKfycbySBH2y2Tym5jB-w8VN8Nx6QORxFQkDEAgFf4po0mgLaS_PCJfxcbge_ZsGgwujPFd6/exec");
-                scriptUrl.searchParams.append('Genre', genre);
-                scriptUrl.searchParams.append('Title', title);
-                scriptUrl.searchParams.append('Watched', "FALSE");
-                scriptUrl.searchParams.append('Rating', "0");
-                scriptUrl.searchParams.append('action', "add"); // Special action to add new movie
-                scriptUrl.searchParams.append('callback', callbackName);
-                scriptUrl.searchParams.append('_', Date.now()); // Cache buster
-                
-                // Define cleanup function
-                const cleanup = () => {
-                    // Remove the script element
-                    const scriptElement = document.getElementById(scriptId);
-                    if (scriptElement && scriptElement.parentNode) {
-                        scriptElement.parentNode.removeChild(scriptElement);
-                    }
-                    
-                    // Remove the global callback
-                    if (window[callbackName]) {
-                        delete window[callbackName];
-                    }
-                };
-                
-                // Define the callback function
-                window[callbackName] = function(response) {
-                    console.log(`Received add response for ${title}:`, response);
-                    cleanup();
-                    
-                    if (response && response.error) {
-                        console.error(`Error adding ${title}:`, response.error);
-                        reject(new Error(response.error));
-                        return;
-                    }
-                    
-                    // Check if the addition was successful
-                    if (response && response.success) {
-                        console.log(`Successfully added ${title} to ${genre}`);
-                        resolve(response);
-                    } else {
-                        console.warn(`Addition may have failed for ${title}:`, response);
-                        resolve(response || { success: true });
-                    }
-                };
-                
-                // Create and add the script element
-                const script = document.createElement('script');
-                script.id = scriptId;
-                script.src = scriptUrl.toString();
-                
-                // Set up error handler
-                script.onerror = function() {
-                    console.error(`Failed to load script for adding ${title}`);
-                    cleanup();
-                    reject(new Error(`Network error while adding ${title}`));
-                };
-                
-                // Add the script to the document
-                document.body.appendChild(script);
-                
-                // Set a timeout
-                setTimeout(() => {
-                    if (window[callbackName]) {
-                        console.error(`Request timed out for adding ${title}`);
-                        cleanup();
-                        reject(new Error(`Request timed out for adding ${title}`));
-                    }
-                }, 15000); // 15 second timeout
-            });
-        }
+// Add a new movie to Google Sheets
+function addNewMovie(genre, title) {
+    return new Promise((resolve, reject) => {
+        // Show more clear debug information
+        console.log(`Adding new movie: ${title} to genre ${genre}`);
+        
+        const scriptId = `add_script_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+        const callbackName = `add_callback_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+        
+        // Create the URL with parameters - note order of parameters
+        const scriptUrl = new URL("https://script.google.com/macros/s/AKfycbz3VDA2UqebJNJBFUqTt_15bPh_U4Ywho_ZCtDot56xxwczgGKnVB8DL0AXvHZChWRK/exec");
+        // Match column order in spreadsheet: Genre, Title, Watched, Rating
+        scriptUrl.searchParams.append('Genre', genre); 
+        scriptUrl.searchParams.append('Title', title);
+        scriptUrl.searchParams.append('Watched', "FALSE");
+        scriptUrl.searchParams.append('Rating', "0");
+        scriptUrl.searchParams.append('action', "add"); // Special action to add new movie
+        scriptUrl.searchParams.append('callback', callbackName);
+        scriptUrl.searchParams.append('_', Date.now()); // Cache buster
+        
+        // Define cleanup function
+        const cleanup = () => {
+            // Remove the script element
+            const scriptElement = document.getElementById(scriptId);
+            if (scriptElement && scriptElement.parentNode) {
+                scriptElement.parentNode.removeChild(scriptElement);
+            }
+            
+            // Remove the global callback
+            if (window[callbackName]) {
+                delete window[callbackName];
+            }
+        };
+        
+        // Define the callback function
+        window[callbackName] = function(response) {
+            console.log(`Received add response for ${title}:`, response);
+            cleanup();
+            
+            if (response && response.error) {
+                console.error(`Error adding ${title}:`, response.error);
+                reject(new Error(response.error));
+                return;
+            }
+            
+            // Check if the addition was successful
+            if (response && response.success) {
+                console.log(`Successfully added ${title} to ${genre}`);
+                resolve(response);
+            } else {
+                console.warn(`Addition may have failed for ${title}:`, response);
+                resolve(response || { success: true });
+            }
+        };
+        
+        // Create and add the script element
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = scriptUrl.toString();
+        
+        // Set up error handler
+        script.onerror = function() {
+            console.error(`Failed to load script for adding ${title}`);
+            cleanup();
+            reject(new Error(`Network error while adding ${title}`));
+        };
+        
+        // Add the script to the document
+        document.body.appendChild(script);
+        
+        // Set a timeout
+        setTimeout(() => {
+            if (window[callbackName]) {
+                console.error(`Request timed out for adding ${title}`);
+                cleanup();
+                reject(new Error(`Request timed out for adding ${title}`));
+            }
+        }, 15000); // 15 second timeout
+    });
+}
 
         // Add event listeners for movie interactions
         function addMovieEventListeners() {
@@ -1420,7 +1421,7 @@
                 const callbackName = `fetch_callback_${Date.now()}`;
                 
                 // Create the URL with callback parameter
-                const scriptUrl = new URL("https://script.google.com/macros/s/AKfycbySBH2y2Tym5jB-w8VN8Nx6QORxFQkDEAgFf4po0mgLaS_PCJfxcbge_ZsGgwujPFd6/exec");
+                const scriptUrl = new URL("https://script.google.com/macros/s/AKfycbz3VDA2UqebJNJBFUqTt_15bPh_U4Ywho_ZCtDot56xxwczgGKnVB8DL0AXvHZChWRK/exec");
                 scriptUrl.searchParams.append('callback', callbackName);
                 scriptUrl.searchParams.append('_', Date.now()); // Cache buster
                 
@@ -1551,7 +1552,7 @@
                 const callbackName = `callback_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
                 
                 // Create the URL with parameters
-                const scriptUrl = new URL("https://script.google.com/macros/s/AKfycbySBH2y2Tym5jB-w8VN8Nx6QORxFQkDEAgFf4po0mgLaS_PCJfxcbge_ZsGgwujPFd6/exec");
+                const scriptUrl = new URL("https://script.google.com/macros/s/AKfycbz3VDA2UqebJNJBFUqTt_15bPh_U4Ywho_ZCtDot56xxwczgGKnVB8DL0AXvHZChWRK/exec");
                 scriptUrl.searchParams.append('Genre', genre);
                 scriptUrl.searchParams.append('Title', title);
                 scriptUrl.searchParams.append('Watched', watchedValue);
