@@ -271,6 +271,40 @@
             background-color: #c2185b;
             transform: scale(1.05);
         }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-btn {
+            background-color: #9b4d96;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-btn:hover {
+            background-color: #ff66a3;
+            transform: translateY(-4px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .action-btn i {
+            font-size: 20px;
+        }
         
         .confirmation-dialog {
             position: fixed;
@@ -285,6 +319,8 @@
             text-align: center;
             display: none;
             border: 3px solid #9b4d96;
+            width: 90%;
+            max-width: 500px;
         }
         
         .confirmation-dialog p {
@@ -297,6 +333,82 @@
             justify-content: center;
             gap: 15px;
         }
+
+        /* Movie suggestion form */
+        .suggestion-form {
+            padding: 20px;
+            background-color: #fff8fa;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #9b4d96;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #f5a9bc;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #9b4d96;
+            box-shadow: 0 0 5px rgba(155, 77, 150, 0.5);
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .submit-btn {
+            background-color: #2a0a3a;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #5a005a;
+            transform: translateY(-3px);
+        }
+
+        .cancel-btn {
+            background-color: #f1a1c2;
+            color: #2a0a3a;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e91e63;
+            color: white;
+            transform: translateY(-3px);
+        }
         
         .overlay {
             position: fixed;
@@ -307,6 +419,79 @@
             background-color: rgba(0,0,0,0.5);
             z-index: 1999;
             display: none;
+        }
+
+        /* Pagination controls */
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .page-btn {
+            background-color: #9b4d96;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover {
+            background-color: #ff66a3;
+            transform: scale(1.05);
+        }
+
+        .page-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .page-indicator {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: #9b4d96;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #9b4d96;
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255,255,255,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            flex-direction: column;
+        }
+
+        .loading-text {
+            margin-top: 10px;
+            color: #9b4d96;
+            font-weight: bold;
         }
 
         /* ===== DECORATIVE ELEMENTS ===== */
@@ -354,6 +539,36 @@
         .main-bow-bl { bottom: -15px; left: -15px; }
         .main-bow-br { bottom: -15px; right: -15px; }
 
+        /* All watched movies container */
+        .all-watched-container {
+            background-color: #f0f8ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .all-watched-title {
+            color: #5a005a;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            border-bottom: 2px solid #9b4d96;
+            padding-bottom: 10px;
+        }
+
+        .genre-section {
+            margin-bottom: 30px;
+        }
+
+        .genre-title {
+            color: #9b4d96;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            border-left: 5px solid #f5a9bc;
+            padding-left: 10px;
+        }
+
         /* ===== RESPONSIVE STYLES ===== */
         @media (max-width: 768px) {
             body {
@@ -381,11 +596,24 @@
             .genre-container {
                 grid-template-columns: 1fr;
             }
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .form-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
- <!-- Navigation -->
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Loading movie database...</div>
+    </div>
+
+    <!-- Navigation -->
     <div class="nav-container">
         <a href="index.html" class="nav-item home">
             <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home">
@@ -412,6 +640,7 @@
             Time Bridge
         </a>
     </div>
+    
     <!-- Confirmation dialog for reset -->
     <div class="overlay" id="overlay"></div>
     <div class="confirmation-dialog" id="confirmation-dialog">
@@ -420,6 +649,33 @@
         <div class="dialog-buttons">
             <button class="reset-btn" id="confirm-reset">Yes, Reset All</button>
             <button class="watched-btn" id="cancel-reset">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Movie suggestion dialog -->
+    <div class="confirmation-dialog" id="suggestion-dialog">
+        <h2 style="color: #9b4d96; margin-bottom: 15px;">Suggest a New Movie</h2>
+        <div class="suggestion-form">
+            <div class="form-group">
+                <label for="movie-title">Movie Title</label>
+                <input type="text" id="movie-title" placeholder="Enter movie title" required>
+            </div>
+            <div class="form-group">
+                <label for="movie-genre">Genre</label>
+                <select id="movie-genre" required>
+                    <option value="" disabled selected>Select a genre</option>
+                    <option value="romance">Romance</option>
+                    <option value="comedy">Comedy</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="scifi">Sci-Fi</option>
+                    <option value="horror">Horror</option>
+                    <option value="animation">Animation</option>
+                </select>
+            </div>
+            <div class="form-buttons">
+                <button type="button" class="submit-btn" id="submit-suggestion">Add Movie</button>
+                <button type="button" class="cancel-btn" id="cancel-suggestion">Cancel</button>
+            </div>
         </div>
     </div>
 
@@ -448,6 +704,22 @@
                 <!-- Genre cards will be added by JavaScript -->
             </div>
             
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button id="show-watched-btn" class="action-btn">
+                    <span>🎬</span> Show All Watched Movies
+                </button>
+                <button id="suggest-movie-btn" class="action-btn">
+                    <span>✨</span> Suggest a New Movie
+                </button>
+            </div>
+            
+            <!-- All watched movies container -->
+            <div id="all-watched-container" class="all-watched-container">
+                <h2 class="all-watched-title">All Watched Movies</h2>
+                <!-- Content will be dynamically added -->
+            </div>
+            
             <div id="movies-display">
                 <!-- Movies will be displayed here when genre is selected -->
             </div>
@@ -457,8 +729,8 @@
     <div class="hearts-container" id="hearts-container"></div>
 
     <script>
-        // Updated movie database with watched status and ratings
-        const movieDatabase = {
+        // Default movie database (fallback in case API fails)
+        let movieDatabase = {
             romance: [
                 { title: "The Notebook", watched: false, rating: 0 },
                 { title: "Beastly", watched: false, rating: 0 },
@@ -503,8 +775,15 @@
             ]
         };
 
-        // Default movie database to use when resetting
+        // Fallback in case API fails
         const defaultMovieDatabase = JSON.parse(JSON.stringify(movieDatabase));
+        
+        // Pagination state
+        const paginationState = {
+            currentGenre: null,
+            currentPage: 1,
+            itemsPerPage: 5
+        };
 
         // Create genre cards
         function createGenreCards() {
@@ -515,18 +794,38 @@
                 const genreCard = document.createElement('div');
                 genreCard.className = 'genre-card';
                 genreCard.innerHTML = `<h3>${genre.charAt(0).toUpperCase() + genre.slice(1)}</h3>`;
-                genreCard.addEventListener('click', () => showMovies(genre));
+                genreCard.addEventListener('click', () => {
+                    paginationState.currentGenre = genre;
+                    paginationState.currentPage = 1;
+                    showMoviesWithPagination(genre, 1);
+                    
+                    // Hide all watched container if showing
+                    document.getElementById('all-watched-container').style.display = 'none';
+                });
                 container.appendChild(genreCard);
             }
         }
 
-        // Show movies for selected genre - updated version
-        function showMovies(genre) {
+        // Show movies for selected genre with pagination
+        function showMoviesWithPagination(genre, page) {
             const moviesDisplay = document.getElementById('movies-display');
             const movies = movieDatabase[genre];
             
-            // Filter unwatched movies
+            // Reset pagination state
+            paginationState.currentGenre = genre;
+            paginationState.currentPage = page;
+            
+            // Filter unwatched and watched movies
             const unwatchedMovies = movies.filter(movie => !movie.watched);
+            const watchedMovies = movies.filter(movie => movie.watched);
+            
+            // Pagination for unwatched movies
+            const startIndex = (page - 1) * paginationState.itemsPerPage;
+            const endIndex = Math.min(startIndex + paginationState.itemsPerPage, unwatchedMovies.length);
+            const currentPageMovies = unwatchedMovies.slice(startIndex, endIndex);
+            
+            // Calculate total pages
+            const totalPages = Math.ceil(unwatchedMovies.length / paginationState.itemsPerPage);
             
             // Create movies container
             let html = `
@@ -535,9 +834,9 @@
                         ${genre.charAt(0).toUpperCase() + genre.slice(1)} Movies
                     </h3>`;
             
-            // Add unwatched movies
-            if (unwatchedMovies.length > 0) {
-                html += unwatchedMovies.map((movie, index) => {
+            // Add unwatched movies for current page
+            if (currentPageMovies.length > 0) {
+                html += currentPageMovies.map((movie, index) => {
                     // Find actual index in the original array
                     const actualIndex = movieDatabase[genre].findIndex(m => m.title === movie.title);
                     return `
@@ -555,13 +854,29 @@
                         </div>
                     </div>
                 `}).join('');
+                
+                // Add pagination controls if needed
+                if (unwatchedMovies.length > paginationState.itemsPerPage) {
+                    html += `
+                    <div class="pagination-controls">
+                        <button class="page-btn" id="prev-page" ${page <= 1 ? 'disabled' : ''}>Previous</button>
+                        <div class="page-indicator">Page ${page} of ${totalPages}</div>
+                        <button class="page-btn" id="next-page" ${page >= totalPages ? 'disabled' : ''}>Next</button>
+                    </div>`;
+                }
             } else {
-                html += `<p style="text-align: center; color: #888;">No unwatched movies in this genre!</p>`;
+                if (unwatchedMovies.length === 0) {
+                    html += `<p style="text-align: center; color: #888;">No unwatched movies in this genre!</p>`;
+                } else {
+                    html += `<p style="text-align: center; color: #888;">No more movies on this page.</p>
+                    <div class="pagination-controls">
+                        <button class="page-btn" id="prev-page">Previous</button>
+                        <div class="page-indicator">Page ${page} of ${totalPages}</div>
+                    </div>`;
+                }
             }
             
             // Add watched movies section
-            const watchedMovies = movies.filter(movie => movie.watched);
-            
             if (watchedMovies.length > 0) {
                 html += `
                     <div class="watched-container">
@@ -594,11 +909,298 @@
             // Add event listeners for stars, watched buttons, and undo buttons
             addMovieEventListeners();
             
+            // Add event listeners for pagination
+            const prevPageBtn = document.getElementById('prev-page');
+            const nextPageBtn = document.getElementById('next-page');
+            
+            if (prevPageBtn) {
+                prevPageBtn.addEventListener('click', () => {
+                    if (page > 1) {
+                        showMoviesWithPagination(genre, page - 1);
+                    }
+                });
+            }
+            
+            if (nextPageBtn) {
+                nextPageBtn.addEventListener('click', () => {
+                    if (page < totalPages) {
+                        showMoviesWithPagination(genre, page + 1);
+                    }
+                });
+            }
+            
             // Scroll to movies
             moviesDisplay.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Show all watched movies across all genres
+        function showAllWatchedMovies() {
+            // Hide any current movie display
+            document.getElementById('movies-display').innerHTML = '';
             
-            // Save to localStorage
-            saveMovieData();
+            // Get all watched movies container
+            const allWatchedContainer = document.getElementById('all-watched-container');
+            allWatchedContainer.style.display = 'block';
+            
+            // Clear previous content
+            allWatchedContainer.innerHTML = '<h2 class="all-watched-title">All Watched Movies</h2>';
+            
+            // Track if we found any watched movies
+            let foundWatched = false;
+            
+            // Go through each genre
+            for (const genre in movieDatabase) {
+                // Filter watched movies in this genre
+                const watchedMovies = movieDatabase[genre].filter(movie => movie.watched);
+                
+                // If there are watched movies in this genre
+                if (watchedMovies.length > 0) {
+                    foundWatched = true;
+                    
+                    // Create genre section
+                    const genreSection = document.createElement('div');
+                    genreSection.className = 'genre-section';
+                    
+                    // Add genre title
+                    const genreTitle = document.createElement('h3');
+                    genreTitle.className = 'genre-title';
+                    genreTitle.textContent = genre.charAt(0).toUpperCase() + genre.slice(1);
+                    genreSection.appendChild(genreTitle);
+                    
+                    // Add each watched movie
+                    watchedMovies.forEach(movie => {
+                        // Find actual index in the original array
+                        const actualIndex = movieDatabase[genre].findIndex(m => m.title === movie.title);
+                        
+                        // Create movie element
+                        const movieElement = document.createElement('div');
+                        movieElement.className = 'watched-movie';
+                        movieElement.innerHTML = `
+                            <div class="movie-title">${movie.title}</div>
+                            <div class="watched-movie-actions">
+                                <div class="rating-display">
+                                    ${'★'.repeat(movie.rating)}${'☆'.repeat(5 - movie.rating)}
+                                </div>
+                                <button class="undo-btn" data-genre="${genre}" data-index="${actualIndex}">Undo Watch</button>
+                            </div>
+                        `;
+                        genreSection.appendChild(movieElement);
+                    });
+                    
+                    // Add this genre section to the container
+                    allWatchedContainer.appendChild(genreSection);
+                }
+            }
+            
+            // If no watched movies were found
+            if (!foundWatched) {
+                const noMoviesMsg = document.createElement('p');
+                noMoviesMsg.style.textAlign = 'center';
+                noMoviesMsg.style.color = '#888';
+                noMoviesMsg.style.marginTop = '20px';
+                noMoviesMsg.textContent = 'You haven\'t watched any movies yet!';
+                allWatchedContainer.appendChild(noMoviesMsg);
+            }
+            
+            // Add event listeners for the undo buttons
+            document.querySelectorAll('#all-watched-container .undo-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const genre = this.dataset.genre;
+                    const index = parseInt(this.dataset.index);
+                    
+                    // Show loading overlay
+                    showLoadingOverlay('Unmarking as watched...');
+                    
+                    // Find the movie in the database and mark as unwatched
+                    const movie = movieDatabase[genre][index];
+                    movie.watched = false;
+                    
+                    console.log(`Marking as UNWATCHED: ${movie.title} (${genre})`);
+                    
+                    // Update movie data in Google Sheets with two-way connection
+                    updateMovieData(genre, movie.title, false, movie.rating)
+                        .then((result) => {
+                            console.log("Unwatch result:", result);
+                            hideLoadingOverlay();
+                            // Refresh the all watched movies display
+                            showAllWatchedMovies();
+                        })
+                        .catch(error => {
+                            console.error("Error unmarking movie as watched:", error);
+                            hideLoadingOverlay();
+                            alert("Failed to unmark movie as watched: " + error.message);
+                            // Revert the change in local data
+                            movie.watched = true;
+                        });
+                });
+            });
+            
+            // Scroll to container
+            allWatchedContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Show suggestion dialog
+        function showSuggestionDialog() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('suggestion-dialog').style.display = 'block';
+            
+            // Clear previous values
+            document.getElementById('movie-title').value = '';
+            document.getElementById('movie-genre').selectedIndex = 0;
+        }
+
+        // Hide suggestion dialog
+        function hideSuggestionDialog() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('suggestion-dialog').style.display = 'none';
+        }
+
+        // Add a new movie suggestion
+        function addMovieSuggestion() {
+            const titleInput = document.getElementById('movie-title');
+            const genreSelect = document.getElementById('movie-genre');
+            
+            const title = titleInput.value.trim();
+            const genre = genreSelect.value;
+            
+            // Validate inputs
+            if (!title) {
+                alert('Please enter a movie title');
+                return;
+            }
+            
+            if (!genre) {
+                alert('Please select a genre');
+                return;
+            }
+            
+            // Check if the movie already exists in the database
+            if (movieDatabase[genre] && movieDatabase[genre].some(movie => movie.title.toLowerCase() === title.toLowerCase())) {
+                alert('This movie already exists in the database!');
+                return;
+            }
+            
+            // Show loading overlay
+            showLoadingOverlay('Adding movie suggestion...');
+            
+            // Add the new movie to the database
+            const newMovie = {
+                title: title,
+                watched: false,
+                rating: 0
+            };
+            
+            // Add movie to Google Sheets
+            addNewMovie(genre, title)
+                .then((result) => {
+                    console.log("Add movie result:", result);
+                    
+                    // Add to local database
+                    if (!movieDatabase[genre]) {
+                        movieDatabase[genre] = [];
+                    }
+                    movieDatabase[genre].push(newMovie);
+                    
+                    // Hide dialog
+                    hideSuggestionDialog();
+                    hideLoadingOverlay();
+                    
+                    // Show success message
+                    alert(`Successfully added "${title}" to the ${genre} genre!`);
+                    
+                    // Refresh the genre cards
+                    createGenreCards();
+                    
+                    // If we were viewing this genre, refresh the display
+                    if (paginationState.currentGenre === genre) {
+                        showMoviesWithPagination(genre, 1);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error adding movie:", error);
+                    hideLoadingOverlay();
+                    alert("Failed to add movie: " + error.message);
+                });
+        }
+
+        // Add a new movie to Google Sheets
+        function addNewMovie(genre, title) {
+            return new Promise((resolve, reject) => {
+                // Show more clear debug information
+                console.log(`Adding new movie: ${title} to genre ${genre}`);
+                
+                const scriptId = `add_script_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+                const callbackName = `add_callback_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+                
+                // Create the URL with parameters
+                const scriptUrl = new URL("https://script.google.com/macros/s/AKfycbySBH2y2Tym5jB-w8VN8Nx6QORxFQkDEAgFf4po0mgLaS_PCJfxcbge_ZsGgwujPFd6/exec");
+                scriptUrl.searchParams.append('Genre', genre);
+                scriptUrl.searchParams.append('Title', title);
+                scriptUrl.searchParams.append('Watched', "FALSE");
+                scriptUrl.searchParams.append('Rating', "0");
+                scriptUrl.searchParams.append('action', "add"); // Special action to add new movie
+                scriptUrl.searchParams.append('callback', callbackName);
+                scriptUrl.searchParams.append('_', Date.now()); // Cache buster
+                
+                // Define cleanup function
+                const cleanup = () => {
+                    // Remove the script element
+                    const scriptElement = document.getElementById(scriptId);
+                    if (scriptElement && scriptElement.parentNode) {
+                        scriptElement.parentNode.removeChild(scriptElement);
+                    }
+                    
+                    // Remove the global callback
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                    }
+                };
+                
+                // Define the callback function
+                window[callbackName] = function(response) {
+                    console.log(`Received add response for ${title}:`, response);
+                    cleanup();
+                    
+                    if (response && response.error) {
+                        console.error(`Error adding ${title}:`, response.error);
+                        reject(new Error(response.error));
+                        return;
+                    }
+                    
+                    // Check if the addition was successful
+                    if (response && response.success) {
+                        console.log(`Successfully added ${title} to ${genre}`);
+                        resolve(response);
+                    } else {
+                        console.warn(`Addition may have failed for ${title}:`, response);
+                        resolve(response || { success: true });
+                    }
+                };
+                
+                // Create and add the script element
+                const script = document.createElement('script');
+                script.id = scriptId;
+                script.src = scriptUrl.toString();
+                
+                // Set up error handler
+                script.onerror = function() {
+                    console.error(`Failed to load script for adding ${title}`);
+                    cleanup();
+                    reject(new Error(`Network error while adding ${title}`));
+                };
+                
+                // Add the script to the document
+                document.body.appendChild(script);
+                
+                // Set a timeout
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        console.error(`Request timed out for adding ${title}`);
+                        cleanup();
+                        reject(new Error(`Request timed out for adding ${title}`));
+                    }
+                }, 15000); // 15 second timeout
+            });
         }
 
         // Add event listeners for movie interactions
@@ -610,9 +1212,14 @@
                     const index = parseInt(this.parentElement.dataset.index);
                     const rating = parseInt(this.dataset.rating);
                     
+                    // Show loading overlay
+                    showLoadingOverlay('Updating rating...');
+                    
                     // Find the movie in the database
                     const movie = movieDatabase[genre][index];
                     movie.rating = rating;
+                    
+                    console.log(`Setting rating ${rating} for: ${movie.title} (${genre})`);
                     
                     // Update stars visual
                     const stars = this.parentElement.querySelectorAll('.star');
@@ -624,8 +1231,17 @@
                         }
                     });
                     
-                    // Save to localStorage
-                    saveMovieData();
+                    // Update movie data in Google Sheets with two-way connection
+                    updateMovieData(genre, movie.title, movie.watched, rating)
+                        .then((result) => {
+                            console.log("Rating update result:", result);
+                            hideLoadingOverlay();
+                        })
+                        .catch(error => {
+                            console.error("Error updating movie rating:", error);
+                            hideLoadingOverlay();
+                            alert("Failed to update movie rating: " + error.message);
+                        });
                 });
             });
             
@@ -635,12 +1251,30 @@
                     const genre = this.dataset.genre;
                     const index = parseInt(this.dataset.index);
                     
+                    // Show loading overlay
+                    showLoadingOverlay('Marking as watched...');
+                    
                     // Find the movie in the database and mark as watched
                     const movie = movieDatabase[genre][index];
                     movie.watched = true;
                     
-                    // Refresh the genre display
-                    showMovies(genre);
+                    console.log(`Marking as WATCHED: ${movie.title} (${genre})`);
+                    
+                    // Update movie data in Google Sheets with two-way connection
+                    updateMovieData(genre, movie.title, true, movie.rating)
+                        .then((result) => {
+                            console.log("Watch result:", result);
+                            hideLoadingOverlay();
+                            // Refresh the genre display with pagination
+                            showMoviesWithPagination(genre, paginationState.currentPage);
+                        })
+                        .catch(error => {
+                            console.error("Error marking movie as watched:", error);
+                            hideLoadingOverlay();
+                            alert("Failed to mark movie as watched: " + error.message);
+                            // Revert the change in local data
+                            movie.watched = false;
+                        });
                 });
             });
             
@@ -650,50 +1284,91 @@
                     const genre = this.dataset.genre;
                     const index = parseInt(this.dataset.index);
                     
+                    // Show loading overlay
+                    showLoadingOverlay('Unmarking as watched...');
+                    
                     // Find the movie in the database and mark as unwatched
                     const movie = movieDatabase[genre][index];
                     movie.watched = false;
                     
-                    // Refresh the genre display
-                    showMovies(genre);
+                    console.log(`Marking as UNWATCHED: ${movie.title} (${genre})`);
+                    
+                    // Update movie data in Google Sheets with two-way connection
+                    // Explicitly pass false as the third parameter
+                    updateMovieData(genre, movie.title, false, movie.rating)
+                        .then((result) => {
+                            console.log("Unwatch result:", result);
+                            hideLoadingOverlay();
+                            // Refresh the genre display with pagination
+                            showMoviesWithPagination(genre, paginationState.currentPage);
+                        })
+                        .catch(error => {
+                            console.error("Error unmarking movie as watched:", error);
+                            hideLoadingOverlay();
+                            alert("Failed to unmark movie as watched: " + error.message);
+                            // Revert the change in local data
+                            movie.watched = true;
+                        });
                 });
             });
         }
 
-        // Save movie data to localStorage
-        function saveMovieData() {
-            localStorage.setItem('movieDatabase', JSON.stringify(movieDatabase));
+        // Show loading overlay
+        function showLoadingOverlay(message = 'Loading...') {
+            const overlay = document.getElementById('loading-overlay');
+            const loadingText = overlay.querySelector('.loading-text');
+            loadingText.textContent = message;
+            overlay.style.display = 'flex';
         }
 
-        // Load movie data from localStorage
-        function loadMovieData() {
-            const savedData = localStorage.getItem('movieDatabase');
-            if (savedData) {
-                const parsedData = JSON.parse(savedData);
-                // Merge saved data with default data structure
-                for (const genre in parsedData) {
-                    if (movieDatabase[genre]) {
-                        movieDatabase[genre] = parsedData[genre];
-                    }
-                }
-            }
+        // Hide loading overlay
+        function hideLoadingOverlay() {
+            const overlay = document.getElementById('loading-overlay');
+            overlay.style.display = 'none';
         }
 
         // Reset all movie data
         function resetAllData() {
+            // Show loading overlay
+            showLoadingOverlay('Resetting all movie data...');
+            
             // Reset to default values
+            movieDatabase = JSON.parse(JSON.stringify(defaultMovieDatabase));
+            
+            // Create promises for all update operations
+            const updatePromises = [];
+            
+            // Update all movies in Google Sheets
             for (const genre in movieDatabase) {
-                movieDatabase[genre] = JSON.parse(JSON.stringify(defaultMovieDatabase[genre]));
+                for (const movie of movieDatabase[genre]) {
+                    updatePromises.push(updateMovieData(genre, movie.title, false, 0));
+                }
             }
             
-            // Clear local storage
-            localStorage.removeItem('movieDatabase');
-            
-            // Reset display
-            document.getElementById('movies-display').innerHTML = '';
-            
-            // Show feedback
-            alert('All movie data has been reset!');
+            // Wait for all updates to complete
+            Promise.all(updatePromises)
+                .then(() => {
+                    hideLoadingOverlay();
+                    
+                    // Reset display
+                    document.getElementById('movies-display').innerHTML = '';
+                    document.getElementById('all-watched-container').style.display = 'none';
+                    
+                    // Reset pagination state
+                    paginationState.currentGenre = null;
+                    paginationState.currentPage = 1;
+                    
+                    // Refresh genre cards (in case any data affects them)
+                    createGenreCards();
+                    
+                    // Show feedback
+                    alert('All movie data has been reset!');
+                })
+                .catch(error => {
+                    console.error("Error resetting movie data:", error);
+                    hideLoadingOverlay();
+                    alert("Failed to reset all movie data. Please try again.");
+                });
         }
 
         // Create floating hearts
@@ -736,12 +1411,227 @@
             document.getElementById('confirmation-dialog').style.display = 'none';
         }
 
+        // Fetch data from Google Sheets - improved JSONP version
+        function fetchMovieData() {
+            return new Promise((resolve, reject) => {
+                showLoadingOverlay('Loading movies from database...');
+                
+                const scriptId = `fetch_script_${Date.now()}`;
+                const callbackName = `fetch_callback_${Date.now()}`;
+                
+                // Create the URL with callback parameter
+                const scriptUrl = new URL("https://script.google.com/macros/s/AKfycbySBH2y2Tym5jB-w8VN8Nx6QORxFQkDEAgFf4po0mgLaS_PCJfxcbge_ZsGgwujPFd6/exec");
+                scriptUrl.searchParams.append('callback', callbackName);
+                scriptUrl.searchParams.append('_', Date.now()); // Cache buster
+                
+                // Define cleanup function
+                const cleanup = () => {
+                    // Remove the script element
+                    const scriptElement = document.getElementById(scriptId);
+                    if (scriptElement && scriptElement.parentNode) {
+                        scriptElement.parentNode.removeChild(scriptElement);
+                    }
+                    
+                    // Remove the global callback
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                    }
+                };
+                
+                // Define the callback function
+                window[callbackName] = function(data) {
+                    console.log("Received movie data:", data);
+                    cleanup();
+                    
+                    try {
+                        // Check for errors
+                        if (data && data.error) {
+                            console.error("API returned error:", data.error);
+                            createGenreCards(); // Use default data
+                            hideLoadingOverlay();
+                            reject(new Error(data.error));
+                            return;
+                        }
+                        
+                        // Make sure we got an array of movies
+                        if (!Array.isArray(data)) {
+                            console.error("Unexpected data format:", data);
+                            createGenreCards(); // Use default data
+                            hideLoadingOverlay();
+                            reject(new Error("Unexpected data format"));
+                            return;
+                        }
+                        
+                        // Process data into our format
+                        const tempDb = {};
+                        let movieCount = 0;
+                        
+                        data.forEach(row => {
+                            const genre = row.Genre.toLowerCase();
+                            if (!tempDb[genre]) tempDb[genre] = [];
+                            
+                            // Convert watched string to boolean
+                            const isWatched = row.Watched === "TRUE" || row.Watched === true;
+                            
+                            tempDb[genre].push({
+                                title: row.Title,
+                                watched: isWatched,
+                                rating: parseInt(row.Rating) || 0
+                            });
+                            
+                            movieCount++;
+                        });
+                        
+                        console.log(`Processed ${movieCount} movies in ${Object.keys(tempDb).length} genres`);
+                        
+                        // Only replace movieDatabase if we got data
+                        if (Object.keys(tempDb).length > 0) {
+                            movieDatabase = tempDb;
+                            console.log("Updated movie database:", movieDatabase);
+                        } else {
+                            console.warn("No movie data received, using default database");
+                        }
+                        
+                        // Create genre cards after data is fetched
+                        createGenreCards();
+                        hideLoadingOverlay();
+                        resolve(true);
+                    } catch (error) {
+                        console.error("Error processing movie data:", error);
+                        createGenreCards(); // Use default data
+                        hideLoadingOverlay();
+                        reject(error);
+                    }
+                };
+                
+                // Create and add the script element
+                const script = document.createElement('script');
+                script.id = scriptId;
+                script.src = scriptUrl.toString();
+                
+                // Set up error handler
+                script.onerror = function() {
+                    console.error("Failed to load movie data script");
+                    cleanup();
+                    
+                    // Use default data if fetch fails
+                    console.warn("Using default movie data due to script load error");
+                    createGenreCards();
+                    hideLoadingOverlay();
+                    reject(new Error("Failed to load movie data script"));
+                };
+                
+                // Add the script to the document
+                document.body.appendChild(script);
+                
+                // Set a timeout
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        console.error("Movie data fetch timed out");
+                        cleanup();
+                        
+                        // Use default data
+                        console.warn("Using default movie data due to timeout");
+                        createGenreCards();
+                        hideLoadingOverlay();
+                        reject(new Error("Movie data fetch timed out"));
+                    }
+                }, 15000); // 15 second timeout
+            });
+        }
+
+        // Update movie in Google Sheets - improved JSONP version with better error handling
+        function updateMovieData(genre, title, watched, rating) {
+            return new Promise((resolve, reject) => {
+                // Show more clear debug information
+                const watchedValue = watched ? "TRUE" : "FALSE";
+                console.log(`Updating ${title} (${genre}): Setting watched=${watchedValue}, rating=${rating}`);
+                
+                const scriptId = `jsonp_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+                const callbackName = `callback_${Date.now()}_${Math.floor(Math.random() * 1000000)}`;
+                
+                // Create the URL with parameters
+                const scriptUrl = new URL("https://script.google.com/macros/s/AKfycbySBH2y2Tym5jB-w8VN8Nx6QORxFQkDEAgFf4po0mgLaS_PCJfxcbge_ZsGgwujPFd6/exec");
+                scriptUrl.searchParams.append('Genre', genre);
+                scriptUrl.searchParams.append('Title', title);
+                scriptUrl.searchParams.append('Watched', watchedValue);
+                scriptUrl.searchParams.append('Rating', rating.toString());
+                scriptUrl.searchParams.append('callback', callbackName);
+                scriptUrl.searchParams.append('_', Date.now()); // Cache buster
+                
+                // Define cleanup function
+                const cleanup = () => {
+                    // Remove the script element
+                    const scriptElement = document.getElementById(scriptId);
+                    if (scriptElement && scriptElement.parentNode) {
+                        scriptElement.parentNode.removeChild(scriptElement);
+                    }
+                    
+                    // Remove the global callback
+                    if (window[callbackName]) {
+                        delete window[callbackName];
+                    }
+                };
+                
+                // Define the callback function
+                window[callbackName] = function(response) {
+                    console.log(`Received response for ${title}:`, response);
+                    cleanup();
+                    
+                    if (response && response.error) {
+                        console.error(`Error updating ${title}:`, response.error);
+                        reject(new Error(response.error));
+                        return;
+                    }
+                    
+                    // Check if the update was successful
+                    if (response && response.success) {
+                        console.log(`Successfully updated ${title} (${genre}) - watched=${response.watched}, rating=${response.rating}`);
+                        resolve(response);
+                    } else {
+                        console.warn(`Update may have failed for ${title}:`, response);
+                        resolve(response || { success: true });
+                    }
+                };
+                
+                // Create and add the script element
+                const script = document.createElement('script');
+                script.id = scriptId;
+                script.src = scriptUrl.toString();
+                
+                // Set up error handler
+                script.onerror = function() {
+                    console.error(`Failed to load script for updating ${title}`);
+                    cleanup();
+                    reject(new Error(`Network error while updating ${title}`));
+                };
+                
+                // Add the script to the document
+                document.body.appendChild(script);
+                
+                // Set a timeout
+                setTimeout(() => {
+                    if (window[callbackName]) {
+                        console.error(`Request timed out for ${title}`);
+                        cleanup();
+                        reject(new Error(`Request timed out for ${title}`));
+                    }
+                }, 15000); // 15 second timeout
+            });
+        }
+
         // Initialize on page load
         window.addEventListener('load', () => {
+            // First create hearts (visual element that doesn't depend on data)
             createHearts();
-            loadMovieData(); // Load saved movie data first
-            createGenreCards();
+            
+            // Set active nav item
             setActiveNav();
+            
+            // Fetch movie data from API
+            fetchMovieData().catch(error => {
+                console.error("Failed to initialize movie data:", error);
+            });
             
             // Set up reset button
             document.getElementById('reset-all-btn').addEventListener('click', showConfirmationDialog);
@@ -750,6 +1640,16 @@
                 hideConfirmationDialog();
             });
             document.getElementById('cancel-reset').addEventListener('click', hideConfirmationDialog);
+            
+            // Set up Show All Watched button
+            document.getElementById('show-watched-btn').addEventListener('click', showAllWatchedMovies);
+            
+            // Set up Suggest Movie button
+            document.getElementById('suggest-movie-btn').addEventListener('click', showSuggestionDialog);
+            
+            // Set up movie suggestion form buttons
+            document.getElementById('submit-suggestion').addEventListener('click', addMovieSuggestion);
+            document.getElementById('cancel-suggestion').addEventListener('click', hideSuggestionDialog);
         });
     </script>
 </body>
