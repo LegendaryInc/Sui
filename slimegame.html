@@ -42,6 +42,24 @@
             border-right: 3px solid #ff9ec6;
         }
 
+        .nav-container a {
+            text-decoration: none;
+            color: white;
+            font-size: 0.9em;
+            text-align: center;
+            padding: 15px 0;
+            margin: 5px 0;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-container img {
+            width: 45px;
+            height: 45px;
+            object-fit: contain;
+            margin-bottom: 5px;
+        }
+
         /* ===== RIGHT STORE NAVIGATION BAR ===== */
         .nav-container-right {
             position: fixed;
@@ -355,10 +373,24 @@
                     <p>Give your slime a name and choose its color</p>
                     <div class="slime-form">
                         <input type="text" id="slime-name-input" placeholder="Name your slime">
-                        <div class="color-picker">
-                            <span>Choose a color:</span>
-                            <input type="color" id="slime-color-input" value="#88ff88">
-                        </div>
+<div class="color-picker">
+    <span>Choose a color:</span>
+    <div style="display: flex; gap: 18px; margin-top: 8px;">
+        <label style="display: flex; flex-direction: column; align-items: center;">
+            <input type="radio" name="slime-color" value="#808080" checked>
+            <span style="display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: #808080; border: 2px solid #888; margin-top: 4px;"></span>
+        </label>
+        <label style="display: flex; flex-direction: column; align-items: center;">
+            <input type="radio" name="slime-color" value="#d17965">
+            <span style="display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: #d17965; border: 2px solid #b05a4a; margin-top: 4px;"></span>
+        </label>
+        <label style="display: flex; flex-direction: column; align-items: center;">
+            <input type="radio" name="slime-color" value="#a0ad4d">
+            <span style="display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: #a0ad4d; border: 2px solid #7e8a3b; margin-top: 4px;"></span>
+        </label>
+    </div>
+    <input type="hidden" id="slime-color-input" value="#808080">
+</div>
                         <button class="create-slime-button" id="create-slime-button">Create Slime</button>
                     </div>
                  </div>
@@ -779,10 +811,36 @@
     }
 
     function renderStoreItems(category = 'all'){
-        const lE=document.getElementById('store-items-list');if(!lE){console.error("Store list element not found."); return;}lE.innerHTML='';
+        const lE=document.getElementById('store-items-list');
+        if(!lE){console.error("Store list element not found."); return;}
+        lE.innerHTML='';
         const itemsToDisplay = (category==='all') ? storeItems : storeItems.filter(i=>i.itemType===category);
-        if(!itemsToDisplay||itemsToDisplay.length===0){lE.innerHTML=`<li>No items found for category: ${category}.</li>`;return;}
-        itemsToDisplay.forEach(i=>{const li=document.createElement('li');li.className='item-card';li.dataset.itemId=i.itemId;let v=(i.itemType==='Color'&&i.dataValue)?`<div class="item-color-preview" style="background-color: ${i.dataValue};"></div>`:(i.dataValue&&typeof i.dataValue==='string'&&i.dataValue.startsWith('http'))?`<img src="${i.dataValue}" alt="${i.itemName}">`:'<div>?</div>';const o=inventoryData.find(oi=>oi.itemId===i.itemId);const q=o?o.quantity:0;li.innerHTML=`${v}<div class="item-name">${i.itemName}</div><div class="item-price">${i.price} Coins</div>${q>0?`<div class="equipped-status">Owned: ${q}</div>`:''}<button class="buy-btn">Buy</button>`;lE.appendChild(li);});
+        if(!itemsToDisplay||itemsToDisplay.length===0){
+            lE.innerHTML=`<li>No items found for category: ${category}.</li>`;
+            return;
+        }
+        itemsToDisplay.forEach(i=>{
+            const li=document.createElement('li');
+            li.className='item-card';
+            li.dataset.itemId=i.itemId;
+            let v = '';
+            if(i.itemType==='Color' && i.dataValue){
+                // Show a big color preview and a 🎨 emoji
+                v = `<div class="item-color-preview" style="background-color: ${i.dataValue}; margin: 0 auto 8px auto;"></div>
+                     <div style="font-size:1.5em; margin-bottom:4px;">🎨</div>`;
+            } else if(i.dataValue && typeof i.dataValue==='string' && i.dataValue.startsWith('http')){
+                v = `<img src="${i.dataValue}" alt="${i.itemName}">`;
+            } else if(i.dataValue && typeof i.dataValue==='string' && i.dataValue.length <= 3) {
+                // Emoji: show big and centered
+                v = `<div style="font-size: 2.8em; margin-bottom: 8px; line-height: 1;">${i.dataValue}</div>`;
+            } else {
+                v = '<div>?</div>';
+            }
+            const o=inventoryData.find(oi=>oi.itemId===i.itemId);
+            const q=o?o.quantity:0;
+            li.innerHTML=`${v}<div class="item-name">${i.itemName}</div><div class="item-price">${i.price} Coins</div>${q>0?`<div class="equipped-status">Owned: ${q}</div>`:''}<button class="buy-btn">Buy</button>`;
+            lE.appendChild(li);
+        });
         lE.querySelectorAll('.buy-btn').forEach(b=>b.addEventListener('click',handlePurchaseItem));
     }
 
@@ -912,7 +970,17 @@
 
     function createHearts() { /* ... same ... */ const c=document.getElementById('hearts-container');if(!c)return;c.innerHTML='';for(let i=0;i<20;i++){const h=document.createElement('div');h.className='heart';h.innerHTML='❤️';h.style.left=`${Math.random()*100}vw`;h.style.animationDuration=`${15+Math.random()*10}s`;h.style.animationDelay=`${Math.random()*5}s`;h.style.fontSize=`${20+Math.random()*20}px`;c.appendChild(h);}}
 
-    window.addEventListener('load', () => { createHearts(); setupEventListeners(); initializeGame(); });
+    function setupSlimeColorRadios() {
+        const radios = document.querySelectorAll('input[name="slime-color"]');
+        const hiddenInput = document.getElementById('slime-color-input');
+        radios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.checked) hiddenInput.value = this.value;
+            });
+        });
+    }
+
+    window.addEventListener('load', () => { createHearts(); setupEventListeners(); initializeGame(); setupSlimeColorRadios(); });
     window.addEventListener('beforeunload', e => { if (slimeData && playerData.playerId) { saveSlimeData(); } });
 </script>
 </body>
