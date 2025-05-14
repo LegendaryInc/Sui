@@ -25,7 +25,7 @@
         }
 
         /* ===== LEFT KUROMI NAVIGATION BAR ===== */
-        .nav-container-left { /* Renamed for clarity */
+        .nav-container-left {
             position: fixed;
             left: 0;
             top: 0;
@@ -47,17 +47,16 @@
             right: 0;
             top: 0;
             height: 100vh;
-            width: 100px; /* Same width as left for symmetry */
-            background-color: #2a0a3a; /* Kuromi theme to match left */
+            width: 100px; 
+            background-color: #2a0a3a; 
             display: flex;
             flex-direction: column;
             align-items: center;
             padding-top: 30px;
             z-index: 1000;
-            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2); /* Shadow on its left */
-            border-left: 3px solid #ff9ec6; /* Border on its left */
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2); 
+            border-left: 3px solid #ff9ec6; 
         }
-        /* Common styles for nav items in both left and right nav bars */
         .nav-item {
             width: 100%;
             text-align: center;
@@ -73,9 +72,9 @@
         .active { background-color: #ff66a3; font-weight: bold; }
 
 
-        .page-wrapper { /* Wraps header and main content */
-            max-width: 1000px; /* Can be wider now */
-            margin: 0 auto; /* Centers in the available space between navs */
+        .page-wrapper { 
+            max-width: 1000px; 
+            margin: 0 auto; 
             padding: 20px 0; 
             position: relative;
         }
@@ -85,11 +84,11 @@
             text-transform: uppercase; font-weight: bold; border-radius: 12px;
             margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative;
         }
-        .main-content-area { /* Area for main page content, including the game */
-            width: 100%; padding: 20px; background-color: white; /* Reduced padding for game */
+        .main-content-area { 
+            width: 100%; padding: 20px; background-color: white;
             border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             margin-bottom: 40px; position: relative;
-            display: flex; /* Keep for centering game elements */
+            display: flex; 
             flex-direction: column;
             align-items: center;
         }
@@ -102,15 +101,13 @@
         .main-bow-tl { top: -15px; left: -15px; } .main-bow-tr { top: -15px; right: -15px; }
         .main-bow-bl { bottom: -15px; left: -15px; } .main-bow-br { bottom: -15px; right: -15px; }
 
-
-        /* ===== SLIME GAME STYLES (back in main content area) ===== */
         .slime-game-wrapper {
              display: flex;
              flex-direction: column;
              align-items: center;
              width: 100%;
-             max-width: 500px; /* Max width for the game area itself */
-             margin: 0 auto; /* Center the game wrapper */
+             max-width: 500px; 
+             margin: 0 auto; 
         }
         .slime-container {
             display: flex; flex-direction: column; align-items: center;
@@ -126,7 +123,7 @@
         #slimeCanvas {
             border: 3px solid #a0d2eb; box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 10px; display: block;
-            max-width: 100%; /* Ensure it doesn't overflow .slime-container */
+            max-width: 100%; 
         }
         .status-bars {
             display: flex; gap: 20px; margin-bottom: 20px; width: 100%;
@@ -139,7 +136,6 @@
         .bar-fill { height: 100%; background-color: #4CAF50; width: 100%; transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out; }
         .controls { margin-bottom: 15px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
         .controls button { padding: 10px 20px; font-size: 1em; }
-        /* Button specific colors remain the same */
         #feedButton { background-color: #f9a825; } #feedButton:hover { background-color: #f57f17; }
         #playButton { background-color: #66bb6a; } #playButton:hover { background-color: #43a047; }
         #shortBounceButton { background-color: #4fc3f7; } #shortBounceButton:hover { background-color: #29b6f6; }
@@ -159,33 +155,16 @@
         .hat-btn { font-size: 20px; }
         #slimeMessage { font-size: 1.1em; }
 
-
-        /* ===== RESPONSIVE STYLES ===== */
         @media (max-width: 768px) {
-            body {
-                padding-left: 80px; /* Keep left nav space */
-                padding-right: 0; /* Remove right nav space, it will stack or hide */
-            }
+            body { padding-left: 80px; padding-right: 0; }
             .nav-container-left { width: 80px; }
-            .nav-container-right {
-                display: none; /* Hide right nav on smaller screens, or implement a toggle */
-                /* Or:
-                position: relative; width: 100%; height: auto;
-                margin-top: 10px; border-left: none; border-top: 2px solid #ff9ec6;
-                flex-direction: row; justify-content: space-around; padding: 5px 0;
-                */
-            }
-            .nav-item { font-size: 0; padding: 15px 0; } /* For icon-only nav items */
+            .nav-container-right { display: none; }
+            .nav-item { font-size: 0; padding: 15px 0; }
             .nav-item img { width: 40px; height: 40px; margin-bottom: 0; }
             header { font-size: 1.8em; padding: 15px; }
-            .main-content-area { padding: 20px; } /* Adjust padding */
-            
-            /* Game element adjustments for smaller screens if needed */
+            .main-content-area { padding: 20px; }
             .slime-game-wrapper { max-width: 95%; }
-            #slimeCanvas { /* dimensions set by JS, ensure responsive */
-                max-width: 100%;
-                height: auto; /* Maintain aspect ratio */
-            }
+            #slimeCanvas { max-width: 100%; height: auto; }
             .slime-name-header { font-size: 2em !important; }
             .status-bars { flex-direction: column; gap: 10px !important; }
             .bar-container { width: 100% !important; }
@@ -207,6 +186,10 @@
         <a href="movies.html" class="nav-item movies"><img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker"> Movie Picker</a>
         <a href="bookdate.html" class="nav-item bookdate"><img src="https://i.imgur.com/megzmKr.png" alt="Book a Date"> Book a Date</a>
         <a href="timezone.html" class="nav-item timezone"><img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge"> Time Bridge</a>
+        <a href="slimegame.html" class="nav-item slimegame"> <!-- This will be marked active by JS -->
+            <img src="https://i.imgur.com/yFzLbfM.png" alt="Slime Game Icon"> <!-- UPDATED ICON URL -->
+            Slime Game
+        </a>
     </div>
 
     <!-- Main Page Content (Slime Game is Here) -->
@@ -287,29 +270,18 @@
 
     <!-- Right Navigation Bar (Links Only) -->
     <div class="nav-container-right">
-        <!-- Add any links you want here, e.g., back to Home or other sections -->
-        <a href="index.html" class="nav-item">
-            <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home Icon"> <!-- Example Icon -->
-            Home
-        </a>
-        <a href="slimegame.html" class="nav-item active"> <!-- Link to itself, marked active -->
-            <img src="https://i.imgur.com/QY1Y0nC.png" alt="Slime Game Icon">
+        <!-- Only the Slime Game link, active on this page -->
+        <a href="slimegame.html" class="nav-item active">
+            <img src="https://i.imgur.com/yFzLbfM.png" alt="Slime Game Icon"> <!-- UPDATED ICON URL -->
             Slime Game
         </a>
-        <!-- Add more links as desired -->
-         <a href="loveletters.html" class="nav-item">
-            <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters Icon">
-            Love Letters
-        </a>
+        <!-- You can add other static links here if you wish, but per your request, keeping it minimal -->
     </div>
 
     <div class="hearts-container" id="hearts-container"></div>
 
     <script>
-        // All JavaScript for createHearts, setActiveNav, and the slime game logic
-        // remains exactly the same as the previous full code response.
-        // No changes are needed in the JS for this layout adjustment.
-        function createHearts() { /* ... same ... */ 
+        function createHearts() { 
             const container = document.getElementById('hearts-container');
             if (!container) return;
             const heartCount = container.children.length;
@@ -331,8 +303,8 @@
         }
         function setActiveNav() {
             const leftNavItems = document.querySelectorAll('.nav-container-left .nav-item');
-            const rightNavItems = document.querySelectorAll('.nav-container-right .nav-item'); // Get right nav items too
-            const allNavItems = [...leftNavItems, ...rightNavItems]; // Combine node lists
+            const rightNavItems = document.querySelectorAll('.nav-container-right .nav-item');
+            const allNavItems = [...leftNavItems, ...rightNavItems]; 
 
             let path = window.location.pathname.split("/").pop();
             if (path === "") { path = "index.html"; }
@@ -344,7 +316,6 @@
                 }
             });
         }
-
 
         const canvas = document.getElementById('slimeCanvas');
         const ctx = canvas.getContext('2d');
@@ -364,12 +335,11 @@
         const hatButtons = document.querySelectorAll('.hat-btn');
         const bgButtons = document.querySelectorAll('.bg-btn');
 
-
         const MAX_STAT = 100, STAT_DECAY_RATE = 1, FEED_AMOUNT = 30, PLAY_AMOUNT = 25;
         const TICK_INTERVAL = 2000, ANIMATION_FPS = 30;
         let animationFrameId = null, gameLogicIntervalId = null;
 
-        let slime = { // Back to original larger slime for main content area
+        let slime = { 
             hunger: MAX_STAT, happiness: MAX_STAT,
             x: canvas.width / 2, y: canvas.height - 90, 
             originalX: canvas.width / 2, 
@@ -385,7 +355,7 @@
             animationTimer: 0 
         };
 
-        function getGradientColors(rgbaString, state = 'normal') { /* ... same ... */ 
+        function getGradientColors(rgbaString, state = 'normal') { 
             const match = rgbaString.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
             if (!match) return [rgbaString, rgbaString];
             let r = parseInt(match[1]), g = parseInt(match[2]), b = parseInt(match[3]), a = match[4] ? parseFloat(match[4]) : 1;
@@ -396,7 +366,7 @@
             return [`rgba(${lighterR}, ${lighterG}, ${lighterB}, ${a})`, `rgba(${modR}, ${modG}, ${modB}, ${a})`];
         }
 
-        function drawSlime() { /* ... same, uses the larger slime dimensions ... */
+        function drawSlime() { 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             let currentHeight = slime.baseHeight - slime.bounceHeight;
             let currentSlimeX = slime.x; 
@@ -457,7 +427,7 @@
             ctx.stroke();
         }
         
-        function updateStatusBars() { /* ... same ... */ 
+        function updateStatusBars() { 
             const hungerPercent = (slime.hunger / MAX_STAT) * 100;
             hungerBar.style.width = hungerPercent + '%';
             hungerValueDisplay.textContent = `${Math.round(slime.hunger)}/${MAX_STAT}`;
@@ -472,13 +442,13 @@
             else if (happinessPercent < 60) happinessBar.style.backgroundColor = '#ffeb3b';
             else happinessBar.style.backgroundColor = '#4CAF50';
         }
-        function determineSlimeColorAndExpression() { /* ... same ... */ 
+        function determineSlimeColorAndExpression() { 
             if (slime.hunger < 30 || slime.happiness < 30) { slime.mouthType = 'sad'; setMessage("Sui looks sad and hungry!"); }
             else if (slime.hunger < 60 || slime.happiness < 60) { slime.mouthType = 'neutral'; setMessage("Sui seems a bit bored or peckish."); }
             else { slime.mouthType = 'smile'; setMessage("Sui is content!"); }
         }
 
-        function gameAnimationLoop() { /* ... same ... */ 
+        function gameAnimationLoop() { 
             if (slime.isBouncing) {
                 if (slime.bounceType === 'wiggle') {
                     slime.bounceDuration -= 1000 / ANIMATION_FPS; 
@@ -500,7 +470,7 @@
             drawSlime();
             animationFrameId = requestAnimationFrame(gameAnimationLoop);
         }
-        function gameLogicTick() { /* ... same ... */ 
+        function gameLogicTick() { 
             slime.hunger -= STAT_DECAY_RATE; slime.happiness -= STAT_DECAY_RATE;
             slime.hunger = Math.max(0, slime.hunger); slime.happiness = Math.max(0, slime.happiness);
             if (slime.animationTimer <= 0) { determineSlimeColorAndExpression();
@@ -514,7 +484,7 @@
             updateStatusBars();
         }
         
-        function feedSui() { /* ... same ... */ 
+        function feedSui() { 
             if (slime.hunger < MAX_STAT) {
                 slime.hunger = Math.min(MAX_STAT, slime.hunger + FEED_AMOUNT);
                 slime.happiness = Math.min(MAX_STAT, slime.happiness + PLAY_AMOUNT / 3);
@@ -524,7 +494,7 @@
                 triggerBounce('normal', 1000); 
             } else { setMessage("Sui is already full!"); }
         }
-        function playWithSui() { /* ... same ... */ 
+        function playWithSui() { 
             if (slime.happiness < MAX_STAT) {
                 slime.happiness = Math.min(MAX_STAT, slime.happiness + PLAY_AMOUNT);
                 setMessage("Whee! Sui had fun playing!");
@@ -533,28 +503,28 @@
                 triggerBounce('normal', 1500); 
             } else { setMessage("Sui is perfectly happy right now!"); }
         }
-        function triggerBounce(type = 'normal', duration = 750) { /* ... same ... */ 
+        function triggerBounce(type = 'normal', duration = 750) { 
             if (slime.isBouncing && slime.bounceType !== 'normal' && type === 'normal') return;
             slime.isBouncing = true; slime.bounceType = type; slime.bounceDuration = duration; 
             if (type === 'wiggle') { slime.originalX = slime.x; setMessage("Sui is wiggling happily!"); }
             else if (type === 'short') { setMessage("Boing!"); }
         }
-        function shortBounceSui() { /* ... same ... */ if (!slime.isBouncing || slime.bounceType === 'normal') { triggerBounce('short', 700); } }
-        function happyWiggleSui() { /* ... same ... */ if (!slime.isBouncing || slime.bounceType === 'normal') { triggerBounce('wiggle', 2000); } }
+        function shortBounceSui() { if (!slime.isBouncing || slime.bounceType === 'normal') { triggerBounce('short', 700); } }
+        function happyWiggleSui() { if (!slime.isBouncing || slime.bounceType === 'normal') { triggerBounce('wiggle', 2000); } }
         function setMessage(msg) { slimeMessage.textContent = msg; }
 
-        colorButtons.forEach(button => { /* ... same ... */ 
+        colorButtons.forEach(button => { 
             button.addEventListener('click', () => {
                 slime.baseColor = button.dataset.color;
                 if (slime.animationTimer <= 0) { determineSlimeColorAndExpression(); }
             });
         });
-        hatButtons.forEach(button => { /* ... same ... */ 
+        hatButtons.forEach(button => { 
             button.addEventListener('click', () => {
                 slime.hat = (button.dataset.hat === 'none') ? null : button.dataset.hat;
             });
         });
-        bgButtons.forEach(button => { /* ... same ... */ 
+        bgButtons.forEach(button => { 
             button.addEventListener('click', () => {
                 const bgValue = button.dataset.bg;
                 if (bgValue.startsWith('url') || bgValue.startsWith('linear-gradient')) {
@@ -573,7 +543,6 @@
         
         function startGame() { 
             slime.x = canvas.width / 2; slime.originalX = slime.x;
-            // Slime Y position is relative to its own canvas, so this is fine.
             slime.y = canvas.height - (slime.baseHeight / 2) - 30; 
             determineSlimeColorAndExpression(); updateStatusBars();
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
