@@ -6,7 +6,6 @@
     <title>Slime Care Game | Happy Birthday!</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
     <style>
-        /* ... (existing general, nav, page-wrapper, header, main, decorative, responsive styles remain the same) ... */
         * {
             margin: 0;
             padding: 0;
@@ -87,7 +86,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
         }
-        .main-content-area { /* Renamed main for clarity */
+        .main-content-area {
             width: 100%;
             padding: 40px;
             background-color: white;
@@ -150,10 +149,10 @@
             .nav-item img { width: 40px; height: 40px; margin-bottom: 0; }
             .nav-item span { font-size: 24px !important; }
             header { font-size: 1.8em; padding: 15px; }
-            .main-content-area { padding: 25px; } /* Adjusted for new class name */
+            .main-content-area { padding: 25px; }
             #slimeCanvas {
                 width: 100% !important; 
-                max-width: 350px !important; /* Keep canvas from getting too huge on small screens */
+                max-width: 380px !important; /* Adjusted max width for canvas */
                 height: auto !important; 
                  /* Adjust height based on new slime size if canvas fixed height */
             }
@@ -161,26 +160,25 @@
             .status-bars { flex-direction: column; width: 90% !important; gap: 10px !important; }
             .bar-container { width: 100% !important; }
             .customization { width: 90% !important; }
+            .controls button { font-size: 0.9em; padding: 8px 15px; }
         }
 
-
-        /* ===== SLIME GAME SPECIFIC STYLES ===== */
-        .slime-container { /* New container for name + canvas */
+        .slime-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-bottom: 20px;
-            background-color: #fff0f5; /* LavenderBlush - cute background for the slime area */
+            background-color: #fff0f5; 
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 2px 6px rgba(155, 77, 150, 0.2); /* Soft purple shadow */
-            border: 2px dashed #ffc0cb; /* Pink dashed border */
+            box-shadow: 0 2px 6px rgba(155, 77, 150, 0.2); 
+            border: 2px dashed #ffc0cb; 
         }
 
         .slime-name-header {
             font-family: 'Pacifico', cursive;
-            font-size: 2.2em; /* Bigger name */
-            color: #9b4d96; /* Theme purple */
+            font-size: 2.2em; 
+            color: #9b4d96; 
             margin-bottom: 10px;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
@@ -190,56 +188,128 @@
             background-color: #e0ffff; 
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 10px;
-            /* width and height set in JS for bigger slime */
         }
 
-        .status-bars { /* Styles mostly okay */ }
-        .status-bar { /* Styles mostly okay */ }
-        .status-bar label { /* Styles mostly okay */ }
-        .bar-container { /* Styles mostly okay */ }
-        .bar-fill { /* Styles mostly okay */ }
-        .controls { /* Styles mostly okay */ }
-        .controls button { /* Styles mostly okay */ }
-        #feedButton { /* Styles mostly okay */ }
-        #feedButton:hover { /* Styles mostly okay */ }
-        #playButton { /* Styles mostly okay */ }
-        #playButton:hover { /* Styles mostly okay */ }
-        .customization { /* Styles mostly okay, maybe slight color tweaks */
+        .status-bars {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 420px; /* Adjusted to accommodate canvas size */
+            justify-content: space-around;
+        }
+
+        .status-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .status-bar label { margin-bottom: 5px; font-weight: bold; }
+        .bar-container {
+            width: 180px; /* Adjusted for wider status bar area */
+            height: 20px;
+            background-color: #e0e0e0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        .bar-fill {
+            height: 100%;
+            background-color: #4CAF50;
+            width: 100%;
+            transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+
+        .controls {
+            margin-bottom: 15px;
+            display: flex; /* For better button layout */
+            flex-wrap: wrap; /* Allow buttons to wrap */
+            justify-content: center; /* Center buttons */
+            gap: 10px; /* Space between buttons */
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            font-size: 1em;
+            font-family: 'Poppins', sans-serif;
+            /* margin: 5px; Removed margin, using gap from flex container */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            transition: all 0.2s;
+        }
+        .controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        #feedButton { background-color: #f9a825; }
+        #feedButton:hover { background-color: #f57f17; }
+        #playButton { background-color: #66bb6a; }
+        #playButton:hover { background-color: #43a047; }
+        /* New bounce button styles */
+        #shortBounceButton { background-color: #4fc3f7; } /* Light Blue */
+        #shortBounceButton:hover { background-color: #29b6f6; }
+        #happyWiggleButton { background-color: #ffee58; color: #5d4037; } /* Yellow with dark text */
+        #happyWiggleButton:hover { background-color: #fdd835; }
+
+
+        .customization {
             background-color: #fff8fa;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 420px; /* Adjusted */
+            text-align: center;
         }
-        .customization h3 { /* Styles mostly okay */ }
-        .customization p { /* Styles mostly okay */ }
-        .color-picker, .hat-picker { /* Styles mostly okay */ }
-        .color-btn { /* Styles mostly okay */ }
-        .hat-btn { /* Styles mostly okay */ }
-        #slimeMessage { /* Styles mostly okay */ }
-
+        .customization h3 {
+            margin-top: 0; margin-bottom: 10px; color: #9b4d96;
+            font-family: 'Pacifico', cursive; font-size: 1.5em;
+        }
+        .customization p {
+            margin: 5px 0 8px 0; font-weight: bold; color: #7c3c79;
+            font-family: 'Poppins', sans-serif;
+        }
+        .color-picker, .hat-picker {
+            margin-bottom: 10px; display: flex; justify-content: center;
+            align-items: center; gap: 8px; flex-wrap: wrap;
+        }
+        .color-picker p, .hat-picker p { margin-right: 10px; }
+        .color-btn {
+            width: 30px; height: 30px; border: 2px solid #ccc;
+            border-radius: 50%; cursor: pointer; font-size: 0;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .color-btn:hover { transform: scale(1.1); border-color: #888; }
+        .hat-btn {
+            padding: 5px 10px; font-size: 20px; border: 1px solid #ccc;
+            border-radius: 5px; background-color: #f0f0f0; cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        .hat-btn:hover { background-color: #e0e0e0; transform: scale(1.1); }
+        #slimeMessage {
+            font-size: 1.1em; font-family: 'Poppins', sans-serif;
+            color: #555; min-height: 25px; font-style: italic; margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="nav-container">
-        <!-- ... navigation items ... -->
-        <a href="index.html" class="nav-item home">
-            <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home"> Home
-        </a>
-        <a href="loveletters.html" class="nav-item letters">
-            <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters"> Love Letters
-        </a>
-        <a href="lovecalculator.html" class="nav-item calculator">
-            <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator"> Love Calculator
-        </a>
-        <a href="movies.html" class="nav-item movies">
-            <img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker"> Movie Picker
-        </a>
-        <a href="bookdate.html" class="nav-item bookdate">
-            <img src="https://i.imgur.com/megzmKr.png" alt="Book a Date"> Book a Date
-        </a>
-        <a href="timezone.html" class="nav-item timezone">
-            <img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge"> Time Bridge
-        </a>
-        <a href="slimegame.html" class="nav-item slimegame"> 
-            <img src="https://i.imgur.com/QY1Y0nC.png" alt="Slime Game Icon"> Slime Game
-        </a>
+        <a href="index.html" class="nav-item home"><img src="https://i.imgur.com/ZAl2gbp.png" alt="Home"> Home</a>
+        <a href="loveletters.html" class="nav-item letters"><img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters"> Love Letters</a>
+        <a href="lovecalculator.html" class="nav-item calculator"><img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator"> Love Calculator</a>
+        <a href="movies.html" class="nav-item movies"><img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker"> Movie Picker</a>
+        <a href="bookdate.html" class="nav-item bookdate"><img src="https://i.imgur.com/megzmKr.png" alt="Book a Date"> Book a Date</a>
+        <a href="timezone.html" class="nav-item timezone"><img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge"> Time Bridge</a>
+        <a href="slimegame.html" class="nav-item slimegame"> <img src="https://i.imgur.com/QY1Y0nC.png" alt="Slime Game Icon"> Slime Game</a>
     </div>
 
     <div class="page-wrapper">
@@ -249,19 +319,18 @@
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-right">
         </header>
 
-        <div class="main-content-area"> <!-- Changed main to div with class for clarity -->
+        <div class="main-content-area">
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tl">
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tr">
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-bl">
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-br">
             
-            <div class="slime-container"> <!-- New container for name + canvas -->
+            <div class="slime-container">
                 <div class="slime-name-header">Sui</div>
-                <canvas id="slimeCanvas" width="450" height="350"></canvas> <!-- Increased canvas size -->
+                <canvas id="slimeCanvas" width="450" height="350"></canvas>
             </div>
 
             <div class="status-bars">
-                <!-- ... status bars ... -->
                 <div class="status-bar">
                     <label for="hungerBar">Hunger:</label>
                     <div class="bar-container">
@@ -279,13 +348,13 @@
             </div>
 
             <div class="controls">
-                <!-- ... controls ... -->
                 <button id="feedButton">Feed Sui 🍖</button>
                 <button id="playButton">Play with Sui 😊</button>
+                <button id="shortBounceButton">Short Bounce ✨</button> <!-- New Button -->
+                <button id="happyWiggleButton">Happy Wiggle 💃</button> <!-- New Button -->
             </div>
 
             <div class="customization">
-                <!-- ... customization ... -->
                 <h3>Customize Sui!</h3>
                 <div class="color-picker">
                     <p>Color:</p>
@@ -312,7 +381,6 @@
     <div class="hearts-container" id="hearts-container"></div>
 
     <script>
-        // ... (createHearts, setActiveNav functions remain the same) ...
         function createHearts() {
             const container = document.getElementById('hearts-container');
             if (!container) return;
@@ -321,7 +389,7 @@
             for (let i = 0; i < 15; i++) {
                 const heart = document.createElement('div');
                 heart.className = 'heart';
-                heart.innerHTML = '💜'; // Changed to purple to match theme
+                heart.innerHTML = '💜';
                 heart.style.left = `${Math.random() * 100}vw`;
                 heart.style.animationDuration = `${10 + Math.random() * 10}s`; 
                 heart.style.animationDelay = `${Math.random() * 5}s`;
@@ -337,24 +405,21 @@
         function setActiveNav() {
             const navItems = document.querySelectorAll('.nav-container .nav-item');
             let path = window.location.pathname.split("/").pop();
-            if (path === "") {
-                path = "index.html";
-            }
+            if (path === "") { path = "index.html"; }
             navItems.forEach(item => {
                 item.classList.remove('active');
-                if (item.getAttribute('href') === path) {
-                    item.classList.add('active');
-                }
+                if (item.getAttribute('href') === path) { item.classList.add('active'); }
             });
         }
 
-        // ===== SLIME GAME SCRIPT =====
         const canvas = document.getElementById('slimeCanvas');
         const ctx = canvas.getContext('2d');
 
-        // ... (button, bar, display element consts remain the same) ...
         const feedButton = document.getElementById('feedButton');
         const playButton = document.getElementById('playButton');
+        const shortBounceButton = document.getElementById('shortBounceButton'); // New button
+        const happyWiggleButton = document.getElementById('happyWiggleButton'); // New button
+
         const hungerBar = document.getElementById('hungerBar');
         const happinessBar = document.getElementById('happinessBar');
         const hungerValueDisplay = document.getElementById('hungerValue');
@@ -363,301 +428,275 @@
         const colorButtons = document.querySelectorAll('.color-btn');
         const hatButtons = document.querySelectorAll('.hat-btn');
 
-
         const MAX_STAT = 100;
         const STAT_DECAY_RATE = 1;
         const FEED_AMOUNT = 30;
         const PLAY_AMOUNT = 25;
-        const TICK_INTERVAL = 2000;
+        const TICK_INTERVAL = 2000; // Game logic tick
+        const ANIMATION_FPS = 30; // For smoother visual animations like wiggle
+        let animationFrameId = null; // For requestAnimationFrame
 
         let slime = {
             hunger: MAX_STAT,
             happiness: MAX_STAT,
             x: canvas.width / 2,
-            y: canvas.height - 90, // Adjusted for larger slime, ground Y of center-bottom
-            baseWidth: 130,    // BIGGER SLIME
-            baseHeight: 110,   // BIGGER SLIME
+            y: canvas.height - 90, 
+            originalX: canvas.width / 2, // Store original X for wiggle
+            baseWidth: 130,    
+            baseHeight: 110,   
             baseColor: 'rgba(144, 238, 144, 1)', 
             color: 'rgba(144, 238, 144, 1)',    
             hat: null, 
-            hatSize: 55, // BIGGER HAT
+            hatSize: 55, 
             eyeColor: 'black',
             pupilColor: 'white',
-            eyeOffsetX: 28, // Scaled for bigger slime
-            eyeOffsetY: -25, // Scaled for bigger slime
-            eyeRadius: 14,  // Scaled for bigger slime
-            pupilRadius: 6, // Scaled for bigger slime
+            eyeOffsetX: 28, 
+            eyeOffsetY: -25, 
+            eyeRadius: 14,  
+            pupilRadius: 6, 
             mouthType: 'smile',
-            isBouncing: false,
+            isBouncing: false, // General bounce from actions
             bounceHeight: 0,
-            animationTimer: 0
+            bounceType: 'normal', // 'normal', 'short', 'wiggle'
+            bounceDuration: 0, // Timer for specific bounce types
+            wiggleAmplitude: 10,
+            wiggleSpeed: 0.2,
+            animationTimer: 0 // For color/expression changes after feed/play
         };
 
         function getGradientColors(rgbaString, state = 'normal') {
             const match = rgbaString.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
             if (!match) return [rgbaString, rgbaString];
-
-            let r = parseInt(match[1]);
-            let g = parseInt(match[2]);
-            let b = parseInt(match[3]);
-            let a = match[4] ? parseFloat(match[4]) : 1; // Ensure alpha is 1 for base
-
+            let r = parseInt(match[1]), g = parseInt(match[2]), b = parseInt(match[3]), a = match[4] ? parseFloat(match[4]) : 1;
             let modR = r, modG = g, modB = b;
-            // Modify base color for state BEFORE calculating gradient variant
-            if (state === 'sad') {
-                modR = Math.max(0, r - 40); modG = Math.max(0, g - 40); modB = Math.max(0, b - 40);
-            } else if (state === 'neutral') {
-                modR = Math.max(0, r - 20); modG = Math.max(0, g - 20); modB = Math.max(0, b - 20);
-            }
-
-            // Create a noticeably lighter color for the top of the gradient
-            // Increase difference for more pronounced gradient
-            const lighterR = Math.min(255, modR + 60); // Increased difference from +30 to +60
-            const lighterG = Math.min(255, modG + 60);
-            const lighterB = Math.min(255, modB + 60);
-            
-            // Ensure full opacity for gradient colors unless specifically reducing for effect
+            if (state === 'sad') { modR = Math.max(0, r - 40); modG = Math.max(0, g - 40); modB = Math.max(0, b - 40); }
+            else if (state === 'neutral') { modR = Math.max(0, r - 20); modG = Math.max(0, g - 20); modB = Math.max(0, b - 20); }
+            const lighterR = Math.min(255, modR + 60), lighterG = Math.min(255, modG + 60), lighterB = Math.min(255, modB + 60);
             return [`rgba(${lighterR}, ${lighterG}, ${lighterB}, ${a})`, `rgba(${modR}, ${modG}, ${modB}, ${a})`];
         }
 
-
         function drawSlime() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             let currentHeight = slime.baseHeight - slime.bounceHeight;
+            let currentSlimeX = slime.x; // Use this for drawing, allows wiggle to modify it
             let currentY = slime.y + slime.bounceHeight / 2; 
             let slimeBodyTopY = currentY - currentHeight;      
             let slimeBodyBottomY = currentY;                   
 
-            // Determine current state for gradient modification
             let currentState = 'normal';
-            if (slime.animationTimer > 0) { // During animation, use animation color directly
-                 currentState = 'animation';
-            } else if (slime.hunger < 30 || slime.happiness < 30) {
-                currentState = 'sad';
-            } else if (slime.hunger < 60 || slime.happiness < 60) {
-                currentState = 'neutral';
-            }
+            if (slime.animationTimer > 0) { currentState = 'animation'; }
+            else if (slime.hunger < 30 || slime.happiness < 30) { currentState = 'sad'; }
+            else if (slime.hunger < 60 || slime.happiness < 60) { currentState = 'neutral'; }
             
-            // For animations, slime.color is already set. For normal states, derive from baseColor.
             const colorForGradient = (currentState === 'animation') ? slime.color : slime.baseColor;
             const gradientColors = getGradientColors(colorForGradient, currentState);
-            
-            const gradient = ctx.createLinearGradient(slime.x, slimeBodyTopY, slime.x, slimeBodyBottomY);
+            const gradient = ctx.createLinearGradient(currentSlimeX, slimeBodyTopY, currentSlimeX, slimeBodyBottomY);
             gradient.addColorStop(0, gradientColors[0]); 
             gradient.addColorStop(1, gradientColors[1]); 
-
             ctx.fillStyle = gradient;
 
             ctx.beginPath();
-            ctx.moveTo(slime.x, slimeBodyBottomY);
-            ctx.bezierCurveTo(
-                slime.x - slime.baseWidth / 1.5, slimeBodyBottomY + 15, // Adjusted for bigger slime
-                slime.x - slime.baseWidth / 1.8, slimeBodyTopY - 30,    // Adjusted for bigger slime
-                slime.x, slimeBodyTopY                               
-            );
-            ctx.bezierCurveTo(
-                slime.x + slime.baseWidth / 1.8, slimeBodyTopY - 30,    
-                slime.x + slime.baseWidth / 1.5, slimeBodyBottomY + 15, 
-                slime.x, slimeBodyBottomY                               
-            );
-            ctx.closePath();
-            ctx.fill();
+            ctx.moveTo(currentSlimeX, slimeBodyBottomY);
+            ctx.bezierCurveTo(currentSlimeX - slime.baseWidth/1.5, slimeBodyBottomY+15, currentSlimeX - slime.baseWidth/1.8, slimeBodyTopY-30, currentSlimeX, slimeBodyTopY);
+            ctx.bezierCurveTo(currentSlimeX + slime.baseWidth/1.8, slimeBodyTopY-30, currentSlimeX + slime.baseWidth/1.5, slimeBodyBottomY+15, currentSlimeX, slimeBodyBottomY);
+            ctx.closePath(); ctx.fill();
 
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-            ctx.beginPath();
-            ctx.ellipse(slime.x, slimeBodyBottomY + 8, slime.baseWidth / 2.1, 8, 0, 0, Math.PI * 2); // Bigger shadow
-            ctx.fill();
+            ctx.fillStyle = 'rgba(0,0,0,0.15)'; ctx.beginPath();
+            ctx.ellipse(currentSlimeX, slimeBodyBottomY+8, slime.baseWidth/2.1, 8, 0, 0, Math.PI*2); ctx.fill();
 
             if (slime.hat && slime.hat !== 'none') {
-                ctx.save(); // Save context state before drawing hat
-                ctx.fillStyle = 'black'; // Explicitly set opaque color for hat text
-                ctx.font = `${slime.hatSize}px 'Arial', 'sans-serif'`; 
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle'; 
-
-                let hatYPosition = slimeBodyTopY - (slime.hatSize * 0.3) + (slime.bounceHeight * 0.5); // Adjusted factor
-                if (slime.hat === '👑') hatYPosition -= 5;
-                if (slime.hat === '🎩') hatYPosition += 3;
-                if (slime.hat === '🍓') hatYPosition -= 4;
-                if (slime.hat === '⭐') hatYPosition -= 2;
-                if (slime.hat === '🥳') hatYPosition -= 2;
-
-
-                ctx.fillText(slime.hat, slime.x, hatYPosition);
-                ctx.restore(); // Restore context state
+                ctx.save(); ctx.fillStyle = 'black'; 
+                ctx.font = `${slime.hatSize}px 'Arial','sans-serif'`; ctx.textAlign='center'; ctx.textBaseline='middle'; 
+                let hatY = slimeBodyTopY - (slime.hatSize*0.3) + (slime.bounceHeight*0.5);
+                if(slime.hat==='👑') hatY-=5; if(slime.hat==='🎩') hatY+=3; if(slime.hat==='🍓') hatY-=4; if(slime.hat==='⭐') hatY-=2; if(slime.hat==='🥳') hatY-=2;
+                ctx.fillText(slime.hat, currentSlimeX, hatY);
+                ctx.restore();
             }
 
-            const eyeCenterY = slimeBodyTopY + slime.baseHeight * 0.38 + slime.bounceHeight * 0.1; // Adjusted Y for eyes
-            const leftEyeX = slime.x - slime.eyeOffsetX;
-            const rightEyeX = slime.x + slime.eyeOffsetX;
+            const eyeCenterY = slimeBodyTopY + slime.baseHeight*0.38 + slime.bounceHeight*0.1;
+            const leftEyeX = currentSlimeX - slime.eyeOffsetX, rightEyeX = currentSlimeX + slime.eyeOffsetX;
             const eyeY = eyeCenterY + slime.eyeOffsetY;
-
-            ctx.fillStyle = 'white';
-            ctx.beginPath(); ctx.arc(leftEyeX, eyeY, slime.eyeRadius, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.arc(rightEyeX, eyeY, slime.eyeRadius, 0, Math.PI * 2); ctx.fill();
-
-            ctx.fillStyle = slime.eyeColor;
-            let pupilOffsetY = 0;
-            if (slime.mouthType === 'happy' || slime.mouthType === 'smile') pupilOffsetY = -2; // Scaled
-            if (slime.mouthType === 'sad') pupilOffsetY = 2; // Scaled
-
-            ctx.beginPath(); ctx.arc(leftEyeX, eyeY + pupilOffsetY, slime.pupilRadius, 0, Math.PI * 2); ctx.fill();
-            ctx.beginPath(); ctx.arc(rightEyeX, eyeY + pupilOffsetY, slime.pupilRadius, 0, Math.PI * 2); ctx.fill();
-
-            ctx.strokeStyle = 'black';
-            ctx.lineWidth = 2.5; // Slightly thicker for bigger slime
-            ctx.beginPath();
-            const mouthBaseY = eyeY + slime.eyeRadius + 5; // Scaled
-            switch (slime.mouthType) {
-                case 'smile': case 'happy':
-                    ctx.arc(slime.x, mouthBaseY, 12, 0.1 * Math.PI, 0.9 * Math.PI); break; // Bigger smile
-                case 'ooh':
-                    ctx.arc(slime.x, mouthBaseY + 4, 6, 0, Math.PI * 2); break; // Bigger 'ooh'
-                case 'sad':
-                    ctx.arc(slime.x, mouthBaseY + 10, 12, 1.1 * Math.PI, 1.9 * Math.PI); break; // Bigger sad
-                case 'neutral': default:
-                    ctx.moveTo(slime.x - 12, mouthBaseY + 4); ctx.lineTo(slime.x + 12, mouthBaseY + 4); break; // Bigger neutral
+            ctx.fillStyle='white'; ctx.beginPath(); ctx.arc(leftEyeX,eyeY,slime.eyeRadius,0,Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(rightEyeX,eyeY,slime.eyeRadius,0,Math.PI*2); ctx.fill();
+            ctx.fillStyle=slime.eyeColor; let pOffsetY=0;
+            if(slime.mouthType==='happy'||slime.mouthType==='smile') pOffsetY=-2; if(slime.mouthType==='sad') pOffsetY=2;
+            ctx.beginPath(); ctx.arc(leftEyeX,eyeY+pOffsetY,slime.pupilRadius,0,Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(rightEyeX,eyeY+pOffsetY,slime.pupilRadius,0,Math.PI*2); ctx.fill();
+            ctx.strokeStyle='black'; ctx.lineWidth=2.5; ctx.beginPath();
+            const mouthY = eyeY + slime.eyeRadius + 5;
+            switch(slime.mouthType){
+                case 'smile': case 'happy': ctx.arc(currentSlimeX,mouthY,12,0.1*Math.PI,0.9*Math.PI); break;
+                case 'ooh': ctx.arc(currentSlimeX,mouthY+4,6,0,Math.PI*2); break;
+                case 'sad': ctx.arc(currentSlimeX,mouthY+10,12,1.1*Math.PI,1.9*Math.PI); break;
+                default: ctx.moveTo(currentSlimeX-12,mouthY+4); ctx.lineTo(currentSlimeX+12,mouthY+4); break;
             }
             ctx.stroke();
         }
+        
+        function updateStatusBars() {
+            const hungerPercent = (slime.hunger / MAX_STAT) * 100;
+            hungerBar.style.width = hungerPercent + '%';
+            hungerValueDisplay.textContent = `${Math.round(slime.hunger)}/${MAX_STAT}`;
+            if (hungerPercent < 30) hungerBar.style.backgroundColor = '#f44336';
+            else if (hungerPercent < 60) hungerBar.style.backgroundColor = '#ffeb3b';
+            else hungerBar.style.backgroundColor = '#4CAF50';
 
-        function determineSlimeColorAndExpression() {
-            // This function now primarily sets the mouthType and message.
-            // The actual color for the gradient is handled in drawSlime by getGradientColors using slime.baseColor and state.
-            if (slime.hunger < 30 || slime.happiness < 30) {
-                slime.mouthType = 'sad';
-                setMessage("Sui looks sad and hungry!");
-            } else if (slime.hunger < 60 || slime.happiness < 60) {
-                slime.mouthType = 'neutral';
-                setMessage("Sui seems a bit bored or peckish.");
-            } else {
-                slime.mouthType = 'smile';
-                setMessage("Sui is content!");
-            }
-            // slime.color will be set to specific animation colors by feed/play functions.
-            // Otherwise, drawSlime uses slime.baseColor + state for gradient.
+            const happinessPercent = (slime.happiness / MAX_STAT) * 100;
+            happinessBar.style.width = happinessPercent + '%';
+            happinessValueDisplay.textContent = `${Math.round(slime.happiness)}/${MAX_STAT}`;
+            if (happinessPercent < 30) happinessBar.style.backgroundColor = '#f44336';
+            else if (happinessPercent < 60) happinessBar.style.backgroundColor = '#ffeb3b';
+            else happinessBar.style.backgroundColor = '#4CAF50';
         }
 
+        function determineSlimeColorAndExpression() {
+            if (slime.hunger < 30 || slime.happiness < 30) { slime.mouthType = 'sad'; setMessage("Sui looks sad and hungry!"); }
+            else if (slime.hunger < 60 || slime.happiness < 60) { slime.mouthType = 'neutral'; setMessage("Sui seems a bit bored or peckish."); }
+            else { slime.mouthType = 'smile'; setMessage("Sui is content!"); }
+        }
 
-        function updateSlimeState() {
-            // ... (stat decay and clamping same as before) ...
+        // Combined game update and animation loop
+        function gameAnimationLoop() {
+            // Bounce / Wiggle Logics
+            if (slime.isBouncing) {
+                if (slime.bounceType === 'wiggle') {
+                    slime.bounceDuration -= 1000 / ANIMATION_FPS; // Decrease duration based on frame time
+                    if (slime.bounceDuration <= 0) {
+                        slime.isBouncing = false;
+                        slime.bounceType = 'normal';
+                        slime.x = slime.originalX; // Reset X position
+                        slime.bounceHeight = 0;
+                    } else {
+                        // Wiggle: horizontal movement + small vertical bounce
+                        slime.x = slime.originalX + Math.sin(Date.now() * slime.wiggleSpeed * 0.1) * slime.wiggleAmplitude;
+                        slime.bounceHeight = Math.abs(Math.sin(Date.now() * 0.02)) * 8; // Softer bounce for wiggle
+                    }
+                } else { // Normal or short bounce
+                    slime.bounceHeight = Math.abs(Math.sin(Date.now() * (slime.bounceType === 'short' ? 0.025 : 0.015))) * (slime.bounceType === 'short' ? 10 : 15);
+                    slime.bounceDuration -= 1000 / ANIMATION_FPS;
+                     if (slime.bounceDuration <= 0 && slime.animationTimer <= 0) { // Stop if duration ends AND no other anim active
+                        slime.isBouncing = false;
+                        slime.bounceHeight = 0;
+                        slime.bounceType = 'normal';
+                    }
+                }
+            }
+
+            drawSlime();
+            animationFrameId = requestAnimationFrame(gameAnimationLoop);
+        }
+
+        // Game logic tick (hunger, happiness, etc.) - less frequent
+        function gameLogicTick() {
             slime.hunger -= STAT_DECAY_RATE;
             slime.happiness -= STAT_DECAY_RATE;
             slime.hunger = Math.max(0, slime.hunger);
             slime.happiness = Math.max(0, slime.happiness);
 
-            if (slime.animationTimer <= 0) {
+            if (slime.animationTimer <= 0) { // Only evaluate mood if not in a feed/play color animation
                 determineSlimeColorAndExpression();
-                // Ensure slime.color is reset to baseColor if no animation
-                // This is handled by drawSlime logic now using slime.baseColor and state
             } else {
-                slime.animationTimer--;
-                if (slime.animationTimer === 0) {
-                    slime.isBouncing = false;
-                    slime.bounceHeight = 0;
+                slime.animationTimer--; // This is based on gameLogicTick, not animation frames
+                if (slime.animationTimer === 0) { // Feed/play color animation ended
                     determineSlimeColorAndExpression(); // Re-evaluate mood
+                    if(!slime.isBouncing) slime.bounceHeight = 0; // Ensure bounce from action stops if not manually bounced
                 }
             }
-
-            if (slime.isBouncing) {
-                slime.bounceHeight = Math.abs(Math.sin(Date.now() * 0.015)) * 15; // Bigger bounce for bigger slime
-            }
-
             updateStatusBars();
-            drawSlime();
         }
+        
 
-        function feedSlime() {
-            // ... (logic mostly same) ...
+        function feedSui() {
             if (slime.hunger < MAX_STAT) {
                 slime.hunger = Math.min(MAX_STAT, slime.hunger + FEED_AMOUNT);
                 slime.happiness = Math.min(MAX_STAT, slime.happiness + PLAY_AMOUNT / 3);
                 setMessage("Yum! Sui enjoyed the food!");
-                slime.mouthType = 'ooh';
-                slime.color = 'rgba(173, 255, 47, 1)'; // Animation color (will be used by getGradientColors)
-                slime.animationTimer = 2; // e.g., 2 game ticks
-                triggerBounce();
-            } else {
-                setMessage("Sui is already full!");
-            }
-            updateStatusBars(); 
-            drawSlime(); 
+                slime.mouthType = 'ooh'; slime.color = 'rgba(173,255,47,1)';
+                slime.animationTimer = 2; // 2 gameLogicTicks for color change
+                triggerBounce('normal', 1000); // Standard bounce for 1 sec
+            } else { setMessage("Sui is already full!"); }
         }
 
-        function playWithSlime() {
-            // ... (logic mostly same) ...
+        function playWithSui() {
             if (slime.happiness < MAX_STAT) {
                 slime.happiness = Math.min(MAX_STAT, slime.happiness + PLAY_AMOUNT);
                 setMessage("Whee! Sui had fun playing!");
-                slime.mouthType = 'happy';
-                slime.color = 'rgba(135, 206, 250, 1)'; // Animation color
-                slime.animationTimer = 2; // e.g., 2 game ticks
-                triggerBounce(true);
-            } else {
-                setMessage("Sui is perfectly happy right now!");
-            }
-            updateStatusBars();
-            drawSlime();
+                slime.mouthType = 'happy'; slime.color = 'rgba(135,206,250,1)';
+                slime.animationTimer = 2; // 2 gameLogicTicks for color change
+                triggerBounce('normal', 1500); // Longer bounce for play for 1.5 sec
+            } else { setMessage("Sui is perfectly happy right now!"); }
         }
 
-        // ... (triggerBounce, setMessage, color/hat button listeners, gameIntervalId, startGame remain largely the same) ...
-        function triggerBounce(longer = false) {
+        function triggerBounce(type = 'normal', duration = 750) {
+            // Don't override an ongoing special bounce unless it's a new special bounce
+            if (slime.isBouncing && slime.bounceType !== 'normal' && type === 'normal') return;
+
             slime.isBouncing = true;
-            const duration = longer ? 1500 : 750;
-            if (slime.animationTimer === 0) {
-                setTimeout(() => {
-                    if (slime.animationTimer <= 0) { 
-                        slime.isBouncing = false;
-                        slime.bounceHeight = 0;
-                        drawSlime(); 
-                    }
-                }, duration);
+            slime.bounceType = type;
+            slime.bounceDuration = duration; // Duration in ms
+
+            if (type === 'wiggle') {
+                slime.originalX = slime.x; // Store current x to wiggle around it
+                setMessage("Sui is wiggling happily!");
+            } else if (type === 'short') {
+                setMessage("Boing!");
             }
         }
+        
+        function shortBounceSui() {
+            if (!slime.isBouncing || slime.bounceType === 'normal') { // Allow interrupting a normal bounce
+                triggerBounce('short', 700); // 0.7 seconds
+            }
+        }
+
+        function happyWiggleSui() {
+             if (!slime.isBouncing || slime.bounceType === 'normal') {
+                triggerBounce('wiggle', 2000); // Wiggle for 2 seconds
+            }
+        }
+
         function setMessage(msg) { slimeMessage.textContent = msg; }
 
         colorButtons.forEach(button => {
             button.addEventListener('click', () => {
                 slime.baseColor = button.dataset.color;
-                if (slime.animationTimer <= 0) { // Only change expression if not animating
-                    determineSlimeColorAndExpression();
-                }
-                drawSlime(); 
+                if (slime.animationTimer <= 0) { determineSlimeColorAndExpression(); }
             });
         });
         hatButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const newHat = button.dataset.hat;
-                slime.hat = (newHat === 'none') ? null : newHat;
-                drawSlime(); 
+                slime.hat = (button.dataset.hat === 'none') ? null : button.dataset.hat;
             });
         });
-        feedButton.addEventListener('click', feedSlime);
-        playButton.addEventListener('click', playWithSlime);
-        let gameIntervalId = null;
+
+        feedButton.addEventListener('click', feedSui);
+        playButton.addEventListener('click', playWithSui);
+        shortBounceButton.addEventListener('click', shortBounceSui);
+        happyWiggleButton.addEventListener('click', happyWiggleSui);
+        
+        let gameLogicIntervalId = null;
 
         function startGame() {
             slime.x = canvas.width / 2;
-            // Adjust Y for the new, larger slime. Center its mass a bit above the canvas bottom.
+            slime.originalX = slime.x;
             slime.y = canvas.height - (slime.baseHeight / 2) - 30; 
-
             determineSlimeColorAndExpression(); 
             updateStatusBars();
-            drawSlime(); // Initial draw
-            if(gameIntervalId) clearInterval(gameIntervalId);
-            gameIntervalId = setInterval(updateSlimeState, TICK_INTERVAL);
-        }
+            
+            // Start the separate animation loop
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            gameAnimationLoop();
 
+            // Start the game logic tick
+            if(gameLogicIntervalId) clearInterval(gameLogicIntervalId);
+            gameLogicIntervalId = setInterval(gameLogicTick, TICK_INTERVAL);
+        }
 
         window.addEventListener('load', () => {
             createHearts(); 
             setInterval(createHearts, 15000); 
             setActiveNav(); 
-
-            if (document.getElementById('slimeCanvas') && document.getElementById('feedButton') && document.getElementById('playButton')) { 
-                 startGame();
-            }
+            if (document.getElementById('slimeCanvas')) { startGame(); }
         });
     </script>
 </body>
