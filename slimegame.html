@@ -18,13 +18,14 @@
             background-color: #f1a1c2;
             color: #333;
             min-height: 100vh;
-            padding-left: 100px;
+            padding-left: 100px; /* Space for left nav */
+            padding-right: 100px; /* Space for right nav */
             text-align: center;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* ===== KUROMI NAVIGATION BAR ===== */
+        /* ===== LEFT KUROMI NAVIGATION BAR ===== */
         .nav-container {
             position: fixed;
             left: 0;
@@ -41,38 +42,63 @@
             border-right: 3px solid #ff9ec6;
         }
 
-        .nav-item {
+        /* ===== RIGHT STORE NAVIGATION BAR ===== */
+        .nav-container-right {
+            position: fixed;
+            right: 0; /* Positioned on the right */
+            top: 0;
+            height: 100vh;
+            width: 100px;
+            background-color: #2a0a3a; /* Same style */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            z-index: 1000;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2); /* Shadow on the left */
+            border-left: 3px solid #ff9ec6; /* Border on the left */
+        }
+
+
+        .nav-item { /* Shared style for items in both nav bars */
             width: 100%;
             text-align: center;
             padding: 15px 0;
-            margin: 5px 0; /* Adjusted margin */
+            margin: 5px 0;
             color: white;
-            font-size: 0.8em; /* Adjusted font size */
+            font-size: 0.8em;
             text-decoration: none;
             transition: all 0.3s;
-            cursor: pointer; /* Added cursor pointer */
+            cursor: pointer;
         }
 
-        .nav-item img {
-            width: 45px; /* Adjusted image size */
-            height: 45px; /* Adjusted image size */
+        .nav-item img { /* For left nav images */
+            width: 45px;
+            height: 45px;
             object-fit: contain;
-            margin-bottom: 5px; /* Adjusted margin */
+            margin-bottom: 5px;
         }
+        
+        .nav-item .emoji-icon { /* For right nav emojis */
+            font-size: 2.5em; /* Adjust emoji size */
+            display: block;
+            margin-bottom: 5px;
+        }
+
 
         .nav-item:hover {
             background-color: #9b4d96;
             transform: scale(1.05);
         }
 
-        .active {
+        .active { /* For highlighting active item in both navs */
             background-color: #ff66a3;
             font-weight: bold;
         }
 
         /* ===== MAIN CONTENT WRAPPER ===== */
         .page-wrapper {
-            max-width: 800px;
+            max-width: 800px; /* Adjust if needed due to two navs */
             margin: 0 auto;
             padding: 20px;
             position: relative;
@@ -101,51 +127,24 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 40px;
             position: relative;
-            min-height: 500px; /* Give main a min height */
-            display: flex; /* Use flexbox for main content */
-            flex-direction: column; /* Arrange content vertically */
-            justify-content: center; /* Center content vertically */
-            align-items: center; /* Center content horizontally */
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Hide all game screens by default */
         .game-screen-container {
-            display: none; /* Hide by default */
-            width: 100%; /* Take full width of main */
-            text-align: center; /* Center content inside */
+            display: none;
+            width: 100%;
+            text-align: center;
         }
-
-        /* Make the active screen visible */
         .game-screen-container.active-screen {
             display: block;
         }
 
-
-        /* ===== TEXT STYLES ===== */
-        .celebration-status {
-            font-family: 'Pacifico', cursive;
-            font-size: 2em;
-            color: #e91e63;
-            margin: 20px 0;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .birthday-message {
-            font-size: 1.5em;
-            margin: 20px 0;
-            color: #9b4d96;
-            font-weight: 600;
-        }
-
-        .birthday-submessage {
-            font-size: 1.2em;
-            margin-bottom: 30px;
-            color: #333;
-        }
-
-        /* ===== SLIME TAMAGOTCHI STYLES ===== */
-        /* Removed slime-game-container, screens are now direct children of main */
-        /* Styles for login/create/game/store/inventory screens */
+        /* ... (Rest of your existing CSS for game elements, login, store, inventory, minigames, etc.) ... */
+        /* Ensure there's no conflicting padding-left or padding-right on these inner containers */
         .login-container, .create-slime-container, .game-screen, .store-screen, .inventory-screen, .minigame-select-screen, .minigame-container {
              max-width: 600px;
              margin: 0 auto;
@@ -154,793 +153,101 @@
              border-radius: 15px;
              box-shadow: 0 5px 15px rgba(0,0,0,0.1);
              border: 3px solid #f5a9bc;
-             width: 100%; /* Take full width of parent */
-             display: flex; /* Use flex for internal layout */
-             flex-direction: column; /* Stack content vertically */
-             align-items: center; /* Center horizontally */
+             width: 100%; 
+             display: flex; 
+             flex-direction: column; 
+             align-items: center; 
         }
-
-        .game-title {
-            font-family: 'Pacifico', cursive;
-            color: #9b4d96;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .login-container, .create-slime-container {
-             /* Add specific styles if needed */
-        }
-
-        .login-form, .slime-form {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%; /* Ensure forms take available width */
-        }
-
-        #username-input, #slime-name-input {
-            padding: 12px 20px;
-            border: 2px solid #f5a9bc;
-            border-radius: 30px;
-            font-size: 1.1em;
-            width: 100%;
-            max-width: 300px; /* Kept max-width for input fields */
-            margin-bottom: 15px;
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
-            outline: none;
-        }
-
-        #username-input:focus, #slime-name-input:focus {
-            border-color: #9b4d96;
-            box-shadow: 0 0 8px rgba(155, 77, 150, 0.4);
-        }
-
-        .color-picker {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .color-picker span {
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: #9b4d96;
-        }
-
-        #slime-color-input {
-            width: 80px;
-            height: 80px;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        #slime-color-input::-webkit-color-swatch {
-            border: none;
-            border-radius: 50%;
-            padding: 0;
-        }
-
-        #slime-color-input::-webkit-color-swatch-wrapper {
-            border: none;
-            border-radius: 50%;
-            padding: 0;
-        }
-
-        .login-button, .create-slime-button {
-            background-color: #9b4d96;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1.2em;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-        }
-
-        .login-button:hover, .create-slime-button:hover {
-            background-color: #7c3c79;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-
-        /* Game screen specific adjustments */
-        .game-screen {
-             justify-content: flex-start; /* Align content to top */
-             padding-top: 40px; /* Add padding at top */
-        }
-
-         .currency-display {
-             font-size: 1.3em;
-             font-weight: 600;
-             color: #2a0a3a;
-             margin-bottom: 20px;
-         }
-
-        .slime-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 20px;
-            overflow: hidden; /* Ensure equipped items don't overflow */
-            cursor: pointer; /* Add cursor for tapping games */
-        }
-
-        .slime {
-            width: 100%;
-            height: 80%;
-            background-color: var(--slime-color, #88ff88);
-            border-radius: 50% 50% 40% 40%;
-            position: relative;
-            animation: slimeBounce 2s infinite alternate ease-in-out;
-            z-index: 5; /* Ensure slime is above shadow */
-        }
-
-        /* Equipped Item Styles */
-        .equipped-item {
-             position: absolute;
-             object-fit: contain;
-             z-index: 6; /* Above slime */
-        }
-
-        .equipped-hat {
-            width: 80px; /* Adjust size as needed */
-            height: 80px; /* Adjust size as needed */
-            top: -20px; /* Position above slime head */
-            left: calc(50% - 40px); /* Center horizontally */
-        }
-
-        .equipped-background {
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1; /* Behind the slime and shadow */
-            /* background-size: cover; /* Or contain */
-            /* background-position: center; */
-        }
-         /* Use img tag for background */
-        .equipped-background img {
-             width: 100%;
-             height: 100%;
-             object-fit: cover; /* Or 'contain' depending on desired effect */
-             display: block; /* Remove extra space below image */
-        }
-
-
-        .slime::before {
-            content: '';
-            position: absolute;
-            width: 40%;
-            height: 35%;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            top: 15%;
-            left: 10%;
-        }
-
-        .eyes {
-            position: absolute;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            top: 40%;
-            z-index: 7; /* Above hat if hat covers eyes */
-        }
-
-        .eye {
-            width: 14px;
-            height: 14px;
-            background: black;
-            border-radius: 50%;
-        }
-
-        .mouth {
-            position: absolute;
-            width: 30px;
-            height: 10px;
-            background: black;
-            border-radius: 25px;
-            bottom: 25%;
-            left: calc(50% - 15px);
-             z-index: 7; /* Above hat */
-        }
-
-        [data-mood="happy"] .mouth {
-            height: 10px;
-            border-radius: 0 0 20px 20px;
-            background: transparent;
-            border-bottom: 3px solid black;
-        }
-
-        [data-mood="hungry"] .mouth {
-            height: 10px;
-            border-radius: 20px 20px 0 0;
-            background: transparent;
-            border-top: 3px solid black;
-            bottom: 22%;
-        }
-
-        [data-mood="tired"] .mouth {
-            width: 20px;
-            height: 2px;
-            background: black;
-            left: calc(50% - 10px);
-            bottom: 25%;
-        }
-
-        [data-mood="sick"] .mouth {
-            height: 10px;
-            border-radius: 20px 20px 0 0;
-            background: transparent;
-            border-top: 3px solid black;
-            transform: rotate(180deg);
-            bottom: 22%;
-        }
-
-        @keyframes slimeBounce {
-            0% { transform: translateY(0) scale(1, 0.95); }
-            100% { transform: translateY(-5px) scale(0.95, 1.05); }
-        }
-
-        .slime-shadow {
-            width: 80%;
-            height: 15px;
-            background: rgba(0,0,0,0.1);
-            border-radius: 50%;
-            position: absolute;
-            bottom: 0;
-            left: 10%;
-            z-index: 4; /* Between background and slime */
-        }
-
-        .slime-name {
-            font-family: 'Pacifico', cursive;
-            font-size: 1.5em;
-            color: #9b4d96;
-            margin: 10px 0;
-        }
-
-        .slime-stats {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin: 20px 0;
-            width: 100%; /* Ensure stats take full width */
-        }
-
-        .stat-row {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
-        .stat-label {
-            font-weight: 600;
-            color: #9b4d96;
-            margin-bottom: 5px;
-        }
-
-        .stat-bar {
-            width: 100%;
-            height: 15px;
-            background-color: #f1f1f1;
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .stat-fill {
-            height: 100%;
-            background-color: #9b4d96;
-            border-radius: 10px;
-            transition: width 0.5s;
-        }
-
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .action-btn {
-            background-color: #f5a9bc;
-            color: #2a0a3a;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-        }
-
-        .action-btn:hover {
-            background-color: #e91e63;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-        }
-
-        /* Store/Inventory/Minigame Select Screens */
-        .store-screen, .inventory-screen, .minigame-select-screen {
-            /* Basic flex layout for screens */
-            align-items: flex-start; /* Align items to the start (left) */
-            padding-top: 30px;
-        }
-
-        .screen-title {
-             font-family: 'Pacifico', cursive;
-             color: #9b4d96;
-             font-size: 1.6em;
-             margin-bottom: 20px;
-             text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-             width: 100%; /* Title takes full width */
-             text-align: center; /* Center the title */
-        }
-
-        .store-items-list, .inventory-items-list {
-             width: 100%;
-             list-style: none; /* Remove list bullets */
-             padding: 0;
-             margin: 0;
-             display: flex;
-             flex-wrap: wrap; /* Allow items to wrap */
-             gap: 15px; /* Space between items */
-             justify-content: center; /* Center items */
-        }
-
-        .item-card {
-            background-color: #fff0f5;
-            border: 2px solid #ffb1cc;
-            border-radius: 10px;
-            padding: 10px;
-            text-align: center;
-            width: 120px; /* Fixed width for item cards */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .item-card img {
-            width: 60px; /* Size for item icons/previews */
-            height: 60px;
-            object-fit: contain;
-            margin-bottom: 8px;
-        }
-
-         /* Placeholder/visual for color items */
-        .item-color-preview {
-             width: 60px;
-             height: 60px;
-             border-radius: 50%;
-             margin-bottom: 8px;
-             border: 1px solid #ccc; /* Add slight border */
-        }
-
-
-        .item-name {
-            font-weight: 600;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-            color: #2a0a3a;
-        }
-
-        .item-price {
-            font-size: 0.8em;
-            color: #e91e63;
-            margin-bottom: 10px;
-        }
-
-        .buy-btn, .equip-btn {
-            background-color: #ffb1cc;
-            color: #2a0a3a;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-        }
-
-        .buy-btn:hover, .equip-btn:hover {
-            background-color: #ff9ec6;
-        }
-
-        /* Inventory specific styles */
-        .inventory-item-card {
-             /* Share styles with item-card but potentially adjust */
-             background-color: #ffe6f0; /* Slightly different background */
-             border-color: #ffcce0;
-        }
-
-        .inventory-item-card .item-quantity {
-             font-size: 0.9em;
-             color: #9b4d96;
-             margin-bottom: 5px;
-        }
-
-        .inventory-item-card .equip-btn {
-            /* Styles for equip button */
-        }
-
-         .item-card .equipped-status {
-             font-size: 0.8em;
-             font-weight: bold;
-             color: green; /* Or another color */
-             margin-top: 5px;
-         }
-
-
-        /* Minigame Select Screen */
-        .minigame-buttons {
-             display: flex;
-             flex-direction: column; /* Stack buttons */
-             gap: 15px;
-             width: 80%; /* Limit width */
-             max-width: 300px; /* Max width */
-             margin-top: 20px;
-        }
-
-        .minigame-select-btn {
-             background-color: #9b4d96;
-             color: white;
-             border: none;
-             padding: 12px 30px;
-             font-size: 1.2em;
-             border-radius: 30px;
-             cursor: pointer;
-             transition: all 0.3s;
-             font-family: 'Poppins', sans-serif;
-             font-weight: 600;
-        }
-
-         .minigame-select-btn:hover {
-             background-color: #7c3c79;
-             transform: translateY(-3px);
-             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-         }
-
-
-        /* Individual Minigame Containers */
-         .minigame-container {
-             position: relative; /* Needed for absolute positioning of game elements */
-             overflow: hidden; /* Hide elements outside the container */
-             /* Specific dimensions for minigames */
-             width: 100%;
-             height: 400px; /* Fixed height for minigame area */
-             background-color: #e6f7ff; /* Light blue background for game area */
-             border: 3px solid #a9d8ff;
-         }
-
-        .minigame-info {
-             position: absolute;
-             top: 10px;
-             left: 10px;
-             text-align: left;
-             font-size: 1.1em;
-             font-weight: 600;
-             color: #2a0a3a;
-             z-index: 20; /* Above game elements */
-        }
-
-         .minigame-score { margin-bottom: 5px; }
-
-         .minigame-timer { color: #e91e63; }
-
-         .minigame-message {
-             position: absolute;
-             top: 50%;
-             left: 50%;
-             transform: translate(-50%, -50%);
-             font-size: 2em;
-             font-family: 'Pacifico', cursive;
-             color: #9b4d96;
-             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-             z-index: 25; /* Above everything */
-             display: none; /* Hidden initially */
-         }
-
-
-         /* Minigame Specific Elements */
-
-         /* Bubble Pop / Falling Food */
-         .minigame-target {
-             position: absolute;
-             width: 40px; /* Size of bubbles/food */
-             height: 40px;
-             object-fit: contain;
-             cursor: pointer;
-             z-index: 10; /* Above background, below info/message */
-         }
-
-         .minigame-target.food {
-             /* Specific food icon/style */
-             background: url('https://i.imgur.com/ExampleFood.png') center/contain no-repeat; /* Replace with actual food URL */
-         }
-         .minigame-target.bubble {
-             /* Specific bubble icon/style */
-              width: 30px;
-              height: 30px;
-              background-color: rgba(155, 77, 150, 0.5); /* Semi-transparent purple */
-              border-radius: 50%;
-              border: 2px solid rgba(255,255,255,0.8);
-              box-shadow: inset 5px 5px 10px rgba(255,255,255,0.3);
-              /* Add simple bubble float animation */
-              animation: bubbleFloat linear infinite; /* Name, duration, timing, iteration */
-              animation-duration: 8s; /* Example duration */
-         }
-
-         @keyframes bubbleFloat {
-             0% { transform: translateY(100%); }
-             100% { transform: translateY(-10%); } /* Float upwards */
-         }
-
-
-         /* Game End/Results */
-         .minigame-results {
-              margin-top: 20px;
-              font-size: 1.3em;
-              color: #2a0a3a;
-              display: none; /* Hidden initially */
-         }
-
-         .minigame-results p { margin-bottom: 10px; }
-
-         .minigame-back-btn {
-             margin-top: 20px;
-             background-color: #f5a9bc;
-             color: #2a0a3a;
-             border: none;
-             padding: 10px 20px;
-             border-radius: 20px;
-             font-size: 1em;
-             cursor: pointer;
-             transition: all 0.3s;
-             font-family: 'Poppins', sans-serif;
-             font-weight: 600;
-         }
-
-         .minigame-back-btn:hover {
-             background-color: #e91e63;
-             color: white;
-         }
-
-
-
-        /* Loading overlay */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            z-index: 2000;
-            display: none;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(155, 77, 150, 0.2);
-            border-radius: 50%;
-            border-top-color: #9b4d96;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            margin-top: 15px;
-            color: #9b4d96;
-            font-weight: 600;
-        }
-
-        /* ===== DECORATIVE ELEMENTS ===== */
-        .bow {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: url('https://i.imgur.com/tA7aPg4.png') center/contain no-repeat;
-            z-index: 10;
-        }
-
-        .hearts-container {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .heart {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            color: #f5a9bc;
-            font-size: 30px;
-            opacity: 0.7;
-            animation: floatUp 15s linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.7; }
-            90% { opacity: 0.7; }
-            100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
-        }
-
-        /* ===== POSITIONING FOR BOWS ===== */
-        .header-bow-left { top: -15px; left: -15px; }
-        .header-bow-right { top: -15px; right: -15px; }
-        .main-bow-tl { top: -15px; left: -15px; }
-        .main-bow-tr { top: -15px; right: -15px; }
-        .main-bow-bl { bottom: -15px; left: -15px; }
-        .main-bow-br { bottom: -15px; right: -15px; }
-
-        /* ===== RESPONSIVE STYLES ===== */
-        @media (max-width: 768px) {
-            body {
-                padding-left: 80px;
-            }
-            .nav-container {
-                width: 80px;
-            }
-            .nav-item {
-                font-size: 0.7em; /* Further adjusted for smaller screens */
-                padding: 10px 0; /* Adjusted padding */
-                margin: 3px 0; /* Adjusted margin */
-            }
-             .nav-item img {
-                width: 35px; /* Adjusted image size */
-                height: 35px; /* Adjusted image size */
-                margin-bottom: 3px; /* Adjusted margin */
-            }
-
-            header {
-                font-size: 1.5em; /* Adjusted size */
-                padding: 12px;
-            }
-            main {
-                padding: 20px;
-                min-height: 400px; /* Adjusted min height */
-            }
-
-            .game-screen-container, .login-container, .create-slime-container, .store-screen, .inventory-screen, .minigame-select-screen, .minigame-container {
-                padding: 15px; /* Adjusted padding */
-            }
-
-            .game-title {
-                font-size: 1.5em; /* Adjusted size */
-            }
-
-            #username-input, #slime-name-input {
-                 max-width: 250px; /* Adjusted max-width */
-                 padding: 10px 15px; /* Adjusted padding */
-                 font-size: 1em; /* Adjusted size */
-            }
-
-            .login-button, .create-slime-button, .minigame-select-btn {
-                padding: 10px 20px;
-                font-size: 1em;
-            }
-
-             .currency-display {
-                font-size: 1.1em; /* Adjusted size */
-             }
-
-            .slime-container {
-                width: 150px; /* Adjusted size */
-                height: 150px; /* Adjusted size */
-            }
-
-             .slime {
-                /* Adjust slime relative size if needed */
-             }
-
-             .equipped-hat {
-                 width: 60px; /* Adjusted size */
-                 height: 60px;
-                 top: -15px;
-                 left: calc(50% - 30px);
-             }
-             .equipped-background {
-                /* Adjust as needed */
-             }
-
-
-            .slime-name {
-                font-size: 1.2em;
-            }
-             .slime-stats {
-                 margin: 15px 0;
-             }
-             .stat-label {
-                 font-size: 0.9em;
-             }
-
-            .actions {
-                flex-direction: row; /* Keep row layout for actions if space allows */
-                justify-content: center;
-                gap: 8px; /* Smaller gap */
-                 margin-top: 15px;
-            }
-             .action-btn {
-                 padding: 8px 15px;
-                 font-size: 0.9em;
-             }
-
-            .store-items-list, .inventory-items-list {
-                 gap: 10px; /* Smaller gap */
-            }
-
-            .item-card {
-                width: 100px; /* Adjusted size */
-                padding: 8px;
-            }
-            .item-card img, .item-color-preview {
-                width: 50px; /* Adjusted size */
-                height: 50px;
-            }
-             .item-name, .item-quantity {
-                font-size: 0.8em; /* Adjusted size */
-             }
-             .item-price {
-                font-size: 0.7em; /* Adjusted size */
-             }
-             .buy-btn, .equip-btn {
-                 padding: 4px 8px;
-                 font-size: 0.7em;
-             }
-
-             .minigame-container {
-                 height: 300px; /* Adjusted height */
-             }
-
-             .minigame-info {
-                 font-size: 0.9em; /* Adjusted size */
-             }
-
-             .minigame-message {
-                 font-size: 1.5em; /* Adjusted size */
-             }
-
-             .minigame-target {
-                 width: 30px; /* Adjusted size */
-                 height: 30px;
-             }
-
-             .minigame-back-btn {
-                 padding: 8px 15px;
-                 font-size: 0.9em;
-             }
-
+        .game-title { font-family: 'Pacifico', cursive; color: #9b4d96; font-size: 1.8em; margin-bottom: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.1); }
+        .login-form, .slime-form { margin-top: 20px; display: flex; flex-direction: column; align-items: center; width: 100%; }
+        #username-input, #slime-name-input { padding: 12px 20px; border: 2px solid #f5a9bc; border-radius: 30px; font-size: 1.1em; width: 100%; max-width: 300px; margin-bottom: 15px; font-family: 'Poppins', sans-serif; text-align: center; outline: none; }
+        #username-input:focus, #slime-name-input:focus { border-color: #9b4d96; box-shadow: 0 0 8px rgba(155, 77, 150, 0.4); }
+        .color-picker { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+        .color-picker span { margin-bottom: 10px; font-weight: 600; color: #9b4d96; }
+        #slime-color-input { width: 80px; height: 80px; border: none; border-radius: 50%; cursor: pointer; overflow: hidden; }
+        #slime-color-input::-webkit-color-swatch { border: none; border-radius: 50%; padding: 0; }
+        #slime-color-input::-webkit-color-swatch-wrapper { border: none; border-radius: 50%; padding: 0; }
+        .login-button, .create-slime-button { background-color: #9b4d96; color: white; border: none; padding: 12px 30px; font-size: 1.2em; border-radius: 30px; cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif; font-weight: 600; }
+        .login-button:hover, .create-slime-button:hover { background-color: #7c3c79; transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .game-screen { justify-content: flex-start; padding-top: 40px; }
+        .currency-display { font-size: 1.3em; font-weight: 600; color: #2a0a3a; margin-bottom: 20px; }
+        .slime-container { position: relative; width: 200px; height: 200px; margin: 0 auto 20px; overflow: hidden; cursor: pointer; }
+        .slime { width: 100%; height: 80%; background-color: var(--slime-color, #88ff88); border-radius: 50% 50% 40% 40%; position: relative; animation: slimeBounce 2s infinite alternate ease-in-out; z-index: 5; }
+        .equipped-item { position: absolute; object-fit: contain; z-index: 6; }
+        .equipped-hat { width: 80px; height: 80px; top: -20px; left: calc(50% - 40px); }
+        .equipped-background { width: 100%; height: 100%; top: 0; left: 0; z-index: 1; }
+        .equipped-background img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .slime::before { content: ''; position: absolute; width: 40%; height: 35%; background: rgba(255,255,255,0.3); border-radius: 50%; top: 15%; left: 10%; }
+        .eyes { position: absolute; width: 100%; display: flex; justify-content: center; gap: 20px; top: 40%; z-index: 7; }
+        .eye { width: 14px; height: 14px; background: black; border-radius: 50%; }
+        .mouth { position: absolute; width: 30px; height: 10px; background: black; border-radius: 25px; bottom: 25%; left: calc(50% - 15px); z-index: 7; }
+        [data-mood="happy"] .mouth { height: 10px; border-radius: 0 0 20px 20px; background: transparent; border-bottom: 3px solid black; }
+        [data-mood="hungry"] .mouth { height: 10px; border-radius: 20px 20px 0 0; background: transparent; border-top: 3px solid black; bottom: 22%; }
+        [data-mood="tired"] .mouth { width: 20px; height: 2px; background: black; left: calc(50% - 10px); bottom: 25%; }
+        [data-mood="sick"] .mouth { height: 10px; border-radius: 20px 20px 0 0; background: transparent; border-top: 3px solid black; transform: rotate(180deg); bottom: 22%; }
+        @keyframes slimeBounce { 0% { transform: translateY(0) scale(1, 0.95); } 100% { transform: translateY(-5px) scale(0.95, 1.05); } }
+        .slime-shadow { width: 80%; height: 15px; background: rgba(0,0,0,0.1); border-radius: 50%; position: absolute; bottom: 0; left: 10%; z-index: 4; }
+        .slime-name { font-family: 'Pacifico', cursive; font-size: 1.5em; color: #9b4d96; margin: 10px 0; }
+        .slime-stats { display: flex; flex-direction: column; gap: 15px; margin: 20px 0; width: 100%; }
+        .stat-row { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        .stat-label { font-weight: 600; color: #9b4d96; margin-bottom: 5px; }
+        .stat-bar { width: 100%; height: 15px; background-color: #f1f1f1; border-radius: 10px; overflow: hidden; position: relative; }
+        .stat-fill { height: 100%; background-color: #9b4d96; border-radius: 10px; transition: width 0.5s; }
+        .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+        .action-btn { background-color: #f5a9bc; color: #2a0a3a; border: none; padding: 10px 20px; border-radius: 20px; font-size: 1em; cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif; font-weight: 600; }
+        .action-btn:hover { background-color: #e91e63; color: white; transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
+        .store-screen, .inventory-screen, .minigame-select-screen { align-items: flex-start; padding-top: 30px; }
+        .screen-title { font-family: 'Pacifico', cursive; color: #9b4d96; font-size: 1.6em; margin-bottom: 20px; text-shadow: 1px 1px 3px rgba(0,0,0,0.1); width: 100%; text-align: center; }
+        .store-items-list, .inventory-items-list { width: 100%; list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .item-card { background-color: #fff0f5; border: 2px solid #ffb1cc; border-radius: 10px; padding: 10px; text-align: center; width: 120px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .item-card img { width: 60px; height: 60px; object-fit: contain; margin-bottom: 8px; }
+        .item-color-preview { width: 60px; height: 60px; border-radius: 50%; margin-bottom: 8px; border: 1px solid #ccc; }
+        .item-name { font-weight: 600; font-size: 0.9em; margin-bottom: 5px; color: #2a0a3a; }
+        .item-price { font-size: 0.8em; color: #e91e63; margin-bottom: 10px; }
+        .buy-btn, .equip-btn { background-color: #ffb1cc; color: #2a0a3a; border: none; padding: 5px 10px; border-radius: 15px; font-size: 0.8em; cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif; font-weight: 600; }
+        .buy-btn:hover, .equip-btn:hover { background-color: #ff9ec6; }
+        .inventory-item-card { background-color: #ffe6f0; border-color: #ffcce0; }
+        .inventory-item-card .item-quantity { font-size: 0.9em; color: #9b4d96; margin-bottom: 5px; }
+        .item-card .equipped-status { font-size: 0.8em; font-weight: bold; color: green; margin-top: 5px; }
+        .minigame-buttons { display: flex; flex-direction: column; gap: 15px; width: 80%; max-width: 300px; margin-top: 20px; }
+        .minigame-select-btn { background-color: #9b4d96; color: white; border: none; padding: 12px 30px; font-size: 1.2em; border-radius: 30px; cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif; font-weight: 600; }
+        .minigame-select-btn:hover { background-color: #7c3c79; transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .minigame-container { position: relative; overflow: hidden; width: 100%; height: 400px; background-color: #e6f7ff; border: 3px solid #a9d8ff; }
+        .minigame-info { position: absolute; top: 10px; left: 10px; text-align: left; font-size: 1.1em; font-weight: 600; color: #2a0a3a; z-index: 20; }
+        .minigame-score { margin-bottom: 5px; }
+        .minigame-timer { color: #e91e63; }
+        .minigame-message { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2em; font-family: 'Pacifico', cursive; color: #9b4d96; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); z-index: 25; display: none; }
+        .minigame-target { position: absolute; width: 40px; height: 40px; object-fit: contain; cursor: pointer; z-index: 10; }
+        .minigame-target.food { background: url('https://i.imgur.com/ExampleFood.png') center/contain no-repeat; }
+        .minigame-target.bubble { width: 30px; height: 30px; background-color: rgba(155, 77, 150, 0.5); border-radius: 50%; border: 2px solid rgba(255,255,255,0.8); box-shadow: inset 5px 5px 10px rgba(255,255,255,0.3); animation: bubbleFloat linear infinite; animation-duration: 8s; }
+        @keyframes bubbleFloat { 0% { transform: translateY(100%); } 100% { transform: translateY(-10%); } }
+        .minigame-results { margin-top: 20px; font-size: 1.3em; color: #2a0a3a; display: none; }
+        .minigame-results p { margin-bottom: 10px; }
+        .minigame-back-btn { margin-top: 20px; background-color: #f5a9bc; color: #2a0a3a; border: none; padding: 10px 20px; border-radius: 20px; font-size: 1em; cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif; font-weight: 600; }
+        .minigame-back-btn:hover { background-color: #e91e63; color: white; }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 2000; display: none; }
+        .spinner { width: 50px; height: 50px; border: 5px solid rgba(155, 77, 150, 0.2); border-radius: 50%; border-top-color: #9b4d96; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { margin-top: 15px; color: #9b4d96; font-weight: 600; }
+        .bow { position: absolute; width: 40px; height: 40px; background: url('https://i.imgur.com/tA7aPg4.png') center/contain no-repeat; z-index: 10; }
+        .hearts-container { position: fixed; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: -1; overflow: hidden; }
+        .heart { position: absolute; width: 30px; height: 30px; color: #f5a9bc; font-size: 30px; opacity: 0.7; animation: floatUp 15s linear infinite; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; } }
+        .header-bow-left { top: -15px; left: -15px; } .header-bow-right { top: -15px; right: -15px; } .main-bow-tl { top: -15px; left: -15px; } .main-bow-tr { top: -15px; right: -15px; } .main-bow-bl { bottom: -15px; left: -15px; } .main-bow-br { bottom: -15px; right: -15px; }
+        @media (max-width: 768px) { body { padding-left: 80px; padding-right: 80px; /* Adjusted for two navs */ }
+            .nav-container, .nav-container-right { width: 80px; }
+            .nav-item { font-size: 0.7em; padding: 10px 0; margin: 3px 0; }
+            .nav-item img, .nav-item .emoji-icon { width: 35px; height: 35px; margin-bottom: 3px; font-size: 2em; /* Adjust emoji size for mobile */ }
+            header { font-size: 1.5em; padding: 12px; } main { padding: 20px; min-height: 400px; }
+            .game-screen-container, .login-container, .create-slime-container, .store-screen, .inventory-screen, .minigame-select-screen, .minigame-container { padding: 15px; }
+            .game-title { font-size: 1.5em; } #username-input, #slime-name-input { max-width: 250px; padding: 10px 15px; font-size: 1em; }
+            .login-button, .create-slime-button, .minigame-select-btn { padding: 10px 20px; font-size: 1em; } .currency-display { font-size: 1.1em; }
+            .slime-container { width: 150px; height: 150px; } .equipped-hat { width: 60px; height: 60px; top: -15px; left: calc(50% - 30px); }
+            .slime-name { font-size: 1.2em; } .slime-stats { margin: 15px 0; } .stat-label { font-size: 0.9em; }
+            .actions { justify-content: center; gap: 8px; margin-top: 15px; } .action-btn { padding: 8px 15px; font-size: 0.9em; }
+            .store-items-list, .inventory-items-list { gap: 10px; } .item-card { width: 100px; padding: 8px; }
+            .item-card img, .item-color-preview { width: 50px; height: 50px; } .item-name, .item-quantity { font-size: 0.8em; } .item-price { font-size: 0.7em; } .buy-btn, .equip-btn { padding: 4px 8px; font-size: 0.7em; }
+            .minigame-container { height: 300px; } .minigame-info { font-size: 0.9em; } .minigame-message { font-size: 1.5em; } .minigame-target { width: 30px; height: 30px; } .minigame-back-btn { padding: 8px 15px; font-size: 0.9em; }
         }
     </style>
 </head>
@@ -954,52 +261,67 @@
     <!-- Floating Hearts -->
     <div class="hearts-container" id="hearts-container"></div>
 
-    <!-- Navigation -->
+    <!-- Left Navigation (Matches index.html) -->
     <div class="nav-container">
-        <!-- Renamed to home-nav, etc. for clarity in JS handling -->
-        <div class="nav-item" id="home-nav">
+        <a href="index.html" class="nav-item home-link"> <!-- Added class for specific targeting -->
             <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home">
             Home
-        </div>
-        <!-- Add new nav items for Store, Inventory, Minigames -->
-        <div class="nav-item" id="store-nav">
-             <img src="https://i.imgur.com/StoreIcon.png" alt="Store"> <!-- Replace with actual store icon -->
-             Store
-        </div>
-        <div class="nav-item" id="inventory-nav">
-             <img src="https://i.imgur.com/InventoryIcon.png" alt="Inventory"> <!-- Replace with actual inventory icon -->
-             Inventory
-        </div>
-         <div class="nav-item" id="minigames-nav">
-             <img src="https://i.imgur.com/MinigameIcon.png" alt="Minigames"> <!-- Replace with actual minigame icon -->
-             Minigames
-        </div>
-
-        <!-- Existing placeholder nav items (remove if not part of this game) -->
-        <!-- Leaving them commented out for now -->
-        <!--
-        <a href="loveletters.html" class="nav-item letters">
+        </a>
+        <a href="loveletters.html" class="nav-item letters-link">
             <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters">
             Love Letters
         </a>
-        <a href="lovecalculator.html" class="nav-item calculator">
+        <a href="lovecalculator.html" class="nav-item calculator-link">
             <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator">
             Love Calculator
         </a>
-        <a href="movies.html" class="nav-item movies">
+        <a href="movies.html" class="nav-item movies-link">
             <img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker">
             Movie Picker
         </a>
-        <a href="bookdate.html" class="nav-item bookdate">
+        <a href="bookdate.html" class="nav-item bookdate-link">
             <img src="https://i.imgur.com/megzmKr.png" alt="Book a Date">
             Book a Date
         </a>
-        <a href="timezone.html" class="nav-item timezone">
+        <a href="timezone.html" class="nav-item timezone-link">
             <img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge">
             Time Bridge
         </a>
-        -->
     </div>
+
+    <!-- Right Store Navigation -->
+    <div class="nav-container-right">
+        <div class="nav-item store-category-nav active" data-category="all"> <!-- Default to all -->
+            <span class="emoji-icon">🛍️</span>
+            All
+        </div>
+        <div class="nav-item store-category-nav" data-category="Color">
+            <span class="emoji-icon">🎨</span>
+            Colors
+        </div>
+        <div class="nav-item store-category-nav" data-category="Hat">
+            <span class="emoji-icon">👒</span>
+            Hats
+        </div>
+        <div class="nav-item store-category-nav" data-category="Background">
+            <span class="emoji-icon">🖼️</span>
+            Backgrounds
+        </div>
+        <!-- Add more categories as needed -->
+        <div class="nav-item" id="game-home-nav"> <!-- Slime Game Home/Main Screen -->
+             <span class="emoji-icon">🐾</span> <!-- Or some other slime/home icon -->
+             Slime
+        </div>
+        <div class="nav-item" id="inventory-nav">
+             <span class="emoji-icon">🎒</span>
+             Inventory
+        </div>
+         <div class="nav-item" id="minigames-nav">
+             <span class="emoji-icon">🎮</span>
+             Minigames
+        </div>
+    </div>
+
 
     <div class="page-wrapper">
         <header>
@@ -1014,11 +336,8 @@
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-bl">
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-br">
 
-            <!-- --- Game Screens Container --- -->
-            <!-- All main game screens live inside here -->
-
             <!-- Login screen -->
-            <div class="game-screen-container" id="login-screen">
+            <div class="game-screen-container active-screen" id="login-screen"> <!-- Start with login active -->
                 <div class="login-container">
                     <h2 class="game-title">Welcome to Slime Tamagotchi!</h2>
                     <p>Enter your name to start caring for your virtual slime pet</p>
@@ -1048,56 +367,24 @@
             <!-- Main Game screen -->
             <div class="game-screen-container" id="game-screen">
                 <div class="game-screen">
-                     <div class="currency-display" id="currency-display">Coins: 0</div> <!-- Currency Display -->
+                     <div class="currency-display" id="currency-display">Coins: 0</div>
                     <h2 class="game-title" id="game-slime-name">Your Slime Pet</h2>
-
-                    <!-- Slime display -->
                     <div class="slime-container" id="main-slime-container">
-                        <!-- Equipped Background goes here -->
                         <div class="equipped-background" id="equipped-background"></div>
                         <div class="slime" id="slime" data-mood="happy">
-                             <!-- Equipped Hat goes here -->
                              <img src="" class="equipped-item equipped-hat" id="equipped-hat" style="display: none;">
-                            <div class="eyes">
-                                <div class="eye"></div>
-                                <div class="eye"></div>
-                            </div>
+                            <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
                             <div class="mouth"></div>
                         </div>
                         <div class="slime-shadow"></div>
                     </div>
-
-                    <div class="slime-name" id="slime-name-display">Gooey</div> <!-- Updated ID -->
-
-                    <!-- Stats display -->
+                    <div class="slime-name" id="slime-name-display">Gooey</div>
                     <div class="slime-stats">
-                        <div class="stat-row">
-                            <span class="stat-label">Hunger</span>
-                            <div class="stat-bar">
-                                <div class="stat-fill" id="hunger-fill" style="width: 100%;"></div>
-                            </div>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Happiness</span>
-                            <div class="stat-bar">
-                                <div class="stat-fill" id="happiness-fill" style="width: 100%;"></div>
-                            </div>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Health</span>
-                            <div class="stat-bar">
-                                <div class="stat-fill" id="health-fill" style="width: 100%;"></div>
-                            </div>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Energy</span>
-                            <div class="stat-bar">
-                                <div class="stat-fill" id="energy-fill" style="width: 100%;"></div>
-                            </div>
-                        </div>
+                        <div class="stat-row"><span class="stat-label">Hunger</span><div class="stat-bar"><div class="stat-fill" id="hunger-fill" style="width: 100%;"></div></div></div>
+                        <div class="stat-row"><span class="stat-label">Happiness</span><div class="stat-bar"><div class="stat-fill" id="happiness-fill" style="width: 100%;"></div></div></div>
+                        <div class="stat-row"><span class="stat-label">Health</span><div class="stat-bar"><div class="stat-fill" id="health-fill" style="width: 100%;"></div></div></div>
+                        <div class="stat-row"><span class="stat-label">Energy</span><div class="stat-bar"><div class="stat-fill" id="energy-fill" style="width: 100%;"></div></div></div>
                     </div>
-
-                    <!-- Actions -->
                     <div class="actions">
                         <button class="action-btn" id="feed-btn">Feed 🍎</button>
                         <button class="action-btn" id="play-btn">Play 🎾</button>
@@ -1111,11 +398,8 @@
             <div class="game-screen-container" id="store-screen">
                  <div class="store-screen">
                     <h2 class="screen-title">Slime Shop</h2>
-                     <div class="currency-display" id="store-currency-display">Coins: 0</div> <!-- Currency Display for Store -->
-                    <ul class="store-items-list" id="store-items-list">
-                        <!-- Store items will be loaded and displayed here by JavaScript -->
-                        <li>Loading store items...</li>
-                    </ul>
+                     <div class="currency-display" id="store-currency-display">Coins: 0</div>
+                    <ul class="store-items-list" id="store-items-list"><li>Loading store items...</li></ul>
                  </div>
             </div>
 
@@ -1123,11 +407,8 @@
             <div class="game-screen-container" id="inventory-screen">
                  <div class="inventory-screen">
                      <h2 class="screen-title">My Inventory</h2>
-                     <div class="currency-display" id="inventory-currency-display">Coins: 0</div> <!-- Currency Display for Inventory -->
-                     <ul class="inventory-items-list" id="inventory-items-list">
-                        <!-- Player inventory items will be loaded and displayed here by JavaScript -->
-                         <li>Loading inventory...</li>
-                     </ul>
+                     <div class="currency-display" id="inventory-currency-display">Coins: 0</div>
+                     <ul class="inventory-items-list" id="inventory-items-list"><li>Loading inventory...</li></ul>
                  </div>
             </div>
 
@@ -1144,9 +425,6 @@
                  </div>
             </div>
 
-             <!-- Minigame containers -->
-             <!-- Each minigame has its own container, shown one at a time -->
-
             <!-- Slime Tapper Minigame -->
              <div class="game-screen-container" id="minigame-tapper-screen">
                  <div class="minigame-container">
@@ -1155,20 +433,12 @@
                          <p class="minigame-timer" id="tapper-timer">Time: 0</p>
                          <p class="minigame-score" id="tapper-score">Taps: 0</p>
                      </div>
-                      <!-- Slime area (can reuse main slime container visual styles) -->
                      <div class="slime-container" id="tapper-slime-area">
-                         <div class="slime" data-mood="happy">
-                             <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
-                             <div class="mouth"></div>
-                         </div>
+                         <div class="slime" data-mood="happy"><div class="eyes"><div class="eye"></div><div class="eye"></div></div><div class="mouth"></div></div>
                          <div class="slime-shadow"></div>
                      </div>
                      <p class="minigame-message" id="tapper-message"></p>
-                     <div class="minigame-results" id="tapper-results">
-                         <p id="tapper-final-score"></p>
-                         <p id="tapper-coins-earned"></p>
-                         <button class="minigame-back-btn" data-target="minigame-select-screen">Back to Games</button>
-                     </div>
+                     <div class="minigame-results" id="tapper-results"><p id="tapper-final-score"></p><p id="tapper-coins-earned"></p><button class="minigame-back-btn" data-target="minigame-select-screen">Back to Games</button></div>
                  </div>
              </div>
 
@@ -1180,13 +450,8 @@
                          <p class="minigame-timer" id="bubble-timer">Time: 0</p>
                          <p class="minigame-score" id="bubble-score">Popped: 0</p>
                      </div>
-                     <!-- Bubbles will be added here by JS -->
                       <p class="minigame-message" id="bubble-message"></p>
-                      <div class="minigame-results" id="bubble-results">
-                         <p id="bubble-final-score"></p>
-                         <p id="bubble-coins-earned"></p>
-                         <button class="minigame-back-btn" data-target="minigame-select-screen">Back to Games</button>
-                     </div>
+                      <div class="minigame-results" id="bubble-results"><p id="bubble-final-score"></p><p id="bubble-coins-earned"></p><button class="minigame-back-btn" data-target="minigame-select-screen">Back to Games</button></div>
                  </div>
              </div>
 
@@ -1198,31 +463,20 @@
                          <p class="minigame-timer" id="feed-timer">Time: 0</p>
                          <p class="minigame-score" id="feed-score">Fed: 0</p>
                      </div>
-                     <!-- Slime area (can reuse visual styles) -->
-                      <div class="slime-container" style="position: relative; margin: 0 auto; pointer-events: none;"> <!-- Disable clicking slime itself -->
-                          <div class="slime" data-mood="happy">
-                             <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
-                             <div class="mouth"></div>
-                         </div>
-                         <div class="slime-shadow"></div>
+                      <div class="slime-container" style="position: relative; margin: 0 auto; pointer-events: none;">
+                          <div class="slime" data-mood="happy"><div class="eyes"><div class="eye"></div><div class="eye"></div></div><div class="mouth"></div></div>
+                          <div class="slime-shadow"></div>
                       </div>
-                     <!-- Food targets will appear here by JS -->
                      <p class="minigame-message" id="feed-message"></p>
-                     <div class="minigame-results" id="feed-results">
-                         <p id="feed-final-score"></p>
-                         <p id="feed-coins-earned"></p>
-                         <button class="minigame-back-btn" data-target="minigame-select-screen">Back to Games</button>
-                     </div>
+                     <div class="minigame-results" id="feed-results"><p id="feed-final-score"></p><p id="feed-coins-earned"></p><button class="minigame-back-btn" data-target="minigame-select-screen">Back to Games</button></div>
                  </div>
              </div>
-
-
         </main>
     </div>
 
 <script>
-    // API Configuration - REPLACE WITH YOUR LATEST DEPLOYMENT URL
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxStd3lhDhhpel4FR7RYPia-_72TRmJYN_6Dj4FfsKZxUbFFPw7CY6sBziSgl8fs_t8BA/exec';
+    // API Configuration
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz07jJhC5CACJ1XBhvXU-aAz9Yjf4S5Ds_f1J8iKC9b991fCDk8L-samJbEnrKyNypk8A/exec'; // Example - REPLACE
     console.log("INITIALIZING SLIME GAME. API URL:", API_URL);
 
     // --- Game State Variables ---
@@ -1241,12 +495,9 @@
         showLoadingIndicator(`Calling: ${action}...`);
         const url = new URL(API_URL);
         url.searchParams.append('action', action);
-
-        // For ALL requests (GET or POST converted to GET), append data properties as URL parameters
         if (data) {
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
-                    // Special handling for 'updates' object in 'updateSlime' action
                     if (action === 'updateSlime' && key === 'updates' && typeof data[key] === 'object') {
                         const updatesObj = data[key];
                         for (const updateKey in updatesObj) {
@@ -1260,30 +511,15 @@
                 }
             }
         }
-        // Add playerId if it's a GET request that needs it and wasn't already in 'data'
-        // (This might be redundant if playerId is always included in 'data' for relevant actions)
-        if (playerData.playerId && !(data && data.playerId) && 
-            ['getStoreItems', 'getPlayerInventory', 'purchaseItem', 'earnCurrency', 'equipItem', 'createSlime', 'updateSlime'].includes(action)
-           ) {
+        if (playerData.playerId && !(data && data.playerId) && ['getStoreItems', 'getPlayerInventory', 'purchaseItem', 'earnCurrency', 'equipItem', 'createSlime', 'updateSlime'].includes(action)) {
              url.searchParams.append('playerId', playerData.playerId);
         }
-        // SlimeId for relevant actions
-        if (slimeData && slimeData.slimeId && !(data && data.slimeId) && 
-            ['updateSlime', 'equipItem'].includes(action)
-           ) {
+        if (slimeData && slimeData.slimeId && !(data && data.slimeId) && ['updateSlime', 'equipItem'].includes(action)) {
             url.searchParams.append('slimeId', slimeData.slimeId);
         }
-        
         const targetUrl = url.toString();
-
-        const options = {
-            method: 'GET', // All requests are now GET
-            headers: {},    // No Content-Type header needed for GET
-            body: null,     // No body for GET
-        };
-
+        const options = { method: 'GET', headers: {}, body: null }; // All GET
         console.log(`Fetching: ${options.method} ${targetUrl}`);
-
         try {
             const response = await fetch(targetUrl, options);
             if (!response.ok) {
@@ -1293,14 +529,11 @@
             }
             const result = await response.json();
             console.log('API Response for action:', action, result);
-
             if (result.success) {
                 if (result.data) {
-                    if (result.data.newCurrency !== undefined) {
-                         playerData.currency = result.data.newCurrency;
-                    } else if (action === 'loadPlayer' && result.data.currency !== undefined) {
-                         playerData.currency = result.data.currency;
-                    } else if (action === 'createAccount') {
+                    if (result.data.newCurrency !== undefined) playerData.currency = result.data.newCurrency;
+                    else if (action === 'loadPlayer' && result.data.currency !== undefined) playerData.currency = result.data.currency;
+                    else if (action === 'createAccount') {
                          if (result.data.player && result.data.player.currency !== undefined) playerData.currency = result.data.player.currency;
                          else if (result.data.currency !== undefined) playerData.currency = result.data.currency;
                     }
@@ -1308,259 +541,104 @@
                 updateCurrencyDisplay();
                 return result.data;
             } else {
-                console.error('API Reported Error for action:', action, result.message, result.data ? result.data.details : '');
-                alert('API Error: ' + result.message);
-                return null;
+                console.error('API Error:', action, result.message, result.data?.details);
+                alert('API Error: ' + result.message); return null;
             }
         } catch (error) {
-            console.error('Fetch Exception for action:', action, error);
-            alert('Network or Script Execution Failed. Check console.');
-            return null;
+            console.error('Fetch Exception:', action, error);
+            alert('Network/Script Failed. Check console.'); return null;
         } finally {
             hideLoadingIndicator();
         }
     }
-    // ... (showLoadingIndicator, hideLoadingIndicator, showScreen functions remain the same as your last HTML version) ...
     function showLoadingIndicator(message) { const l=document.getElementById('loading-text');const o=document.getElementById('loading-overlay');if(l)l.textContent=message||'Loading...';if(o)o.style.display='flex';}
     function hideLoadingIndicator() {const o=document.getElementById('loading-overlay');if(o)o.style.display='none';}
-    function showScreen(screenId){document.querySelectorAll('.game-screen-container').forEach(s=>s.classList.remove('active-screen'));const t=document.getElementById(screenId);if(t)t.classList.add('active-screen');else{console.error("Screen not found:",screenId);const ls=document.getElementById('login-screen');if(ls)ls.classList.add('active-screen');}document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));let an=null;if(screenId==='game-screen')an='home-nav';else if(screenId==='store-screen')an='store-nav';else if(screenId==='inventory-screen')an='inventory-nav';else if(screenId==='minigame-select-screen'||(screenId.startsWith('minigame-')&&screenId.endsWith('-screen')))an='minigames-nav';if(an){const e=document.getElementById(an);if(e)e.classList.add('active');}if(minigameState.activeGame&&!screenId.startsWith('minigame-'))endCurrentMinigame(false);}
-
-    // --- Core Game Functions ---
-    async function initializeGame() { /* ... same logic, calls will now be GET ... */ 
-        createHearts(); setActiveNav();
+    function showScreen(screenId){document.querySelectorAll('.game-screen-container').forEach(s=>s.classList.remove('active-screen'));const t=document.getElementById(screenId);if(t)t.classList.add('active-screen');else{console.error("Screen not found:",screenId);const ls=document.getElementById('login-screen');if(ls)ls.classList.add('active-screen');}document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));let an=null;if(screenId==='game-screen')an='game-home-nav';else if(screenId==='store-screen')an='store-nav-right';else if(screenId==='inventory-screen')an='inventory-nav';else if(screenId==='minigame-select-screen'||(screenId.startsWith('minigame-')&&screenId.endsWith('-screen')))an='minigames-nav';if(an){const e=document.getElementById(an);if(e)e.classList.add('active');}if(minigameState.activeGame&&!screenId.startsWith('minigame-'))endCurrentMinigame(false);}
+    
+    async function initializeGame() { 
+        createHearts(); setActiveNav(); // setActiveNav might target old nav item IDs initially
         const savedUsername = localStorage.getItem('slimeGame_username');
         if (savedUsername) {
-            // loadPlayer already takes {playerName: savedUsername} which fetchData converts to URL params
             const data = await fetchData('loadPlayer', 'GET', { playerName: savedUsername });
             if (data && data.player) {
                 playerData = data.player; slimeData = data.slime; inventoryData = data.inventory || [];
                 localStorage.setItem('slimeGame_playerId', playerData.playerId);
                 localStorage.setItem('slimeGame_username', playerData.username);
-                if (storeItems.length === 0) await fetchStoreItemsOnce(); // Ensure store items loaded for display
+                if (storeItems.length === 0) await fetchStoreItemsOnce();
                 if (slimeData) { showScreen('game-screen'); startGameLoop(); } else { showScreen('create-slime-screen'); }
             } else {
-                console.warn("Player data not found on backend. Starting fresh.");
+                console.warn("Player data not found. Starting fresh.");
                 localStorage.removeItem('slimeGame_username'); localStorage.removeItem('slimeGame_playerId');
                 playerData = { playerId: null, username: null, currency: 0 }; slimeData = null; inventoryData = [];
                 showScreen('login-screen');
             }
         } else { showScreen('login-screen'); }
     }
-
-    async function handleLogin() { /* ... same, fetchData for createAccount is now GET ... */
+    async function handleLogin() {
         const username = document.getElementById('username-input').value.trim();
         if (!username) { alert('Please enter your name'); return; }
         const accData = await fetchData('createAccount', 'GET', { username: username }); 
         if (accData && accData.playerId) {
             playerData.playerId = accData.playerId; playerData.username = accData.username;
-            localStorage.setItem('slimeGame_playerId', playerData.playerId); localStorage.setItem('slimeGame_username', playerData.username);
+            localStorage.setItem('slimeGame_playerId', playerData.playerId);
+            localStorage.setItem('slimeGame_username', playerData.username);
             const loadData = await fetchData('loadPlayer', 'GET', { playerName: playerData.username });
             if(loadData && loadData.player) {
                  playerData = loadData.player; slimeData = loadData.slime; inventoryData = loadData.inventory || [];
                  if (storeItems.length === 0) await fetchStoreItemsOnce();
                  if (slimeData) { showScreen('game-screen'); startGameLoop(); } else { showScreen('create-slime-screen'); }
             } else {
-                 alert('Failed to load full player data after login/creation.');
-                 localStorage.removeItem('slimeGame_username'); localStorage.removeItem('slimeGame_playerId');
-                 playerData = { playerId: null, username: null, currency: 0 }; slimeData = null; inventoryData = [];
-                 showScreen('login-screen');
+                 alert('Failed to load player data.'); showScreen('login-screen');
             }
         }
     }
-
-    async function handleCreateSlime() { /* Changed to GET */
-        const slimeName = document.getElementById('slime-name-input').value.trim();
-        const slimeColor = document.getElementById('slime-color-input').value;
-        if (!slimeName) { alert('Please name your slime'); return; }
-        if (!playerData.playerId) { alert('Player not logged in.'); initializeGame(); return; }
-        
-        const newSlime = await fetchData('createSlime', 'GET', { // <<< CHANGED TO GET
-            playerId: playerData.playerId, 
-            slimeName: slimeName, 
-            slimeColor: slimeColor 
-        });
-
-        if (newSlime && newSlime.slimeId) { 
-            slimeData = newSlime; 
-            if (storeItems.length === 0) await fetchStoreItemsOnce();
-            showScreen('game-screen'); 
-            startGameLoop(); 
-        }
-    }
-    
-    async function fetchStoreItemsOnce() { /* ... same ... */ 
-        if (storeItems.length > 0) return; console.log("Fetching store items for the first time...");
-        const items = await fetchData('getStoreItems', 'GET');
-        if (items) storeItems = items; else console.error("Failed to fetch store items during initial load/check.");
-    }
-
-    function updateSlimeDisplay() { /* ... same ... */ 
-        const mainSlimeContainer = document.getElementById('main-slime-container'); const slimeNameDisplay = document.getElementById('slime-name-display'); const slimeStatsElement = document.querySelector('.slime-stats'); const actionsElement = document.querySelector('.actions');
-        if (!slimeData) { if(mainSlimeContainer) mainSlimeContainer.style.display = 'none';  if(slimeNameDisplay) slimeNameDisplay.textContent = 'No Slime Active';  if(slimeStatsElement) slimeStatsElement.style.display = 'none';  if(actionsElement) actionsElement.style.display = 'none'; return; }
-        if(mainSlimeContainer) mainSlimeContainer.style.display = 'block'; if(slimeStatsElement) slimeStatsElement.style.display = 'flex';  if(actionsElement) actionsElement.style.display = 'flex'; if(slimeNameDisplay) slimeNameDisplay.textContent = slimeData.name;
-        const slimeElement = document.getElementById('slime'); if(slimeElement) slimeElement.style.setProperty('--slime-color', slimeData.color);
-        ['hunger', 'happiness', 'health', 'energy'].forEach(s => { const fillEl = document.getElementById(`${s}-fill`); if(fillEl) fillEl.style.width = `${Math.max(0, Math.min(100, slimeData[s]))}%`; });
-        let mood = 'happy'; if (slimeData.hunger < 30) mood = 'hungry'; else if (slimeData.energy < 30) mood = 'tired'; else if (slimeData.health < 30) mood = 'sick'; else if (slimeData.happiness < 30) mood = 'sad'; if(slimeElement) slimeElement.dataset.mood = mood;
-        [{ e: 'hunger-fill', v: slimeData.hunger }, { e: 'happiness-fill', v: slimeData.happiness }, { e: 'health-fill', v: slimeData.health }, { e: 'energy-fill', v: slimeData.energy }].forEach(s => { const el = document.getElementById(s.e); if(el) { if (s.v < 30) el.style.backgroundColor = '#ff5252';  else if (s.v < 70) el.style.backgroundColor = '#ffb142';  else el.style.backgroundColor = '#9b4d96'; } });
-        updateEquippedItemsDisplay();
-    }
-
-    function updateEquippedItemsDisplay() { /* ... same ... */ 
-        const hatEl = document.getElementById('equipped-hat'); const bgEl = document.getElementById('equipped-background'); if (!slimeData || !hatEl || !bgEl) { return; }
-        if (storeItems.length === 0 && (slimeData.hat || slimeData.background)) { console.warn("Store items not loaded for equipped display. Attempting fetch."); fetchStoreItemsOnce().then(() => updateEquippedItemsDisplay()); return; }
-        const hatDet = storeItems.find(i => i.itemId === slimeData.hat && i.itemType === 'Hat'); const bgDet = storeItems.find(i => i.itemId === slimeData.background && i.itemType === 'Background');
-        if (hatDet && hatDet.dataValue) { hatEl.src = hatDet.dataValue; hatEl.style.display = 'block'; } else { hatEl.src = ''; hatEl.style.display = 'none'; }
-        if (bgDet && bgDet.dataValue) { bgEl.innerHTML = ''; const img = document.createElement('img'); img.src = bgDet.dataValue; img.alt = 'Background'; bgEl.appendChild(img); bgEl.style.display = 'block'; } else { bgEl.innerHTML = ''; bgEl.style.display = 'none'; }
-    }
-
-    async function saveSlimeData() { /* Changed to GET, passes updates as individual params */
-        if (!slimeData || !playerData.playerId) { console.warn("Cannot save: no slime/player."); return null; }
-        
-        const updatesPayload = { // Keep the updates object for clarity
-            name: slimeData.name, type: slimeData.type, color: slimeData.color, 
-            age: slimeData.age, evolutionStage: slimeData.evolutionStage, 
-            hunger: slimeData.hunger, happiness: slimeData.happiness, health: slimeData.health, 
-            energy: slimeData.energy, intelligence: slimeData.intelligence, 
-            strength: slimeData.strength, agility: slimeData.agility, 
-            lastCared: new Date().toISOString(), 
-            hat: slimeData.hat, background: slimeData.background
-        };
-        slimeData.lastCared = updatesPayload.lastCared; // Update local lastCared
-
-        // Construct data object for fetchData, which will spread these into URL params
-        const paramsForGet = {
-            slimeId: slimeData.slimeId,
-            // Spread properties of updatesPayload into paramsForGet
-            ...updatesPayload 
-            // Or, if you used 'updatesPayload: JSON.stringify(updatesPayload)' in fetchData
-            // you would send: updatesPayload: JSON.stringify(updatesPayload)
-        };
-
-        const result = await fetchData('updateSlime', 'GET', paramsForGet); // <<< CHANGED TO GET
-        if (result) { console.log("Slime data saved."); return true; } 
-        else { console.error("Failed to save slime data."); return false; }
-    }
-
-    function startGameLoop() { /* ... same ... */  if (gameInterval) clearInterval(gameInterval); updateSlimeDisplay(); updateCurrencyDisplay(); gameInterval = setInterval(() => { calculateAndApplyVisualDecay(); saveSlimeData(); }, TICK_RATE); }
-    function calculateAndApplyVisualDecay() { /* ... same ... */ if (!slimeData) return; const dA = STAT_DECREASE_RATE_PER_MINUTE * (TICK_RATE / 60000); slimeData.hunger = Math.max(0, slimeData.hunger - dA); slimeData.happiness = Math.max(0, slimeData.happiness - dA); slimeData.energy = Math.max(0, slimeData.energy - dA); if (slimeData.hunger < 30 || slimeData.happiness < 30) { slimeData.health = Math.max(0, slimeData.health - (dA * 0.5));} updateSlimeDisplay(); }
-    
-    async function performCareAction(actionType, statIncreases, currencyAmount) { /* Changed earnCurrency to GET */
-        if (!slimeData || !playerData.playerId) { alert("Log in/create slime."); initializeGame(); return; }
-        calculateAndApplyVisualDecay();
-        if (statIncreases.hunger !== undefined) slimeData.hunger = Math.min(100, slimeData.hunger + statIncreases.hunger);
-        if (statIncreases.happiness !== undefined) slimeData.happiness = Math.min(100, slimeData.happiness + statIncreases.happiness);
-        if (statIncreases.health !== undefined) slimeData.health = Math.min(100, slimeData.health + statIncreases.health);
-        if (statIncreases.energy !== undefined) slimeData.energy = Math.min(100, slimeData.energy + statIncreases.energy);
-        updateSlimeDisplay();
-        const saveSuccess = await saveSlimeData(); // saveSlimeData is now GET
-        if (saveSuccess && currencyAmount > 0) {
-            const currencyResult = await fetchData('earnCurrency', 'GET', { // <<< CHANGED TO GET
-                playerId: playerData.playerId, 
-                amount: currencyAmount 
-            });
-            if (currencyResult && currencyResult.newCurrency !== undefined) alert(`Earned ${currencyAmount} coins!`);
-        } else if (!saveSuccess) alert("Failed to save stats after action.");
-    }
-
-    // Feed, Play, Clean, Sleep call performCareAction which is now GET for its sub-calls
-    function feedSlime() { performCareAction('feed', { hunger: 30, health: 5 }, 10); }
-    function playWithSlime() { performCareAction('play', { happiness: 30, energy: -10, hunger: -5 }, 15); }
-    function cleanSlime() { performCareAction('clean', { health: 20, happiness: 5 }, 10); }
-    function sleepSlime() { performCareAction('sleep', { energy: 40, health: 10, happiness: -5 }, 5); }
-
-    function updateCurrencyDisplay() { /* ... same ... */ const mD=document.getElementById('currency-display');const sD=document.getElementById('store-currency-display');const iD=document.getElementById('inventory-currency-display');const cC=playerData.currency||0;if(mD)mD.textContent=`Coins: ${cC}`;if(sD)sD.textContent=`Coins: ${cC}`;if(iD)iD.textContent=`Coins: ${cC}`;}
-    
-    async function showStoreScreen() { /* ... same (getStoreItems is already GET) ... */ if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)await saveSlimeData();if(storeItems.length===0)await fetchStoreItemsOnce();renderStoreItems();updateCurrencyDisplay();showScreen('store-screen');}
-    function renderStoreItems() { /* ... same ... */ const lE=document.getElementById('store-items-list');if(!lE)return;lE.innerHTML='';if(!storeItems||storeItems.length===0){lE.innerHTML='<li>No items in store.</li>';return;}storeItems.forEach(i=>{const li=document.createElement('li');li.className='item-card';li.dataset.itemId=i.itemId;let v=(i.itemType==='Color'&&i.dataValue)?`<div class="item-color-preview" style="background-color: ${i.dataValue};"></div>`:(i.dataValue&&typeof i.dataValue==='string'&&i.dataValue.startsWith('http'))?`<img src="${i.dataValue}" alt="${i.itemName}">`:'<div>?</div>';const o=inventoryData.find(oi=>oi.itemId===i.itemId);const q=o?o.quantity:0;li.innerHTML=`${v}<div class="item-name">${i.itemName}</div><div class="item-price">${i.price} Coins</div>${q>0?`<div class="equipped-status">Owned: ${q}</div>`:''}<button class="buy-btn">Buy</button>`;lE.appendChild(li);});lE.querySelectorAll('.buy-btn').forEach(b=>b.addEventListener('click',handlePurchaseItem));}
-    
-    async function handlePurchaseItem(event) { /* Changed to GET */
-        if (!playerData.playerId) { alert("Not logged in."); return; }
-        const itemCard = event.target.closest('.item-card'); const itemId = itemCard.dataset.itemId; if(!itemId) return;
-        
-        const result = await fetchData('purchaseItem', 'GET', { // <<< CHANGED TO GET
-            playerId: playerData.playerId, 
-            itemId: itemId 
-        });
-        if (result) { 
-            await fetchAndRenderInventory(); 
-            const itemDet = storeItems.find(i => i.itemId === itemId); 
-            if(itemDet) alert(`Purchased ${itemDet.itemName}!`); else alert("Purchase successful!"); 
-            renderStoreItems(); 
-        }
-    }
-
-    async function showInventoryScreen() { /* ... same (getPlayerInventory is already GET) ... */ if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)await saveSlimeData();if(storeItems.length===0)await fetchStoreItemsOnce();await fetchAndRenderInventory();updateCurrencyDisplay();showScreen('inventory-screen');}
-    async function fetchAndRenderInventory() { /* ... same ... */ const i=await fetchData('getPlayerInventory','GET');if(i){inventoryData=i;renderInventoryItems();}else{inventoryData=[];renderInventoryItems();}}
-    function renderInventoryItems() { /* ... same ... */ const lE=document.getElementById('inventory-items-list');if(!lE)return;lE.innerHTML='';if(!inventoryData||inventoryData.length===0){lE.innerHTML='<li>Inventory empty.</li>';return;}if(storeItems.length===0)console.warn("Store items catalog not loaded for inv display.");inventoryData.forEach(i=>{const d=storeItems.find(si=>si.itemId===i.itemId);const dv=d?d.dataValue:(i.dataValue||null);const iN=d?d.itemName:(i.itemName||i.itemId);const iT=d?d.itemType:(i.itemType||'Unknown');const li=document.createElement('li');li.className='item-card inventory-item-card';li.dataset.itemId=i.itemId;let v=(iT==='Color'&&dv)?`<div class="item-color-preview" style="background-color: ${dv};"></div>`:(dv&&typeof dv==='string'&&dv.startsWith('http'))?`<img src="${dv}" alt="${iN}">`:'<div>?</div>';const iE=['Color','Hat','Background'].includes(iT);const iCE=slimeData&&((iT==='Color'&&slimeData.color===dv)||(iT==='Hat'&&slimeData.hat===i.itemId)||(iT==='Background'&&slimeData.background===i.itemId));li.innerHTML=`${v}<div class="item-name">${iN}</div>${i.quantity>0?`<div class="item-quantity">Qty: ${i.quantity}</div>`:''}${iCE?`<div class="equipped-status">EQUIPPED</div>`:''}${iE&&!iCE?`<button class="equip-btn">Equip</button>`:''}`;lE.appendChild(li);});lE.querySelectorAll('.equip-btn').forEach(b=>b.addEventListener('click',handleEquipItem));}
-    
-    async function handleEquipItem(event) { /* Changed to GET */
-        if (!playerData.playerId || !slimeData || !slimeData.slimeId) { alert("Player/Slime not loaded."); return; }
-        const itemCard = event.target.closest('.item-card'); const itemId = itemCard.dataset.itemId; if(!itemId) return;
-        const itemDet = storeItems.find(i => i.itemId === itemId); if (!itemDet) { alert("Error finding item details to equip."); return; }
-        
-        const result = await fetchData('equipItem', 'GET', { // <<< CHANGED TO GET
-            playerId: playerData.playerId, 
-            slimeId: slimeData.slimeId, 
-            itemId: itemId 
-        });
-        if (result && result.updatedSlimeField) {
-            if (result.updatedSlimeField === 'color') slimeData.color = result.equippedDataValue;
-            else if (result.updatedSlimeField === 'hat') slimeData.hat = result.equippedItemId;
-            else if (result.updatedSlimeField === 'background') slimeData.background = result.equippedItemId;
-            await saveSlimeData(); // Save slime after equipping
-            updateSlimeDisplay(); 
-            renderInventoryItems(); 
-            alert(`${itemDet.itemName} equipped!`);
-        }
-    }
-    
-    // --- Minigame Functions ---
-    function showMinigameSelectScreen() { /* ... same ... */ if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)saveSlimeData();updateCurrencyDisplay();showScreen('minigame-select-screen');}
-    function handleMinigameSelect(event) { /* ... same ... */ const b=event.target.closest('.minigame-select-btn');if(!b)return;const gT=b.dataset.game;if(!gT)return;if(!playerData.playerId||!slimeData){alert("Log in & create slime.");initializeGame();return;}startMinigame(gT);}
-    function startMinigame(gameType) { /* ... same ... */ endCurrentMinigame(false);minigameState={activeGame:gameType,timeLeft:MINIGAME_DURATION,score:0,gameElements:[]};const sCI=`minigame-${gameType}-screen`;const sC=document.getElementById(sCI);if(!sC){showScreen('minigame-select-screen');return;}showScreen(sCI);const mC=sC.querySelector('.minigame-container');if(mC)mC.style.display='flex';else{showScreen('minigame-select-screen');return;}const tE=sC.querySelector('.minigame-timer');const sE=sC.querySelector('.minigame-score');const msgE=sC.querySelector('.minigame-message');const rE=sC.querySelector('.minigame-results');if(tE)tE.textContent=`Time: ${minigameState.timeLeft}`;if(sE)sE.textContent=`${gameType==='tapper'?'Taps':gameType==='bubble'?'Popped':'Fed'}: ${minigameState.score}`;if(msgE)msgE.style.display='none';if(rE)rE.style.display='none';switch(gameType){case'tapper':startSlimeTapper();break;case'bubble':startBubblePop();break;case'feed':startFeedTheSlime();break;}minigameState.timer=setInterval(()=>{minigameState.timeLeft--;if(tE)tE.textContent=`Time: ${minigameState.timeLeft}`;if(minigameState.timeLeft<=0)endCurrentMinigame(true);},1000);}
-    function endCurrentMinigame(processResults) { /* ... same ... */ if(!minigameState.activeGame)return;if(minigameState.timer){clearInterval(minigameState.timer);minigameState.timer=null;}const aGT=minigameState.activeGame;switch(aGT){case'tapper':const tsa=document.getElementById('tapper-slime-area');if(tsa)tsa.removeEventListener('click',handleSlimeTap);break;case'bubble':stopBubblePop();break;case'feed':stopFeedTheSlime();break;}minigameState.gameElements.forEach(el=>el.remove());minigameState.gameElements=[];if(processResults)displayMinigameResults(aGT,minigameState.score);else{const sc=document.getElementById(`minigame-${aGT}-screen`);if(sc){const me=sc.querySelector('.minigame-message');const re=sc.querySelector('.minigame-results');const mc=sc.querySelector('.minigame-container');if(me)me.style.display='none';if(re)re.style.display='none';if(mc)mc.style.display='none';}}minigameState.activeGame=null;}
-    async function displayMinigameResults(gameType, score) { /* Changed earnCurrency to GET */
-        const screenContainer = document.getElementById(`minigame-${gameType}-screen`); if(!screenContainer){ showScreen('minigame-select-screen'); return; }
-        const resultsEl = screenContainer.querySelector('.minigame-results'); 
-        const finalScoreEl = screenContainer.querySelector('.minigame-final-score') || (resultsEl ? resultsEl.querySelector('p:nth-child(1)') : null); 
-        const coinsEl = screenContainer.querySelector('.minigame-coins-earned') || (resultsEl ? resultsEl.querySelector('p:nth-child(2)') : null); 
-        const msgEl = screenContainer.querySelector('.minigame-message');
-        let coinsEarned = 0; switch (gameType) { case 'tapper': coinsEarned = Math.floor(score / 3); break; case 'bubble': coinsEarned = score * 2; break; case 'feed': coinsEarned = score * 5; break; } coinsEarned = Math.max(0, coinsEarned);
-        if(msgEl) { msgEl.textContent = "Time's Up!"; msgEl.style.display = 'block'; }
-        if (coinsEarned > 0 && playerData.playerId) {
-            const currencyResult = await fetchData('earnCurrency', 'GET', { // <<< CHANGED TO GET
-                playerId: playerData.playerId, 
-                amount: coinsEarned 
-            });
-            if (currencyResult && currencyResult.newCurrency !== undefined) { if(coinsEl) coinsEl.textContent = `You earned ${coinsEarned} coins!`; updateCurrencyDisplay(); } else { if(coinsEl) coinsEl.textContent = `Failed to award coins.`; }
-        } else { if(coinsEl) coinsEl.textContent = "You earned 0 coins."; }
-        if(finalScoreEl) finalScoreEl.textContent = `Final Score: ${score}`; if(resultsEl) resultsEl.style.display = 'block'; if(msgEl) msgEl.style.display = 'none';
-    }
-    // Minigame Implementations
-    function startSlimeTapper() { /* ... same ... */ const sa=document.getElementById('tapper-slime-area'); if(sa) sa.addEventListener('click',handleSlimeTap); }
-    function handleSlimeTap() { /* ... same ... */ if(minigameState.activeGame==='tapper'&&minigameState.timeLeft>0){minigameState.score++;const se=document.getElementById('tapper-score');if(se)se.textContent=`Taps: ${minigameState.score}`;const sle=document.getElementById('tapper-slime-area').querySelector('.slime');if(sle){sle.style.transform='scale(0.95)';setTimeout(()=>{sle.style.transform='scale(1)';},100);}}}
-    let bubbleInterval; 
-    function startBubblePop() { /* ... same ... */ const ga=document.getElementById('bubble-game-area'); if(!ga){endCurrentMinigame(false);return;} bubbleInterval=setInterval(createBubble,BUBBLE_CREATE_DELAY);}
-    function createBubble() { /* ... same ... */ if(minigameState.timeLeft<=0||minigameState.activeGame!=='bubble')return;const ga=document.getElementById('bubble-game-area');const b=document.createElement('div');b.className='minigame-target bubble';const gaw=ga.clientWidth;const bs=30;const rx=Math.random()*(gaw-bs);b.style.left=`${rx}px`;b.style.bottom=`-${bs}px`;b.addEventListener('click',handleBubbleClick);ga.appendChild(b);minigameState.gameElements.push(b);b.addEventListener('animationend',()=>{removeMinigameElement(b);});}
-    function handleBubbleClick(event) { /* ... same ... */ if(minigameState.activeGame==='bubble'&&minigameState.timeLeft>0){event.stopPropagation();const b=event.target;minigameState.score++;const se=document.getElementById('bubble-score');if(se)se.textContent=`Popped: ${minigameState.score}`;removeMinigameElement(b);}}
-    function stopBubblePop() { /* ... same ... */ if(bubbleInterval){clearInterval(bubbleInterval);bubbleInterval=null;}}
-    let foodTimeout;
-    function startFeedTheSlime() { /* ... same ... */ const ga=document.getElementById('feed-game-area');if(!ga){endCurrentMinigame(false);return;}ga.addEventListener('click',handleMissedClickInFeedGame);scheduleNextFood();}
-    function createFoodTarget() { /* ... same ... */ if(minigameState.timeLeft<=0||minigameState.activeGame!=='feed'){foodTimeout=null;return;}const ga=document.getElementById('feed-game-area');const f=document.createElement('img');f.src='https://i.imgur.com/ExampleFood.png';f.className='minigame-target food';const gar=ga.getBoundingClientRect();const fs=40;const p=50;const rx=p+Math.random()*(gar.width-fs-2*p);const ry=p+Math.random()*(gar.height-fs-2*p);f.style.position='absolute';f.style.left=`${rx}px`;f.style.top=`${ry}px`;f.addEventListener('click',handleFoodClick);ga.appendChild(f);minigameState.gameElements.push(f);const rt=setTimeout(()=>{removeMinigameElement(f);scheduleNextFood();},FOOD_LIFESPAN);f._removalTimerId=rt;foodTimeout=null;}
-    function handleFoodClick(event) { /* ... same ... */ if(minigameState.activeGame==='feed'&&minigameState.timeLeft>0){event.stopPropagation();const f=event.target;minigameState.score++;const se=document.getElementById('feed-score');if(se)se.textContent=`Fed: ${minigameState.score}`;if(f._removalTimerId)clearTimeout(f._removalTimerId);removeMinigameElement(f);scheduleNextFood();}}
-    function handleMissedClickInFeedGame(event) { /* ... same ... */ if(minigameState.activeGame==='feed'&&minigameState.timeLeft>0){const fe=document.querySelectorAll('#feed-game-area .minigame-target.food');if(fe.length>0)console.log('Missed click!');}}
-    function scheduleNextFood() { /* ... same ... */ if(minigameState.timeLeft<=0||minigameState.activeGame!=='feed')return;if(foodTimeout===null)foodTimeout=setTimeout(createFoodTarget,FOOD_CREATE_DELAY);}
-    function stopFeedTheSlime() { /* ... same ... */ if(foodTimeout){clearTimeout(foodTimeout);foodTimeout=null;}const ga=document.getElementById('feed-game-area');if(ga)ga.removeEventListener('click',handleMissedClickInFeedGame);}
-    function removeMinigameElement(element) { /* ... same ... */ if(element&&element.parentNode){if(element._removalTimerId)clearTimeout(element._removalTimerId);element.parentNode.removeChild(element);minigameState.gameElements=minigameState.gameElements.filter(el=>el!==element);}}
-
-    // --- Event Listeners ---
-    function setupEventListeners() { /* ... same ... */ const lb=document.getElementById('login-button');if(lb)lb.addEventListener('click',handleLogin);const csb=document.getElementById('create-slime-button');if(csb)csb.addEventListener('click',handleCreateSlime);const fb=document.getElementById('feed-btn');if(fb)fb.addEventListener('click',feedSlime);const pb=document.getElementById('play-btn');if(pb)pb.addEventListener('click',playWithSlime);const cb=document.getElementById('clean-btn');if(cb)cb.addEventListener('click',cleanSlime);const sb=document.getElementById('sleep-btn');if(sb)sb.addEventListener('click',sleepSlime);const nc=document.querySelector('.nav-container');if(nc)nc.addEventListener('click',async(e)=>{const ni=e.target.closest('.nav-item');if(!ni)return;const ogs=document.getElementById('game-screen').classList.contains('active-screen');const oms=document.getElementById('minigame-select-screen').classList.contains('active-screen');if((ogs||oms)&&slimeData)await saveSlimeData();const navId=ni.id;switch(navId){case'home-nav':if(playerData.playerId&&slimeData){showScreen('game-screen');startGameLoop();}else if(playerData.playerId)showScreen('create-slime-screen');else showScreen('login-screen');break;case'store-nav':if(playerData.playerId)showStoreScreen();else{alert("Log in for store.");showScreen('login-screen');}break;case'inventory-nav':if(playerData.playerId)showInventoryScreen();else{alert("Log in for inventory.");showScreen('login-screen');}break;case'minigames-nav':if(playerData.playerId&&slimeData)showMinigameSelectScreen();else if(playerData.playerId){alert("Create slime first!");showScreen('create-slime-screen');}else{alert("Log in for minigames.");showScreen('login-screen');}break;}});const mss=document.getElementById('minigame-select-screen');if(mss)mss.addEventListener('click',handleMinigameSelect);const me=document.querySelector('main');if(me)me.addEventListener('click',(e)=>{const bb=e.target.closest('.minigame-back-btn');if(!bb)return;const ts=bb.dataset.target;if(ts){endCurrentMinigame(false);showScreen(ts);}}); }
-    function setActiveNav() { /* ... same ... */ const hn=document.getElementById('home-nav');if(hn)hn.classList.add('active'); }
-    function createHearts() { /* ... same ... */ const c=document.getElementById('hearts-container');if(!c)return;c.innerHTML='';for(let i=0;i<20;i++){const h=document.createElement('div');h.className='heart';h.innerHTML='❤️';h.style.left=`${Math.random()*100}vw`;h.style.animationDuration=`${15+Math.random()*10}s`;h.style.animationDelay=`${Math.random()*5}s`;h.style.fontSize=`${20+Math.random()*20}px`;c.appendChild(h);}}
-
-    // Initialize on page load
-    window.addEventListener('load', () => { createHearts(); setupEventListeners(); initializeGame(); });
-    window.addEventListener('beforeunload', (event) => { if (slimeData && playerData.playerId) { console.log("Attempting save before unload..."); saveSlimeData(); /* event.preventDefault(); event.returnValue = ''; */ } });
+    async function handleCreateSlime() { 
+        const n=document.getElementById('slime-name-input').value.trim();const c=document.getElementById('slime-color-input').value;
+        if(!n){alert('Name your slime');return;}if(!playerData.playerId){alert('Player not logged in.');initializeGame();return;}
+        const sD=await fetchData('createSlime','GET',{playerId:playerData.playerId,slimeName:n,slimeColor:c});
+        if(sD&&sD.slimeId){slimeData=sD;if(storeItems.length===0)await fetchStoreItemsOnce();showScreen('game-screen');startGameLoop();}}
+    async function fetchStoreItemsOnce(){if(storeItems.length>0)return;const i=await fetchData('getStoreItems','GET');if(i)storeItems=i;else console.error("Failed to fetch store items.");}
+    function updateSlimeDisplay(){const mSC=document.getElementById('main-slime-container');const sND=document.getElementById('slime-name-display');const sS=document.querySelector('.slime-stats');const a=document.querySelector('.actions');if(!slimeData){if(mSC)mSC.style.display='none';if(sND)sND.textContent='No Slime';if(sS)sS.style.display='none';if(a)a.style.display='none';return;}if(mSC)mSC.style.display='block';if(sS)sS.style.display='flex';if(a)a.style.display='flex';if(sND)sND.textContent=slimeData.name;const sE=document.getElementById('slime');if(sE)sE.style.setProperty('--slime-color',slimeData.color);['hunger','happiness','health','energy'].forEach(s=>{const fE=document.getElementById(`${s}-fill`);if(fE)fE.style.width=`${Math.max(0,Math.min(100,slimeData[s]))}%`;});let m='happy';if(slimeData.hunger<30)m='hungry';else if(slimeData.energy<30)m='tired';else if(slimeData.health<30)m='sick';else if(slimeData.happiness<30)m='sad';if(sE)sE.dataset.mood=m;[{e:'hunger-fill',v:slimeData.hunger},{e:'happiness-fill',v:slimeData.happiness},{e:'health-fill',v:slimeData.health},{e:'energy-fill',v:slimeData.energy}].forEach(s=>{const el=document.getElementById(s.e);if(el){if(s.v<30)el.style.backgroundColor='#ff5252';else if(s.v<70)el.style.backgroundColor='#ffb142';else el.style.backgroundColor='#9b4d96';}});updateEquippedItemsDisplay();}
+    function updateEquippedItemsDisplay(){const hE=document.getElementById('equipped-hat');const bE=document.getElementById('equipped-background');if(!slimeData||!hE||!bD)return;if(storeItems.length===0&&(slimeData.hat||slimeData.background)){fetchStoreItemsOnce().then(()=>updateEquippedItemsDisplay());return;}const hD=storeItems.find(i=>i.itemId===slimeData.hat&&i.itemType==='Hat');const bD=storeItems.find(i=>i.itemId===slimeData.background&&i.itemType==='Background');if(hD&&hD.dataValue){hE.src=hD.dataValue;hE.style.display='block';}else{hE.src='';hE.style.display='none';}if(bD&&bD.dataValue){bE.innerHTML='';const img=document.createElement('img');img.src=bD.dataValue;img.alt='Background';bE.appendChild(img);bE.style.display='block';}else{bE.innerHTML='';bE.style.display='none';}}
+    async function saveSlimeData(){if(!slimeData||!playerData.playerId)return null;const uP={name:slimeData.name,type:slimeData.type,color:slimeData.color,age:slimeData.age,evolutionStage:slimeData.evolutionStage,hunger:slimeData.hunger,happiness:slimeData.happiness,health:slimeData.health,energy:slimeData.energy,intelligence:slimeData.intelligence,strength:slimeData.strength,agility:slimeData.agility,lastCared:new Date().toISOString(),hat:slimeData.hat,background:slimeData.background};slimeData.lastCared=uP.lastCared;const pFG={slimeId:slimeData.slimeId,...uP};const r=await fetchData('updateSlime','GET',pFG);if(r){console.log("Slime data saved.");return true;}else{console.error("Failed to save slime data.");return false;}}
+    function startGameLoop(){if(gameInterval)clearInterval(gameInterval);updateSlimeDisplay();updateCurrencyDisplay();gameInterval=setInterval(()=>{calculateAndApplyVisualDecay();saveSlimeData();},TICK_RATE);}
+    function calculateAndApplyVisualDecay(){if(!slimeData)return;const dA=STAT_DECREASE_RATE_PER_MINUTE*(TICK_RATE/60000);slimeData.hunger=Math.max(0,slimeData.hunger-dA);slimeData.happiness=Math.max(0,slimeData.happiness-dA);slimeData.energy=Math.max(0,slimeData.energy-dA);if(slimeData.hunger<30||slimeData.happiness<30)slimeData.health=Math.max(0,slimeData.health-(dA*0.5));updateSlimeDisplay();}
+    async function performCareAction(aT,sI,cA){if(!slimeData||!playerData.playerId){alert("Log in/create slime.");initializeGame();return;}calculateAndApplyVisualDecay();if(sI.hunger!==undefined)slimeData.hunger=Math.min(100,slimeData.hunger+sI.hunger);if(sI.happiness!==undefined)slimeData.happiness=Math.min(100,slimeData.happiness+sI.happiness);if(sI.health!==undefined)slimeData.health=Math.min(100,slimeData.health+sI.health);if(sI.energy!==undefined)slimeData.energy=Math.min(100,slimeData.energy+sI.energy);updateSlimeDisplay();const sS=await saveSlimeData();if(sS&&cA>0){const cR=await fetchData('earnCurrency','GET',{playerId:playerData.playerId,amount:cA});if(cR&&cR.newCurrency!==undefined)alert(`Earned ${cA} coins!`);}else if(!sS)alert("Failed to save stats.");}
+    function feedSlime(){performCareAction('feed',{hunger:30,health:5},10);}
+    function playWithSlime(){performCareAction('play',{happiness:30,energy:-10,hunger:-5},15);}
+    function cleanSlime(){performCareAction('clean',{health:20,happiness:5},10);}
+    function sleepSlime(){performCareAction('sleep',{energy:40,health:10,happiness:-5},5);}
+    function updateCurrencyDisplay(){const mD=document.getElementById('currency-display');const sD=document.getElementById('store-currency-display');const iD=document.getElementById('inventory-currency-display');const cC=playerData.currency||0;if(mD)mD.textContent=`Coins: ${cC}`;if(sD)sD.textContent=`Coins: ${cC}`;if(iD)iD.textContent=`Coins: ${cC}`;}
+    async function showStoreScreen(){if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)await saveSlimeData();if(storeItems.length===0)await fetchStoreItemsOnce();renderStoreItems();updateCurrencyDisplay();showScreen('store-screen');}
+    function renderStoreItems(){const lE=document.getElementById('store-items-list');if(!lE)return;lE.innerHTML='';if(!storeItems||storeItems.length===0){lE.innerHTML='<li>No items.</li>';return;}storeItems.forEach(i=>{const li=document.createElement('li');li.className='item-card';li.dataset.itemId=i.itemId;let v=(i.itemType==='Color'&&i.dataValue)?`<div class="item-color-preview" style="background-color: ${i.dataValue};"></div>`:(i.dataValue&&typeof i.dataValue==='string'&&i.dataValue.startsWith('http'))?`<img src="${i.dataValue}" alt="${i.itemName}">`:'<div>?</div>';const o=inventoryData.find(oi=>oi.itemId===i.itemId);const q=o?o.quantity:0;li.innerHTML=`${v}<div class="item-name">${i.itemName}</div><div class="item-price">${i.price} Coins</div>${q>0?`<div class="equipped-status">Owned: ${q}</div>`:''}<button class="buy-btn">Buy</button>`;lE.appendChild(li);});lE.querySelectorAll('.buy-btn').forEach(b=>b.addEventListener('click',handlePurchaseItem));}
+    async function handlePurchaseItem(e){if(!playerData.playerId){alert("Not logged in.");return;}const iC=e.target.closest('.item-card');const iI=iC.dataset.itemId;if(!iI)return;const r=await fetchData('purchaseItem','GET',{playerId:playerData.playerId,itemId:iI});if(r){await fetchAndRenderInventory();const iD=storeItems.find(i=>i.itemId===iI);if(iD)alert(`Purchased ${iD.itemName}!`);else alert("Purchase successful!");renderStoreItems();}}
+    async function showInventoryScreen(){if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)await saveSlimeData();if(storeItems.length===0)await fetchStoreItemsOnce();await fetchAndRenderInventory();updateCurrencyDisplay();showScreen('inventory-screen');}
+    async function fetchAndRenderInventory(){const i=await fetchData('getPlayerInventory','GET');if(i){inventoryData=i;renderInventoryItems();}else{inventoryData=[];renderInventoryItems();}}
+    function renderInventoryItems(){const lE=document.getElementById('inventory-items-list');if(!lE)return;lE.innerHTML='';if(!inventoryData||inventoryData.length===0){lE.innerHTML='<li>Inventory empty.</li>';return;}if(storeItems.length===0)console.warn("Store items catalog not loaded for inv display.");inventoryData.forEach(i=>{const d=storeItems.find(si=>si.itemId===i.itemId);const dv=d?d.dataValue:(i.dataValue||null);const iN=d?d.itemName:(i.itemName||i.itemId);const iT=d?d.itemType:(i.itemType||'Unknown');const li=document.createElement('li');li.className='item-card inventory-item-card';li.dataset.itemId=i.itemId;let v=(iT==='Color'&&dv)?`<div class="item-color-preview" style="background-color: ${dv};"></div>`:(dv&&typeof dv==='string'&&dv.startsWith('http'))?`<img src="${dv}" alt="${iN}">`:'<div>?</div>';const iEq=['Color','Hat','Background'].includes(iT);const iCE=slimeData&&((iT==='Color'&&slimeData.color===dv)||(iT==='Hat'&&slimeData.hat===i.itemId)||(iT==='Background'&&slimeData.background===i.itemId));li.innerHTML=`${v}<div class="item-name">${iN}</div>${i.quantity>0?`<div class="item-quantity">Qty: ${i.quantity}</div>`:''}${iCE?`<div class="equipped-status">EQUIPPED</div>`:''}${iEq&&!iCE?`<button class="equip-btn">Equip</button>`:''}`;lE.appendChild(li);});lE.querySelectorAll('.equip-btn').forEach(b=>b.addEventListener('click',handleEquipItem));}
+    async function handleEquipItem(e){if(!playerData.playerId||!slimeData||!slimeData.slimeId){alert("Player/Slime not loaded.");return;}const iC=e.target.closest('.item-card');const iI=iC.dataset.itemId;if(!iI)return;const iD=storeItems.find(i=>i.itemId===iI);if(!iD){alert("Error finding item details.");return;}const r=await fetchData('equipItem','GET',{playerId:playerData.playerId,slimeId:slimeData.slimeId,itemId:iI});if(r&&r.updatedSlimeField){if(r.updatedSlimeField==='color')slimeData.color=r.equippedDataValue;else if(r.updatedSlimeField==='hat')slimeData.hat=r.equippedItemId;else if(r.updatedSlimeField==='background')slimeData.background=r.equippedItemId;await saveSlimeData();updateSlimeDisplay();renderInventoryItems();alert(`${iD.itemName} equipped!`);}}
+    function showMinigameSelectScreen(){if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)saveSlimeData();updateCurrencyDisplay();showScreen('minigame-select-screen');}
+    function handleMinigameSelect(e){const b=e.target.closest('.minigame-select-btn');if(!b)return;const gT=b.dataset.game;if(!gT)return;if(!playerData.playerId||!slimeData){alert("Log in & create slime.");initializeGame();return;}startMinigame(gT);}
+    function startMinigame(gT){endCurrentMinigame(false);minigameState={activeGame:gT,timeLeft:MINIGAME_DURATION,score:0,gameElements:[]};const sCI=`minigame-${gT}-screen`;const sC=document.getElementById(sCI);if(!sC){showScreen('minigame-select-screen');return;}showScreen(sCI);const mC=sC.querySelector('.minigame-container');if(mC)mC.style.display='flex';else{showScreen('minigame-select-screen');return;}const tE=sC.querySelector('.minigame-timer');const sE=sC.querySelector('.minigame-score');const msgE=sC.querySelector('.minigame-message');const rE=sC.querySelector('.minigame-results');if(tE)tE.textContent=`Time: ${minigameState.timeLeft}`;if(sE)sE.textContent=`${gT==='tapper'?'Taps':gT==='bubble'?'Popped':'Fed'}: ${minigameState.score}`;if(msgE)msgE.style.display='none';if(rE)rE.style.display='none';switch(gT){case'tapper':startSlimeTapper();break;case'bubble':startBubblePop();break;case'feed':startFeedTheSlime();break;}minigameState.timer=setInterval(()=>{minigameState.timeLeft--;if(tE)tE.textContent=`Time: ${minigameState.timeLeft}`;if(minigameState.timeLeft<=0)endCurrentMinigame(true);},1000);}
+    function endCurrentMinigame(pR){if(!minigameState.activeGame)return;if(minigameState.timer){clearInterval(minigameState.timer);minigameState.timer=null;}const aGT=minigameState.activeGame;switch(aGT){case'tapper':const tsa=document.getElementById('tapper-slime-area');if(tsa)tsa.removeEventListener('click',handleSlimeTap);break;case'bubble':stopBubblePop();break;case'feed':stopFeedTheSlime();break;}minigameState.gameElements.forEach(el=>el.remove());minigameState.gameElements=[];if(pR)displayMinigameResults(aGT,minigameState.score);else{const sc=document.getElementById(`minigame-${aGT}-screen`);if(sc){const me=sc.querySelector('.minigame-message');const re=sc.querySelector('.minigame-results');const mc=sc.querySelector('.minigame-container');if(me)me.style.display='none';if(re)re.style.display='none';if(mc)mc.style.display='none';}}minigameState.activeGame=null;}
+    async function displayMinigameResults(gT,s){const sC=document.getElementById(`minigame-${gT}-screen`);if(!sC){showScreen('minigame-select-screen');return;}const rE=sC.querySelector('.minigame-results');const fSE=sC.querySelector('.minigame-final-score')||(rE?rE.querySelector('p:nth-child(1)'):null);const cE=sC.querySelector('.minigame-coins-earned')||(rE?rE.querySelector('p:nth-child(2)'):null);const msgE=sC.querySelector('.minigame-message');let cEr=0;switch(gT){case'tapper':cEr=Math.floor(s/3);break;case'bubble':cEr=s*2;break;case'feed':cEr=s*5;break;}cEr=Math.max(0,cEr);if(msgE){msgE.textContent="Time's Up!";msgE.style.display='block';}if(cEr>0&&playerData.playerId){const cR=await fetchData('earnCurrency','GET',{playerId:playerData.playerId,amount:cEr});if(cR&&cR.newCurrency!==undefined){if(cE)cE.textContent=`You earned ${cEr} coins!`;updateCurrencyDisplay();}else{if(cE)cE.textContent=`Failed to award coins.`;}}else{if(cE)cE.textContent="You earned 0 coins.";}if(fSE)fSE.textContent=`Final Score: ${s}`;if(rE)rE.style.display='block';if(msgE)msgE.style.display='none';}
+    function startSlimeTapper(){const sa=document.getElementById('tapper-slime-area');if(sa)sa.addEventListener('click',handleSlimeTap);}
+    function handleSlimeTap(){if(minigameState.activeGame==='tapper'&&minigameState.timeLeft>0){minigameState.score++;const se=document.getElementById('tapper-score');if(se)se.textContent=`Taps: ${minigameState.score}`;const sle=document.getElementById('tapper-slime-area').querySelector('.slime');if(sle){sle.style.transform='scale(0.95)';setTimeout(()=>{sle.style.transform='scale(1)';},100);}}}
+    let bubbleInterval;function startBubblePop(){const ga=document.getElementById('bubble-game-area');if(!ga){endCurrentMinigame(false);return;}bubbleInterval=setInterval(createBubble,1000);}
+    function createBubble(){if(minigameState.timeLeft<=0||minigameState.activeGame!=='bubble')return;const ga=document.getElementById('bubble-game-area');const b=document.createElement('div');b.className='minigame-target bubble';const gaw=ga.clientWidth;const bs=30;const rx=Math.random()*(gaw-bs);b.style.left=`${rx}px`;b.style.bottom=`-${bs}px`;b.addEventListener('click',handleBubbleClick);ga.appendChild(b);minigameState.gameElements.push(b);b.addEventListener('animationend',()=>{removeMinigameElement(b);});}
+    function handleBubbleClick(e){if(minigameState.activeGame==='bubble'&&minigameState.timeLeft>0){e.stopPropagation();const b=e.target;minigameState.score++;const se=document.getElementById('bubble-score');if(se)se.textContent=`Popped: ${minigameState.score}`;removeMinigameElement(b);}}
+    function stopBubblePop(){if(bubbleInterval){clearInterval(bubbleInterval);bubbleInterval=null;}}
+    let foodTimeout;function startFeedTheSlime(){const ga=document.getElementById('feed-game-area');if(!ga){endCurrentMinigame(false);return;}ga.addEventListener('click',handleMissedClickInFeedGame);scheduleNextFood();}
+    function createFoodTarget(){if(minigameState.timeLeft<=0||minigameState.activeGame!=='feed'){foodTimeout=null;return;}const ga=document.getElementById('feed-game-area');const f=document.createElement('img');f.src='https://i.imgur.com/ExampleFood.png';f.className='minigame-target food';const gar=ga.getBoundingClientRect();const fs=40;const p=50;const rx=p+Math.random()*(gar.width-fs-2*p);const ry=p+Math.random()*(gar.height-fs-2*p);f.style.position='absolute';f.style.left=`${rx}px`;f.style.top=`${ry}px`;f.addEventListener('click',handleFoodClick);ga.appendChild(f);minigameState.gameElements.push(f);const rt=setTimeout(()=>{removeMinigameElement(f);scheduleNextFood();},2000);f._removalTimerId=rt;foodTimeout=null;}
+    function handleFoodClick(e){if(minigameState.activeGame==='feed'&&minigameState.timeLeft>0){e.stopPropagation();const f=e.target;minigameState.score++;const se=document.getElementById('feed-score');if(se)se.textContent=`Fed: ${minigameState.score}`;if(f._removalTimerId)clearTimeout(f._removalTimerId);removeMinigameElement(f);scheduleNextFood();}}
+    function handleMissedClickInFeedGame(e){if(minigameState.activeGame==='feed'&&minigameState.timeLeft>0){const fe=document.querySelectorAll('#feed-game-area .minigame-target.food');if(fe.length>0)console.log('Missed click!');}}
+    function scheduleNextFood(){if(minigameState.timeLeft<=0||minigameState.activeGame!=='feed')return;if(foodTimeout===null)foodTimeout=setTimeout(createFoodTarget,1500);}
+    function stopFeedTheSlime(){if(foodTimeout){clearTimeout(foodTimeout);foodTimeout=null;}const ga=document.getElementById('feed-game-area');if(ga)ga.removeEventListener('click',handleMissedClickInFeedGame);}
+    function removeMinigameElement(e){if(e&&e.parentNode){if(e._removalTimerId)clearTimeout(e._removalTimerId);e.parentNode.removeChild(e);minigameState.gameElements=minigameState.gameElements.filter(el=>el!==e);}}
+    function setupEventListeners(){const lb=document.getElementById('login-button');if(lb)lb.addEventListener('click',handleLogin);const csb=document.getElementById('create-slime-button');if(csb)csb.addEventListener('click',handleCreateSlime);const fb=document.getElementById('feed-btn');if(fb)fb.addEventListener('click',feedSlime);const pb=document.getElementById('play-btn');if(pb)pb.addEventListener('click',playWithSlime);const cb=document.getElementById('clean-btn');if(cb)cb.addEventListener('click',cleanSlime);const sb=document.getElementById('sleep-btn');if(sb)sb.addEventListener('click',sleepSlime);const nc=document.querySelector('.nav-container');if(nc)nc.addEventListener('click',async e=>{const ni=e.target.closest('.nav-item');if(!ni)return;const ogs=document.getElementById('game-screen').classList.contains('active-screen');const oms=document.getElementById('minigame-select-screen').classList.contains('active-screen');if((ogs||oms)&&slimeData)await saveSlimeData();const navId=ni.id;switch(navId){case'home-nav':if(playerData.playerId&&slimeData){showScreen('game-screen');startGameLoop();}else if(playerData.playerId)showScreen('create-slime-screen');else showScreen('login-screen');break;}});const rightNav=document.querySelector('.nav-container-right');if(rightNav)rightNav.addEventListener('click',async e=>{const ni=e.target.closest('.nav-item');if(!ni)return;document.querySelectorAll('.nav-container-right .nav-item').forEach(i=>i.classList.remove('active'));ni.classList.add('active');const ogs=document.getElementById('game-screen').classList.contains('active-screen');const oms=document.getElementById('minigame-select-screen').classList.contains('active-screen');if((ogs||oms)&&slimeData)await saveSlimeData();const navId=ni.id;if(navId==='game-home-nav'){if(playerData.playerId&&slimeData){showScreen('game-screen');startGameLoop();}else if(playerData.playerId)showScreen('create-slime-screen');else showScreen('login-screen');}else if(navId==='inventory-nav'){if(playerData.playerId)showInventoryScreen();else{alert("Log in for inventory.");showScreen('login-screen');}}else if(navId==='minigames-nav'){if(playerData.playerId&&slimeData)showMinigameSelectScreen();else if(playerData.playerId){alert("Create slime first!");showScreen('create-slime-screen');}else{alert("Log in for minigames.");showScreen('login-screen');}}else if(ni.classList.contains('store-category-nav')){if(playerData.playerId)showStoreScreen(ni.dataset.category);else{alert("Log in for store.");showScreen('login-screen');}}});const mss=document.getElementById('minigame-select-screen');if(mss)mss.addEventListener('click',handleMinigameSelect);const me=document.querySelector('main');if(me)me.addEventListener('click',e=>{const bb=e.target.closest('.minigame-back-btn');if(!bb)return;const ts=bb.dataset.target;if(ts){endCurrentMinigame(false);showScreen(ts);}}); }
+    function setActiveNav(){const hn=document.getElementById('home-nav');if(hn)hn.classList.add('active');const storeAll=document.querySelector('.nav-container-right .nav-item[data-category="all"]');if(storeAll)storeAll.classList.add('active');}
+    function createHearts(){const c=document.getElementById('hearts-container');if(!c)return;c.innerHTML='';for(let i=0;i<20;i++){const h=document.createElement('div');h.className='heart';h.innerHTML='❤️';h.style.left=`${Math.random()*100}vw`;h.style.animationDuration=`${15+Math.random()*10}s`;h.style.animationDelay=`${Math.random()*5}s`;h.style.fontSize=`${20+Math.random()*20}px`;c.appendChild(h);}}
+    window.addEventListener('load',()=>{createHearts();setupEventListeners();initializeGame();});
+    window.addEventListener('beforeunload',e=>{if(slimeData&&playerData.playerId){saveSlimeData();}});
 </script>
 </body>
-</html>
+</html> 
