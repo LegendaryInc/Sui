@@ -8,1194 +8,416 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* ===== GENERAL STYLES ===== */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f1a1c2;
-            color: #333;
-            min-height: 100vh;
-            padding-left: 100px; /* Space for nav */
-            position: relative;
-            overflow-x: hidden;
+            font-family: 'Poppins', sans-serif; background-color: #f1a1c2; color: #333;
+            min-height: 100vh; padding-left: 100px; padding-right: 100px;
+            position: relative; overflow-x: hidden; text-align: center;
         }
 
-        /* ===== KUROMI NAVIGATION BAR ===== */
-        .nav-container {
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            width: 100px;
-            background-color: #2a0a3a;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 30px;
-            z-index: 1000;
-            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
-            border-right: 3px solid #ff9ec6;
+        /* ===== NAVIGATION BARS ===== */
+        .nav-container-left, .nav-container-right {
+            position: fixed; top: 0; height: 100vh; width: 100px;
+            background-color: #2a0a3a; display: flex; flex-direction: column;
+            align-items: center; padding-top: 30px; z-index: 1000;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.2);
         }
-
+        .nav-container-left { left: 0; border-right: 3px solid #ff9ec6; }
+        .nav-container-right { right: 0; border-left: 3px solid #ff9ec6; box-shadow: -4px 0 10px rgba(0,0,0,0.2); }
         .nav-item {
-            width: 100%;
-            text-align: center;
-            padding: 15px 0;
-            margin: 10px 0;
-            color: white;
-            font-size: 0.9em;
-            text-decoration: none;
-            transition: all 0.3s;
+            width: 100%; text-align: center; padding: 15px 0; margin: 10px 0;
+            color: white; font-size: 0.9em; text-decoration: none; transition: all 0.3s;
         }
+        .nav-item:hover { background-color: #9b4d96; transform: scale(1.05); }
+        .nav-item img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 8px; }
+        .active { background-color: #ff66a3; font-weight: bold; }
 
-        .nav-item:hover {
-            background-color: #9b4d96;
-            transform: scale(1.05);
-        }
-
-        .nav-item img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            margin-bottom: 8px;
-        }
-
-        .active {
-            background-color: #ff66a3;
-            font-weight: bold;
-        }
-
-        /* ===== MAIN CONTENT WRAPPER ===== */
-        .page-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-        }
-
-        /* ===== HEADER STYLES ===== */
+        /* ===== MAIN CONTENT ===== */
+        .page-wrapper { max-width: 950px; margin: 0 auto; padding: 20px; position: relative; }
         header {
-            background-color: #9b4d96;
-            color: white;
-            padding: 20px;
-            font-size: 2em;
-            text-transform: uppercase;
-            font-weight: bold;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-            text-align: center;
+            background-color: #9b4d96; color: white; padding: 20px; font-size: 2em;
+            text-transform: uppercase; font-weight: bold; border-radius: 12px;
+            margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative;
         }
-
-        /* ===== MAIN CONTENT STYLES ===== */
         main {
-            width: 100%;
-            padding: 40px;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 40px;
-            position: relative;
+            width: 100%; padding: 20px; background-color: white; border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 40px; position: relative;
         }
 
-        /* ===== TIME ZONE BRIDGE SPECIFIC STYLES ===== */
-
-        /* Main Clock Section */
-        .clock-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .clock-container {
-            width: 45%;
-            text-align: center;
-            padding: 20px;
-            border-radius: 15px;
-            position: relative;
-        }
-
-        .milacik-clock {
-            background-color: #e6f2ff;
-            border: 3px solid #9b4d96;
-            box-shadow: 0 4px 15px rgba(155, 77, 150, 0.2);
-        }
-
-        .sui-clock {
-            background-color: #fff0f7;
-            border: 3px solid #ff66a3;
-            box-shadow: 0 4px 15px rgba(255, 102, 163, 0.2);
-        }
-
-        .clock-name {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-family: 'Pacifico', cursive;
-        }
-
-        .milacik-clock .clock-name {
-            color: #9b4d96;
-        }
-
-        .sui-clock .clock-name {
-            color: #ff66a3;
-        }
-
-        .clock-location {
-            font-size: 1.1em;
-            margin-bottom: 15px;
-            color: #666;
-        }
-
-        .clock-time {
-            font-size: 2.5em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .clock-date {
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
+        /* Time Zone Bridge Specific Styles */
+        .clock-section { display: flex; justify-content: space-around; /* Changed for better spacing */ margin-bottom: 30px; position: relative; flex-wrap: wrap; }
+        .clock-container { width: 48%; text-align: center; padding: 20px; border-radius: 15px; position: relative; margin-bottom: 20px; }
+        .milacik-clock { background-color: #e6f2ff; border: 3px solid #9b4d96; box-shadow: 0 4px 15px rgba(155,77,150,0.2); }
+        .sui-clock { background-color: #fff0f7; border: 3px solid #ff66a3; box-shadow: 0 4px 15px rgba(255,102,163,0.2); }
+        .clock-name { font-size: 1.6em; /* Slightly larger */ font-weight: bold; margin-bottom: 5px; font-family: 'Pacifico', cursive; }
+        .milacik-clock .clock-name { color: #9b4d96; } .sui-clock .clock-name { color: #ff66a3; }
+        .clock-location { font-size: 1.1em; margin-bottom: 15px; color: #666; }
+        .clock-time { font-size: 2.8em; /* Larger time */ font-weight: bold; margin: 10px 0; color: #444; }
+        .clock-date { font-size: 1.2em; margin-bottom: 10px; color: #555; }
+        .sunrise-sunset { font-size: 0.9em; color: #777; margin-top: 8px; }
+        .sunrise-sunset i { margin-right: 5px; }
 
         .heart-bridge {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            background-color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 15px rgba(255, 102, 163, 0.5);
-            z-index: 10;
-            border: 2px solid #ff66a3;
-            font-size: 24px;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60px; height: 60px; /* Slightly larger */ background-color: white;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 20px rgba(255,102,163,0.6); z-index: 10;
+            border: 3px solid #ff66a3; font-size: 28px; /* Larger heart */
+            color: #e91e63;
         }
+        .time-difference { text-align: center; padding: 15px; background-color: #f0f8ff; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #9b4d96; font-size: 1.2em; }
+        .distance-display { display: flex; justify-content: center; align-items: center; padding: 15px; background-color: #fff0f7; border-radius: 10px; margin-bottom: 30px; border-left: 5px solid #ff66a3; font-size: 1.2em; gap: 15px; flex-wrap: wrap; }
+        .distance-icon { font-size: 1.8em; color: #9b4d96; } .distance-text { font-weight: bold; }
+        .distance-heart { font-size: 1.5em; animation: pulse 1.5s infinite; color: #e91e63; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
 
-        .time-difference {
-            text-align: center;
-            padding: 15px;
-            background-color: #f0f8ff;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 5px solid #9b4d96;
-            font-size: 1.2em;
-        }
-        
-        /* Distance Display */
-        .distance-display {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            background-color: #fff0f7;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            border-left: 5px solid #ff66a3;
-            font-size: 1.2em;
-            gap: 15px;
-        }
-        
-        .distance-icon {
-            font-size: 1.8em;
-        }
-        
-        .distance-text {
-            font-weight: bold;
-        }
-        
-        .distance-heart {
-            font-size: 1.5em;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
+        .weather-section { margin-bottom: 30px; padding: 25px; background-color: #f7f0ff; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-left: 5px solid #8e44ad; position: relative; }
+        .weather-header { color: #8e44ad; font-size: 1.8em; margin-bottom: 20px; text-align: center; font-family: 'Pacifico', cursive; }
+        .weather-container { display: flex; justify-content: space-around; /* Changed */ flex-wrap: wrap; }
+        .weather-card { width: 48%; padding: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); text-align: center; transition: transform 0.3s; margin-bottom: 20px; }
+        .weather-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .weather-location { font-size: 1.3em; font-weight: bold; margin-bottom: 10px; color: #8e44ad; }
+        .weather-icon img { width: 70px; height: 70px; margin: 10px 0; /* For OpenWeatherMap icons */ }
+        .weather-icon-emoji { font-size: 3.5em; margin: 15px 0; /* For emoji fallback */ }
+        .weather-temp { font-size: 2.2em; font-weight: bold; margin: 10px 0; }
+        .weather-description { font-size: 1.1em; margin-bottom: 15px; color: #666; text-transform: capitalize; }
+        .weather-details { display: flex; justify-content: space-around; margin-top: 20px; font-size: 1em; color: #777; flex-wrap: wrap; gap: 8px; }
+        .weather-details-item { background-color: #f8f8f8; padding: 8px 15px; border-radius: 20px; display: flex; align-items: center; gap: 5px; }
+        .weather-details-item i { color: #9b4d96; font-size: 1.2em; }
+        .weather-error { color: #d32f2f; margin-top: 10px; }
 
-        /* Weather Comparison */
-        .weather-section {
-            margin-bottom: 30px;
-            padding: 25px;
-            background-color: #f7f0ff;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid #8e44ad;
-            position: relative;
-        }
+        .flashcard-section, .bow, .hearts-container, .heart, @keyframes floatUpTZ, .header-bow-left, .main-bow-tl /* ... (other existing styles remain the same) ... */
+        .flashcard-section { margin-bottom: 30px; padding: 25px; background-color: #e6f2ff; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-left: 5px solid #ff66a3; position: relative; }
+        .flashcard-header { color: #9b4d96; font-size: 1.8em; margin-bottom: 20px; text-align: center; font-family: 'Pacifico', cursive; }
+        .flashcard-container { perspective: 1000px; min-height: 220px; margin: 0 auto; max-width: 500px; }
+        .flashcard { width: 100%; height: 220px; position: relative; transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 10px; padding: 20px; }
+        .flashcard-front { background-color: #fff; border: 3px solid #9b4d96; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 2; }
+        .flashcard-back { background-color: #f8f8f8; border: 3px solid #ff66a3; transform: rotateY(180deg); }
+        .flashcard-word { font-size: 2em; font-weight: bold; margin-bottom: 10px; color: #333; }
+        .flashcard-category { color: #9b4d96; font-size: 0.9em; margin-bottom: 5px; }
+        .flashcard-translation { font-size: 1.8em; font-weight: bold; margin-bottom: 10px; color: #ff66a3; }
+        .flashcard-pronunciation { font-style: italic; color: #666; margin-bottom: 15px; }
+        .flashcard-example { text-align: center; background-color: #f0f8ff; padding: 10px; border-radius: 5px; margin-top: 10px; width: 100%; font-size: 0.9em; }
+        .flashcard-navigation { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; flex-wrap: wrap; gap: 5px; }
+        .flashcard-btn { background-color: #9b4d96; color: white; border: none; border-radius: 20px; padding: 8px 15px; font-size: 1em; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 5px; }
+        .flashcard-btn:hover { background-color: #ff66a3; transform: scale(1.05); }
+        .flashcard-hint { text-align: center; color: #888; margin-top: 15px; font-size: 0.9em; font-style: italic; }
+        .categories-filter { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        .category-btn { background-color: #f0f0f0; border: none; border-radius: 20px; padding: 5px 15px; font-size: 0.9em; cursor: pointer; transition: all 0.3s; }
+        .category-btn:hover { background-color: #e0e0e0; }
+        .category-btn.active { background-color: #ff66a3; color: white; }
 
-        .weather-header {
-            color: #8e44ad;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            text-align: center;
-            font-family: 'Pacifico', cursive;
-        }
+        .bow { position: absolute; width: 40px; height: 40px; background: url('https://i.imgur.com/tA7aPg4.png') center/contain no-repeat; z-index: 10; }
+        .hearts-container { position: fixed; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: -1; overflow: hidden; }
+        .heart { position: absolute; width: 30px; height: 30px; color: #f5a9bc; font-size: 30px; opacity: 0.7; animation: floatUpTZ 15s linear infinite; }
+        @keyframes floatUpTZ { 0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; } }
+        .header-bow-left { top: -15px; left: -15px; } .header-bow-right { top: -15px; right: -15px; }
+        .main-bow-tl { top: -15px; left: -15px; } .main-bow-tr { top: -15px; right: -15px; }
+        .main-bow-bl { bottom: -15px; left: -15px; } .main-bow-br { bottom: -15px; right: -15px; }
+        .clock-bow-left { top: -15px; left: -15px; } .clock-bow-right { top: -15px; right: -15px; }
+        .weather-bow-left { top: -15px; left: -15px; } .weather-bow-right { top: -15px; right: -15px; }
+        .flashcard-bow-left { top: -15px; left: -15px; } .flashcard-bow-right { top: -15px; right: -15px; }
+        
 
-        .weather-container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .weather-card {
-            width: 48%;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: transform 0.3s;
-        }
-        
-        .weather-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .weather-location {
-            font-size: 1.3em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #8e44ad;
-        }
-
-        .weather-icon {
-            font-size: 3.5em;
-            margin: 15px 0;
-        }
-
-        .weather-temp {
-            font-size: 2.2em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .weather-description {
-            font-size: 1.1em;
-            margin-bottom: 15px;
-            color: #666;
-        }
-
-        .weather-details {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            font-size: 1em;
-            color: #777;
-        }
-        
-        .weather-details-item {
-            background-color: #f8f8f8;
-            padding: 8px 15px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .weather-details-item i {
-            color: #9b4d96;
-            font-size: 1.2em;
-        }
-        
-        /* Slovak Language Flashcards */
-        .flashcard-section {
-            margin-bottom: 30px;
-            padding: 25px;
-            background-color: #e6f2ff;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid #ff66a3;
-            position: relative;
-        }
-        
-        .flashcard-header {
-            color: #9b4d96;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            text-align: center;
-            font-family: 'Pacifico', cursive;
-        }
-        
-        .flashcard-container {
-            perspective: 1000px;
-            min-height: 220px;
-            margin: 0 auto;
-            max-width: 500px;
-        }
-        
-        .flashcard {
-            width: 100%;
-            height: 220px;
-            position: relative;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-            cursor: pointer;
-        }
-        
-        .flashcard.flipped {
-            transform: rotateY(180deg);
-        }
-        
-        .flashcard-front, .flashcard-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-            padding: 20px;
-        }
-        
-        .flashcard-front {
-            background-color: #fff;
-            border: 3px solid #9b4d96;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            z-index: 2;
-        }
-        
-        .flashcard-back {
-            background-color: #f8f8f8;
-            border: 3px solid #ff66a3;
-            transform: rotateY(180deg);
-        }
-        
-        .flashcard-word {
-            font-size: 2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        
-        .flashcard-category {
-            color: #9b4d96;
-            font-size: 0.9em;
-            margin-bottom: 5px;
-        }
-        
-        .flashcard-translation {
-            font-size: 1.8em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #ff66a3;
-        }
-        
-        .flashcard-pronunciation {
-            font-style: italic;
-            color: #666;
-            margin-bottom: 15px;
-        }
-        
-        .flashcard-example {
-            text-align: center;
-            background-color: #f0f8ff;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
-            width: 100%;
-            font-size: 0.9em;
-        }
-        
-        .flashcard-navigation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-        
-        .flashcard-btn {
-            background-color: #9b4d96;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 8px 15px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .flashcard-btn:hover {
-            background-color: #ff66a3;
-            transform: scale(1.05);
-        }
-        
-        .flashcard-hint {
-            text-align: center;
-            color: #888;
-            margin-top: 15px;
-            font-size: 0.9em;
-            font-style: italic;
-        }
-        
-        .categories-filter {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        
-        .category-btn {
-            background-color: #f0f0f0;
-            border: none;
-            border-radius: 20px;
-            padding: 5px 15px;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .category-btn:hover {
-            background-color: #e0e0e0;
-        }
-        
-        .category-btn.active {
-            background-color: #ff66a3;
-            color: white;
-        }
-
-        /* ===== DECORATIVE ELEMENTS ===== */
-        .bow {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background: url('https://i.imgur.com/tA7aPg4.png') center/contain no-repeat;
-            z-index: 10;
-        }
-
-        .hearts-container {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .heart {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            color: #f5a9bc;
-            font-size: 30px;
-            opacity: 0.7;
-            animation: floatUp 15s linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.7; }
-            90% { opacity: 0.7; }
-            100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
-        }
-
-        /* ===== POSITIONING FOR BOWS ===== */
-        .header-bow-left { top: -15px; left: -15px; }
-        .header-bow-right { top: -15px; right: -15px; }
-        .main-bow-tl { top: -15px; left: -15px; }
-        .main-bow-tr { top: -15px; right: -15px; }
-        .main-bow-bl { bottom: -15px; left: -15px; }
-        .main-bow-br { bottom: -15px; right: -15px; }
-        .clock-bow-left { top: -15px; left: -15px; }
-        .clock-bow-right { top: -15px; right: -15px; }
-        .weather-bow-left { top: -15px; left: -15px; }
-        .weather-bow-right { top: -15px; right: -15px; }
-        .flashcard-bow-left { top: -15px; left: -15px; }
-        .flashcard-bow-right { top: -15px; right: -15px; }
-        
         /* ===== RESPONSIVE STYLES ===== */
+        @media (max-width: 960px) { /* Adjust breakpoint where clocks/weather might start to wrap */
+            .clock-container, .weather-card { width: 100%; margin-bottom: 20px; }
+            .clock-section, .weather-container { justify-content: center; }
+            .heart-bridge { display: none; } /* Hide bridge if clocks stack */
+        }
         @media (max-width: 768px) {
-            body {
-                padding-left: 80px;
-            }
-            
-            .nav-container {
-                width: 80px;
-            }
-            
-            .nav-item {
-                font-size: 0;
-                padding: 15px 0;
-            }
-            
-            .nav-item img {
-                width: 40px;
-                height: 40px;
-                margin-bottom: 0;
-            }
-            
-            header {
-                font-size: 1.5em;
-                padding: 15px;
-            }
-            
-            main {
-                padding: 20px;
-            }
-            
-            .clock-section {
-                flex-direction: column;
-            }
-            
-            .clock-container {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-            
-            .heart-bridge {
-                display: none;
-            }
-            
-            .weather-container {
-                flex-direction: column;
-            }
-            
-            .weather-card {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-            
-            .categories-filter {
-                flex-direction: column;
-                align-items: center;
-                gap: 5px;
-            }
+            body { padding-left: 80px; padding-right: 0; }
+            .nav-container-left { width: 80px; }
+            .nav-container-right { display: none; }
+            .nav-item { font-size: 0; padding: 15px 0; }
+            .nav-item img { width: 40px; height: 40px; margin-bottom: 0; }
+            header { font-size: 1.5em; padding: 15px; }
+            main { padding: 15px; }
+            .categories-filter { flex-direction: column; align-items: center; gap: 5px; }
+            .flashcard-navigation { justify-content: center; }
+        }
+         @media (max-width: 480px) {
+             body { padding-left: 60px; }
+             .nav-container-left { width: 60px; }
+             .nav-item img { width: 30px; height: 30px; }
+             .clock-time { font-size: 2em; } .clock-name { font-size: 1.4em; }
+             .weather-temp { font-size: 1.8em; } .weather-location { font-size: 1.1em; }
+             .flashcard-word { font-size: 1.5em; } .flashcard-translation { font-size: 1.4em; }
+             .distance-display { font-size: 1em; }
+             .time-difference {font-size: 1em;}
         }
     </style>
 </head>
 <body>
- <!-- Navigation -->
-    <div class="nav-container">
-        <a href="index.html" class="nav-item home">
-            <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home">
-            Home
-        </a>
-        <a href="loveletters.html" class="nav-item letters">
-            <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters">
-            Love Letters
-        </a>
-        <a href="lovecalculator.html" class="nav-item calculator">
-            <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator">
-            Love Calculator
-        </a>
-        <a href="movies.html" class="nav-item movies active">
-            <img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker">
-            Movie Picker
-        </a>
-        <a href="bookdate.html" class="nav-item bookdate">
-            <img src="https://i.imgur.com/megzmKr.png" alt="Book a Date">
-            Book a Date
-        </a>
-        <a href="timezone.html" class="nav-item timezone">
-            <img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge">
-            Time Bridge
-        </a>
+ <!-- Left Navigation -->
+    <div class="nav-container-left">
+        <a href="index.html" class="nav-item home"> <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home"> Home </a>
+        <a href="loveletters.html" class="nav-item letters"> <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters"> Love Letters </a>
+        <a href="lovecalculator.html" class="nav-item calculator"> <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator"> Love Calculator </a>
+        <a href="movies.html" class="nav-item movies"> <img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker"> Movie Picker </a>
+        <a href="bookdate.html" class="nav-item bookdate"> <img src="https://i.imgur.com/megzmKr.png" alt="Book a Date"> Book a Date </a>
+        <a href="timezone.html" class="nav-item timezone active"> <img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge"> Time Bridge </a>
     </div>
 
     <div class="page-wrapper">
         <header>
             Time Zone Bridge 🌙⏰🌈
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-left">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-right">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-left"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-right">
         </header>
 
         <main>
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tl">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tr">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-bl">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-br">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tr">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-bl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-br">
             
-            <!-- Main Clock Section -->
             <section class="clock-section">
                 <div class="clock-container milacik-clock">
                     <img src="https://i.imgur.com/tA7aPg4.png" class="bow clock-bow-left">
-                    <div class="clock-name">Miláčik</div>
-                    <div class="clock-location">Medford, Oregon</div>
-                    <div class="clock-time" id="milacik-time">--:--:--</div>
-                    <div class="clock-date" id="milacik-date">Loading...</div>
+                    <div class="clock-name">Miláčik</div> <div class="clock-location">Medford, Oregon</div>
+                    <div class="clock-time" id="milacik-time">--:--:--</div> <div class="clock-date" id="milacik-date">Loading...</div>
+                    <div class="sunrise-sunset"><i class="fas fa-sun"></i> <span id="milacik-sunrise">--:--</span> | <i class="fas fa-moon"></i> <span id="milacik-sunset">--:--</span></div>
                 </div>
-                
-                <div class="heart-bridge">❤️</div>
-                
+                <div class="heart-bridge">💞</div>
                 <div class="clock-container sui-clock">
                     <img src="https://i.imgur.com/tA7aPg4.png" class="bow clock-bow-right">
-                    <div class="clock-name">Sui</div>
-                    <div class="clock-location">Zelenec, Slovakia</div>
-                    <div class="clock-time" id="sui-time">--:--:--</div>
-                    <div class="clock-date" id="sui-date">Loading...</div>
+                    <div class="clock-name">Sui</div> <div class="clock-location">Zelenec, Slovakia</div>
+                    <div class="clock-time" id="sui-time">--:--:--</div> <div class="clock-date" id="sui-date">Loading...</div>
+                     <div class="sunrise-sunset"><i class="fas fa-sun"></i> <span id="sui-sunrise">--:--</span> | <i class="fas fa-moon"></i> <span id="sui-sunset">--:--</span></div>
                 </div>
             </section>
             
-            <div class="time-difference" id="time-difference">
-                Calculating time difference...
-            </div>
-            
-            <!-- Distance Display -->
+            <div class="time-difference" id="time-difference">Calculating...</div>
             <div class="distance-display">
-                <div class="distance-icon">📏</div>
-                <div class="distance-text">
-                    <span id="distance-miles">5,772 miles</span> | <span id="distance-km">9,290 kilometers</span>
-                </div>
-                <div class="distance-heart">❤️</div>
+                <div class="distance-icon">✈️</div> <div class="distance-text"><span id="distance-miles">5,772 mi</span> | <span id="distance-km">9,290 km</span></div> <div class="distance-heart">💖</div>
             </div>
             
-            <!-- Weather Comparison -->
             <section class="weather-section">
-                <img src="https://i.imgur.com/tA7aPg4.png" class="bow weather-bow-left">
-                <img src="https://i.imgur.com/tA7aPg4.png" class="bow weather-bow-right">
-                <h2 class="weather-header">Weather In Both Worlds</h2>
-                
+                <img src="https://i.imgur.com/tA7aPg4.png" class="bow weather-bow-left"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow weather-bow-right">
+                <h2 class="weather-header">Weather In Our Worlds</h2>
                 <div class="weather-container">
-                    <div class="weather-card" id="milacik-weather">
-                        <div class="weather-location">Medford, Oregon</div>
-                        <div class="weather-icon" id="milacik-icon">⛅</div>
-                        <div class="weather-temp" id="milacik-temp">--°F</div>
-                        <div class="weather-description" id="milacik-desc">Loading...</div>
-                        <div class="weather-details">
-                            <div class="weather-details-item">
-                                <i class="fas fa-tint"></i>
-                                <span id="milacik-humidity">--%</span>
-                            </div>
-                            <div class="weather-details-item">
-                                <i class="fas fa-wind"></i>
-                                <span id="milacik-wind">-- mph</span>
-                            </div>
-                        </div>
+                    <div class="weather-card" id="milacik-weather-card">
+                        <div class="weather-location">Medford, OR</div> <div class="weather-icon" id="milacik-icon"><span class="weather-icon-emoji">⏳</span></div>
+                        <div class="weather-temp" id="milacik-temp">--°F</div> <div class="weather-description" id="milacik-desc">Loading...</div>
+                        <div class="weather-details"> <div class="weather-details-item"><i class="fas fa-tint"></i> <span id="milacik-humidity">--%</span></div> <div class="weather-details-item"><i class="fas fa-wind"></i> <span id="milacik-wind">-- mph</span></div> </div>
+                        <div class="weather-error" id="milacik-weather-error"></div>
                     </div>
-                    
-                    <div class="weather-card" id="sui-weather">
-                        <div class="weather-location">Zelenec, Slovakia</div>
-                        <div class="weather-icon" id="sui-icon">🌤️</div>
-                        <div class="weather-temp" id="sui-temp">--°C</div>
-                        <div class="weather-description" id="sui-desc">Loading...</div>
-                        <div class="weather-details">
-                            <div class="weather-details-item">
-                                <i class="fas fa-tint"></i>
-                                <span id="sui-humidity">--%</span>
-                            </div>
-                            <div class="weather-details-item">
-                                <i class="fas fa-wind"></i>
-                                <span id="sui-wind">-- km/h</span>
-                            </div>
-                        </div>
+                    <div class="weather-card" id="sui-weather-card">
+                        <div class="weather-location">Zelenec, SK</div> <div class="weather-icon" id="sui-icon"><span class="weather-icon-emoji">⏳</span></div>
+                        <div class="weather-temp" id="sui-temp">--°C</div> <div class="weather-description" id="sui-desc">Loading...</div>
+                        <div class="weather-details"> <div class="weather-details-item"><i class="fas fa-tint"></i> <span id="sui-humidity">--%</span></div> <div class="weather-details-item"><i class="fas fa-wind"></i> <span id="sui-wind">-- km/h</span></div> </div>
+                        <div class="weather-error" id="sui-weather-error"></div>
                     </div>
                 </div>
             </section>
             
-            <!-- Slovak Language Flashcards -->
             <section class="flashcard-section">
-                <img src="https://i.imgur.com/tA7aPg4.png" class="bow flashcard-bow-left">
-                <img src="https://i.imgur.com/tA7aPg4.png" class="bow flashcard-bow-right">
+                 <!-- ... Flashcard HTML remains the same ... -->
+                <img src="https://i.imgur.com/tA7aPg4.png" class="bow flashcard-bow-left"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow flashcard-bow-right">
                 <h2 class="flashcard-header">Learn Slovak with Sui</h2>
-                
                 <div class="categories-filter">
-                    <button class="category-btn active" data-category="all">All Words</button>
-                    <button class="category-btn" data-category="basics">Basic Phrases</button>
-                    <button class="category-btn" data-category="romantic">Romantic</button>
-                    <button class="category-btn" data-category="everyday">Everyday Words</button>
-                    <button class="category-btn" data-category="questions">Questions</button>
+                    <button class="category-btn active" data-category="all">All</button> <button class="category-btn" data-category="basics">Basics</button>
+                    <button class="category-btn" data-category="romantic">Romantic</button> <button class="category-btn" data-category="everyday">Everyday</button> <button class="category-btn" data-category="questions">Questions</button>
                 </div>
-                
                 <div class="flashcard-container">
                     <div class="flashcard" id="flashcard">
-                        <div class="flashcard-front">
-                            <div class="flashcard-category">Basic Phrases</div>
-                            <div class="flashcard-word">Hello</div>
-                            <div class="flashcard-hint">(Click card to see translation)</div>
-                        </div>
-                        <div class="flashcard-back">
-                            <div class="flashcard-translation">Ahoj</div>
-                            <div class="flashcard-pronunciation">ah-hoy</div>
-                            <div class="flashcard-example">
-                                <strong>Example:</strong> Ahoj, ako sa máš? <br>
-                                (Hello, how are you?)
-                            </div>
-                        </div>
+                        <div class="flashcard-front"> <div class="flashcard-category">Basics</div> <div class="flashcard-word">Hello</div> <div class="flashcard-hint">(Click to flip)</div> </div>
+                        <div class="flashcard-back"> <div class="flashcard-translation">Ahoj</div> <div class="flashcard-pronunciation">ah-hoy</div> <div class="flashcard-example"><strong>Ex:</strong> Ahoj, ako sa máš?</div> </div>
                     </div>
                 </div>
-                
                 <div class="flashcard-navigation">
-                    <button class="flashcard-btn" id="prev-card">
-                        <i class="fas fa-arrow-left"></i> Previous
-                    </button>
-                    <button class="flashcard-btn" id="add-card">
-                        <i class="fas fa-plus"></i> Add Word
-                    </button>
-                    <button class="flashcard-btn" id="next-card">
-                        Next <i class="fas fa-arrow-right"></i>
-                    </button>
+                    <button class="flashcard-btn" id="prev-card"><i class="fas fa-arrow-left"></i> Prev</button>
+                    <button class="flashcard-btn" id="add-card"><i class="fas fa-plus"></i> Add</button>
+                    <button class="flashcard-btn" id="next-card">Next <i class="fas fa-arrow-right"></i></button>
                 </div>
             </section>
         </main>
     </div>
 
+    <!-- Right Navigation Bar -->
+    <div class="nav-container-right">
+        <a href="slimegame.html" class="nav-item slimegame">
+            <img src="https://i.imgur.com/yFzLbfM.png" alt="Slime Game Icon"> Slime Game
+        </a>
+    </div>
+
     <div class="hearts-container" id="hearts-container"></div>
 
     <script>
-        // Time zone data
-        const userTimeZones = {
-            milacik: {
-                name: "Miláčik",
-                location: "Medford, Oregon",
-                timeZone: "America/Los_Angeles", // Pacific Time
-                coordinates: {
-                    lat: 42.3265,
-                    lon: -122.8756
-                },
-                address: "642 Wabash Ave, Medford OR"
-            },
-            sui: {
-                name: "Sui",
-                location: "Zelenec, Slovakia", 
-                timeZone: "Europe/Bratislava", // Central European Time
-                coordinates: {
-                    lat: 48.3775,
-                    lon: 17.5872
-                },
-                address: "Nezabudkova 774/2, Zelenec, 91921 Slovakia"
-            }
+        const OPENWEATHERMAP_API_KEY = "1841dceb5ea5bf6382232d9a49f213c0";
+
+        const userTimeZones = { /* ... (same userTimeZones object) ... */ 
+            milacik: { name: "Miláčik", location: "Medford, Oregon", timeZone: "America/Los_Angeles", coordinates: { lat: 42.3265, lon: -122.8756 }, address: "642 Wabash Ave, Medford OR" },
+            sui: { name: "Sui", location: "Zelenec, Slovakia", timeZone: "Europe/Bratislava", coordinates: { lat: 48.3775, lon: 17.5872 }, address: "Nezabudkova 774/2, Zelenec, 91921 Slovakia" }
         };
-        
-        // Slovak flashcards database
-        const flashcards = [
-            {
-                category: "basics",
-                english: "Hello",
-                slovak: "Ahoj",
-                pronunciation: "ah-hoy",
-                example: "Ahoj, ako sa máš? (Hello, how are you?)"
-            },
-            {
-                category: "basics",
-                english: "Good morning",
-                slovak: "Dobré ráno",
-                pronunciation: "dob-reh rah-no",
-                example: "Dobré ráno, miláčik! (Good morning, darling!)"
-            },
-            {
-                category: "basics",
-                english: "Good night",
-                slovak: "Dobrú noc",
-                pronunciation: "dob-roo nots",
-                example: "Dobrú noc, sladké sny. (Good night, sweet dreams.)"
-            },
-            {
-                category: "romantic",
-                english: "I love you",
-                slovak: "Milujem ťa",
-                pronunciation: "mee-loo-yem tya",
-                example: "Milujem ťa celým srdcom. (I love you with all my heart.)"
-            },
-            {
-                category: "romantic",
-                english: "I miss you",
-                slovak: "Chýbaš mi",
-                pronunciation: "khee-bash mee",
-                example: "Chýbaš mi každý deň. (I miss you every day.)"
-            },
-            {
-                category: "romantic",
-                english: "Kiss",
-                slovak: "Bozk",
-                pronunciation: "bozk",
-                example: "Daj mi bozk. (Give me a kiss.)"
-            },
-            {
-                category: "everyday",
-                english: "Thank you",
-                slovak: "Ďakujem",
-                pronunciation: "dya-koo-yem",
-                example: "Ďakujem za pomoc. (Thank you for the help.)"
-            },
-            {
-                category: "everyday",
-                english: "Please",
-                slovak: "Prosím",
-                pronunciation: "pro-seem",
-                example: "Môžeš mi, prosím, pomôcť? (Can you please help me?)"
-            },
-            {
-                category: "everyday",
-                english: "Yes",
-                slovak: "Áno",
-                pronunciation: "ah-no",
-                example: "Áno, súhlasím. (Yes, I agree.)"
-            },
-            {
-                category: "everyday",
-                english: "No",
-                slovak: "Nie",
-                pronunciation: "nyeh",
-                example: "Nie, nechcem. (No, I don't want to.)"
-            },
-            {
-                category: "questions",
-                english: "How are you?",
-                slovak: "Ako sa máš?",
-                pronunciation: "ah-ko sah mash",
-                example: "Ahoj, ako sa máš dnes? (Hello, how are you today?)"
-            },
-            {
-                category: "questions",
-                english: "What is your name?",
-                slovak: "Ako sa voláš?",
-                pronunciation: "ah-ko sah vo-lash",
-                example: "Ahoj, ako sa voláš? (Hello, what is your name?)"
-            },
-            {
-                category: "questions",
-                english: "Where are you?",
-                slovak: "Kde si?",
-                pronunciation: "kdeh see",
-                example: "Kde si teraz? (Where are you now?)"
-            },
-            {
-                category: "romantic",
-                english: "My darling",
-                slovak: "Miláčik",
-                pronunciation: "mee-lah-cheek",
-                example: "Miláčik môj, chýbaš mi. (My darling, I miss you.)"
-            },
-            {
-                category: "romantic",
-                english: "You're beautiful",
-                slovak: "Si krásna",
-                pronunciation: "see krahs-nah",
-                example: "Si taká krásna. (You're so beautiful.)"
-            },
-            {
-                category: "everyday",
-                english: "Food",
-                slovak: "Jedlo",
-                pronunciation: "yed-lo",
-                example: "Toto jedlo je výborné. (This food is excellent.)"
-            },
-            {
-                category: "everyday",
-                english: "Water",
-                slovak: "Voda",
-                pronunciation: "vo-dah",
-                example: "Môžem dostať pohár vody? (Can I have a glass of water?)"
-            },
-            {
-                category: "basics",
-                english: "Sorry",
-                slovak: "Prepáč",
-                pronunciation: "pre-pahch",
-                example: "Prepáč za meškanie. (Sorry for being late.)"
-            },
-            {
-                category: "basics",
-                english: "Goodbye",
-                slovak: "Dovidenia",
-                pronunciation: "do-vee-deh-nya",
-                example: "Dovidenia, uvidíme sa zajtra. (Goodbye, see you tomorrow.)"
-            },
-            {
-                category: "questions",
-                english: "When will we meet?",
-                slovak: "Kedy sa stretneme?",
-                pronunciation: "keh-dee sah streh-tneh-meh",
-                example: "Kedy sa stretneme nabudúce? (When will we meet next time?)"
-            }
+        const flashcards = [ /* ... (same flashcards array) ... */ 
+            { category: "basics", english: "Hello", slovak: "Ahoj", pronunciation: "ah-hoy", example: "Ahoj, ako sa máš? (Hello, how are you?)" }, { category: "basics", english: "Good morning", slovak: "Dobré ráno", pronunciation: "dob-reh rah-no", example: "Dobré ráno, miláčik! (Good morning, darling!)" }, { category: "basics", english: "Good night", slovak: "Dobrú noc", pronunciation: "dob-roo nots", example: "Dobrú noc, sladké sny. (Good night, sweet dreams.)" }, { category: "romantic", english: "I love you", slovak: "Milujem ťa", pronunciation: "mee-loo-yem tya", example: "Milujem ťa celým srdcom. (I love you with all my heart.)" }, { category: "romantic", english: "I miss you", slovak: "Chýbaš mi", pronunciation: "khee-bash mee", example: "Chýbaš mi každý deň. (I miss you every day.)" }, { category: "romantic", english: "Kiss", slovak: "Bozk", pronunciation: "bozk", example: "Daj mi bozk. (Give me a kiss.)" }, { category: "everyday", english: "Thank you", slovak: "Ďakujem", pronunciation: "dya-koo-yem", example: "Ďakujem za pomoc. (Thank you for the help.)" }, { category: "everyday", english: "Please", slovak: "Prosím", pronunciation: "pro-seem", example: "Môžeš mi, prosím, pomôcť? (Can you please help me?)" }, { category: "everyday", english: "Yes", slovak: "Áno", pronunciation: "ah-no", example: "Áno, súhlasím. (Yes, I agree.)" }, { category: "everyday", english: "No", slovak: "Nie", pronunciation: "nyeh", example: "Nie, nechcem. (No, I don't want to.)" }, { category: "questions", english: "How are you?", slovak: "Ako sa máš?", pronunciation: "ah-ko sah mash", example: "Ahoj, ako sa máš dnes? (Hello, how are you today?)" }, { category: "questions", english: "What is your name?", slovak: "Ako sa voláš?", pronunciation: "ah-ko sah vo-lash", example: "Ahoj, ako sa voláš? (Hello, what is your name?)" }, { category: "questions", english: "Where are you?", slovak: "Kde si?", pronunciation: "kdeh see", example: "Kde si teraz? (Where are you now?)" }, { category: "romantic", english: "My darling", slovak: "Miláčik", pronunciation: "mee-lah-cheek", example: "Miláčik môj, chýbaš mi. (My darling, I miss you.)" }, { category: "romantic", english: "You're beautiful", slovak: "Si krásna", pronunciation: "see krahs-nah", example: "Si taká krásna. (You're so beautiful.)" }, { category: "everyday", english: "Food", slovak: "Jedlo", pronunciation: "yed-lo", example: "Toto jedlo je výborné. (This food is excellent.)" }, { category: "everyday", english: "Water", slovak: "Voda", pronunciation: "vo-dah", example: "Môžem dostať pohár vody? (Can I have a glass of water?)" }, { category: "basics", english: "Sorry", slovak: "Prepáč", pronunciation: "pre-pahch", example: "Prepáč za meškanie. (Sorry for being late.)" }, { category: "basics", english: "Goodbye", slovak: "Dovidenia", pronunciation: "do-vee-deh-nya", example: "Dovidenia, uvidíme sa zajtra. (Goodbye, see you tomorrow.)" }, { category: "questions", english: "When will we meet?", slovak: "Kedy sa stretneme?", pronunciation: "keh-dee sah streh-tneh-meh", example: "Kedy sa stretneme nabudúce? (When will we meet next time?)" }
         ];
         
-        // Weather icon mapping
-        const weatherIcons = {
-            'clear sky': '☀️',
-            'few clouds': '🌤️',
-            'scattered clouds': '⛅',
-            'broken clouds': '☁️',
-            'shower rain': '🌦️',
-            'rain': '🌧️',
-            'thunderstorm': '⛈️',
-            'snow': '❄️',
-            'mist': '🌫️',
-            'partly cloudy': '⛅',
-            'mostly sunny': '🌤️',
-            'sunny': '☀️',
-            'cloudy': '☁️',
-            'rainy': '🌧️',
-            'stormy': '⛈️',
-            'snowy': '❄️',
-            'foggy': '🌫️'
+        // More comprehensive emoji mapping from OWM icon codes
+        const owmIconToEmoji = {
+            "01d": "☀️", "01n": "🌙", // clear sky
+            "02d": "🌤️", "02n": "☁️🌙", // few clouds
+            "03d": "☁️", "03n": "☁️",   // scattered clouds
+            "04d": "🌥️", "04n": "☁️",   // broken clouds (overcast for night)
+            "09d": "🌦️", "09n": "🌧️🌙", // shower rain
+            "10d": "🌧️", "10n": "🌧️🌙", // rain
+            "11d": "⛈️", "11n": "⛈️🌙", // thunderstorm
+            "13d": "❄️", "13n": "❄️🌙", // snow
+            "50d": "🌫️", "50n": "🌫️🌙"  // mist
         };
 
-        // Function to update clocks
+
         function updateClocks() {
             const now = new Date();
-            
-            // Update Miláčik's clock
-            updateUserClock(now, 'milacik');
-            
-            // Update Sui's clock
+            updateUserClock(now, 'milacik'); 
             updateUserClock(now, 'sui');
-            
-            // Update time difference display
             updateTimeDifference();
         }
 
-        // Update individual user clock
-        function updateUserClock(now, user) {
-            const options = {
-                timeZone: userTimeZones[user].timeZone,
+        function formatTimeFromTimestamp(timestamp, timeZone) {
+            return new Date(timestamp * 1000).toLocaleTimeString('en-US', {
+                timeZone: timeZone,
                 hour: '2-digit',
                 minute: '2-digit',
-                second: '2-digit',
                 hour12: true
-            };
-            
-            const timeString = now.toLocaleTimeString('en-US', options);
-            document.getElementById(`${user}-time`).textContent = timeString;
-            
-            const dateOptions = {
-                timeZone: userTimeZones[user].timeZone,
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            
-            const dateString = now.toLocaleDateString('en-US', dateOptions);
-            document.getElementById(`${user}-date`).textContent = dateString;
+            });
         }
 
-        // Update time difference display
+        function updateUserClock(now, userKey) {
+            const user = userTimeZones[userKey];
+            const options = { timeZone: user.timeZone, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:true };
+            document.getElementById(`${userKey}-time`).textContent = now.toLocaleTimeString('en-US', options);
+            const dateOptions = { timeZone: user.timeZone, weekday:'long', year:'numeric', month:'long', day:'numeric' };
+            document.getElementById(`${userKey}-date`).textContent = now.toLocaleDateString('en-US', dateOptions);
+        }
+
         function updateTimeDifference() {
             const now = new Date();
-            
             const milacikTime = new Date(now.toLocaleString('en-US', {timeZone: userTimeZones.milacik.timeZone}));
             const suiTime = new Date(now.toLocaleString('en-US', {timeZone: userTimeZones.sui.timeZone}));
-            
-            // Calculate difference in hours
-            let hoursDiff = Math.round((suiTime - milacikTime) / (1000 * 60 * 60));
-            
-            // Handle day difference
-            const dayDiff = suiTime.getDate() - milacikTime.getDate();
+            let hoursDiff = (suiTime.getTime() - milacikTime.getTime()) / (3600000); // Get precise diff
             
             let diffText;
-            if (hoursDiff === 0) {
+            if (Math.abs(hoursDiff) < 0.01) { // Account for potential floating point issues near zero
                 diffText = 'You are in the same time zone!';
             } else {
-                const ahead = hoursDiff > 0 ? 'ahead of' : 'behind';
-                hoursDiff = Math.abs(hoursDiff);
+                const ahead = hoursDiff > 0;
+                const wholeHours = Math.floor(Math.abs(hoursDiff));
+                const minutes = Math.round((Math.abs(hoursDiff) - wholeHours) * 60);
                 
-                diffText = `Sui is ${hoursDiff} hours ${ahead} Miláčik`;
-                
-                if (dayDiff !== 0) {
-                    diffText += ` (it's ${dayDiff > 0 ? 'tomorrow' : 'yesterday'} in Slovakia)`;
+                diffText = `Sui is ${wholeHours} hour${wholeHours !== 1 ? 's' : ''}`;
+                if (minutes > 0) {
+                    diffText += ` and ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+                }
+                diffText += ` ${ahead ? 'ahead of' : 'behind'} Miláčik.`;
+
+                // Check if dates are different to indicate next/previous day
+                const milacikDatePart = milacikTime.getFullYear() * 10000 + (milacikTime.getMonth() + 1) * 100 + milacikTime.getDate();
+                const suiDatePart = suiTime.getFullYear() * 10000 + (suiTime.getMonth() + 1) * 100 + suiTime.getDate();
+
+                if (suiDatePart > milacikDatePart) {
+                    diffText += " (It's the next day for Sui!)";
+                } else if (suiDatePart < milacikDatePart) {
+                    diffText += " (It's the previous day for Sui!)";
                 }
             }
-            
             document.getElementById('time-difference').textContent = diffText;
         }
 
-        // Fetch weather data
-        async function fetchWeather() {
+        async function fetchWeatherForUser(userKey, units = 'imperial') {
+            const user = userTimeZones[userKey];
+            const coords = user.coordinates;
+            const unitParam = (userKey === 'sui') ? 'metric' : 'imperial'; // Sui in Celsius, Milacik in Fahrenheit
+            const tempUnit = (userKey === 'sui') ? '°C' : '°F';
+            const windUnit = (userKey === 'sui') ? 'km/h' : 'mph';
+            
+            const weatherErrorEl = document.getElementById(`${userKey}-weather-error`);
+            weatherErrorEl.textContent = ''; // Clear previous errors
+
             try {
-                // For demo purposes, using sample data
-                // In a real implementation, you would use a weather API like OpenWeatherMap
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&appid=${OPENWEATHERMAP_API_KEY}&units=${unitParam}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Weather API Error for ${user.location}: ${response.status} - ${errorData.message || 'Unknown error'}`);
+                }
+                const data = await response.json();
+
+                document.getElementById(`${userKey}-temp`).textContent = `${Math.round(data.main.temp)}${tempUnit}`;
+                document.getElementById(`${userKey}-desc`).textContent = data.weather[0].description;
+                document.getElementById(`${userKey}-humidity`).textContent = `${data.main.humidity}%`;
                 
-                // Sample data for Medford
-                setTimeout(() => {
-                    document.getElementById('milacik-temp').textContent = "68°F";
-                    document.getElementById('milacik-desc').textContent = "Partly Cloudy";
-                    document.getElementById('milacik-humidity').textContent = "45%";
-                    document.getElementById('milacik-wind').textContent = "5 mph";
-                    
-                    // Weather icon based on description
-                    const weatherDesc = "partly cloudy";
-                    document.getElementById('milacik-icon').textContent = weatherIcons[weatherDesc] || "⛅";
-                }, 1000);
+                let windSpeed = data.wind.speed;
+                if (userKey === 'sui') { // API returns m/s for metric, convert to km/h
+                    windSpeed = Math.round(windSpeed * 3.6);
+                } else {
+                    windSpeed = Math.round(windSpeed);
+                }
+                document.getElementById(`${userKey}-wind`).textContent = `${windSpeed} ${windUnit}`;
                 
-                // Sample data for Zelenec
-                setTimeout(() => {
-                    document.getElementById('sui-temp').textContent = "18°C";
-                    document.getElementById('sui-desc').textContent = "Mostly Sunny";
-                    document.getElementById('sui-humidity').textContent = "52%";
-                    document.getElementById('sui-wind').textContent = "10 km/h";
-                    
-                    // Weather icon based on description
-                    const weatherDesc = "mostly sunny";
-                    document.getElementById('sui-icon').textContent = weatherIcons[weatherDesc] || "🌤️";
-                }, 1000);
-                
-                // In a real implementation, you would use:
-                // const apiKey = "your_api_key";
-                // const milacikResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Medford,US&appid=${apiKey}&units=imperial`);
-                // const milacikData = await milacikResponse.json();
-                
-                // const suiResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Zelenec,SK&appid=${apiKey}&units=metric`);
-                // const suiData = await suiResponse.json();
-                
-                // Then update the UI with real data
+                const iconContainer = document.getElementById(`${userKey}-icon`);
+                iconContainer.innerHTML = `<img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="${data.weather[0].description}">`;
+                // Or use emoji mapping:
+                // iconContainer.innerHTML = `<span class="weather-icon-emoji">${owmIconToEmoji[data.weather[0].icon] || '❓'}</span>`;
+
+                // Sunrise and Sunset
+                const sunriseTime = formatTimeFromTimestamp(data.sys.sunrise + data.timezone, user.timeZone);
+                const sunsetTime = formatTimeFromTimestamp(data.sys.sunset + data.timezone, user.timeZone);
+                document.getElementById(`${userKey}-sunrise`).textContent = sunriseTime;
+                document.getElementById(`${userKey}-sunset`).textContent = sunsetTime;
+
+
             } catch (error) {
-                console.error("Error fetching weather:", error);
+                console.error(`Error fetching weather for ${user.location}:`, error);
+                document.getElementById(`${userKey}-desc`).textContent = "Weather unavailable";
+                weatherErrorEl.textContent = `Could not load weather: ${error.message.substring(0,100)}`;
+                const iconContainer = document.getElementById(`${userKey}-icon`);
+                iconContainer.innerHTML = `<span class="weather-icon-emoji">⚠️</span>`; // Error icon
             }
         }
         
-        // Setup flashcard functionality
-        let currentCardIndex = 0;
-        let filteredCards = [...flashcards];
-
-        function setupFlashcards() {
-            const flashcard = document.getElementById('flashcard');
-            const prevCardBtn = document.getElementById('prev-card');
-            const nextCardBtn = document.getElementById('next-card');
-            const addCardBtn = document.getElementById('add-card');
-            const categoryBtns = document.querySelectorAll('.category-btn');
-            
-            // Flip card on click
-            flashcard.addEventListener('click', function() {
-                this.classList.toggle('flipped');
-            });
-            
-            // Previous card button
-            prevCardBtn.addEventListener('click', function() {
-                if (currentCardIndex > 0) {
-                    currentCardIndex--;
-                } else {
-                    currentCardIndex = filteredCards.length - 1; // Loop back to end
-                }
-                updateFlashcard();
-                flashcard.classList.remove('flipped'); // Reset to front side
-            });
-            
-            // Next card button
-            nextCardBtn.addEventListener('click', function() {
-                if (currentCardIndex < filteredCards.length - 1) {
-                    currentCardIndex++;
-                } else {
-                    currentCardIndex = 0; // Loop back to beginning
-                }
-                updateFlashcard();
-                flashcard.classList.remove('flipped'); // Reset to front side
-            });
-            
-            // Add new card button (would open a form in a real implementation)
-            addCardBtn.addEventListener('click', function() {
-                alert('In a complete implementation, this would open a form to add new vocabulary words!');
-            });
-            
-            // Category filter buttons
-            categoryBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // Update active state
-                    categoryBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Filter cards
-                    const category = this.getAttribute('data-category');
-                    if (category === 'all') {
-                        filteredCards = [...flashcards];
-                    } else {
-                        filteredCards = flashcards.filter(card => card.category === category);
-                    }
-                    
-                    // Reset index and update display
-                    currentCardIndex = 0;
-                    updateFlashcard();
-                    flashcard.classList.remove('flipped'); // Reset to front side
-                });
-            });
-            
-            // Initial flashcard display
+        async function fetchAllWeather() {
+            await Promise.all([
+                fetchWeatherForUser('milacik'),
+                fetchWeatherForUser('sui')
+            ]);
+        }
+        
+        let currentCardIndex = 0; let filteredCards = [...flashcards];
+        function setupFlashcards() { /* ... (same logic as before) ... */ 
+            const flashcardEl = document.getElementById('flashcard'); const prevBtn = document.getElementById('prev-card');
+            const nextBtn = document.getElementById('next-card'); const addBtn = document.getElementById('add-card');
+            const catBtns = document.querySelectorAll('.category-btn');
+            flashcardEl.addEventListener('click', function(){ this.classList.toggle('flipped'); });
+            prevBtn.addEventListener('click', function(){ currentCardIndex = (currentCardIndex > 0) ? currentCardIndex - 1 : filteredCards.length - 1; updateFlashcard(); flashcardEl.classList.remove('flipped'); });
+            nextBtn.addEventListener('click', function(){ currentCardIndex = (currentCardIndex < filteredCards.length - 1) ? currentCardIndex + 1 : 0; updateFlashcard(); flashcardEl.classList.remove('flipped'); });
+            addBtn.addEventListener('click', function(){ alert('This would open a form to add new words!'); });
+            catBtns.forEach(btn => { btn.addEventListener('click', function(){ catBtns.forEach(b=>b.classList.remove('active')); this.classList.add('active'); const cat = this.dataset.category; filteredCards = (cat === 'all') ? [...flashcards] : flashcards.filter(card => card.category === cat); currentCardIndex = 0; updateFlashcard(); flashcardEl.classList.remove('flipped'); }); });
             updateFlashcard();
         }
-        
-        // Update flashcard display
-        function updateFlashcard() {
-            if (filteredCards.length === 0) {
-                // No cards match filter
-                document.querySelector('.flashcard-front .flashcard-category').textContent = 'No Cards';
-                document.querySelector('.flashcard-front .flashcard-word').textContent = 'No words found for this category';
-                document.querySelector('.flashcard-back .flashcard-translation').textContent = '';
-                document.querySelector('.flashcard-back .flashcard-pronunciation').textContent = '';
-                document.querySelector('.flashcard-back .flashcard-example').textContent = '';
-                return;
-            }
-            
+        function updateFlashcard() { /* ... (same logic as before) ... */ 
+            if (filteredCards.length === 0) { document.querySelector('.flashcard-front .flashcard-category').textContent='No Cards'; document.querySelector('.flashcard-front .flashcard-word').textContent='No words in category'; document.querySelector('.flashcard-back .flashcard-translation').textContent=''; document.querySelector('.flashcard-back .flashcard-pronunciation').textContent=''; document.querySelector('.flashcard-back .flashcard-example').textContent=''; return; }
             const card = filteredCards[currentCardIndex];
-            
-            // Update front
-            document.querySelector('.flashcard-front .flashcard-category').textContent = capitalizeFirstLetter(card.category);
-            document.querySelector('.flashcard-front .flashcard-word').textContent = card.english;
-            
-            // Update back
-            document.querySelector('.flashcard-back .flashcard-translation').textContent = card.slovak;
-            document.querySelector('.flashcard-back .flashcard-pronunciation').textContent = card.pronunciation;
-            document.querySelector('.flashcard-back .flashcard-example').innerHTML = `<strong>Example:</strong> ${card.example}`;
+            document.querySelector('.flashcard-front .flashcard-category').textContent = capitalizeFirstLetter(card.category); document.querySelector('.flashcard-front .flashcard-word').textContent = card.english;
+            document.querySelector('.flashcard-back .flashcard-translation').textContent = card.slovak; document.querySelector('.flashcard-back .flashcard-pronunciation').textContent = card.pronunciation; document.querySelector('.flashcard-back .flashcard-example').innerHTML = `<strong>Ex:</strong> ${card.example}`;
         }
-        
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
+        function capitalizeFirstLetter(string) { return string.charAt(0).toUpperCase() + string.slice(1); }
+        function createHearts() { /* ... (same logic as before, ensure it doesn't overpopulate) ... */ 
+            const container = document.getElementById('hearts-container'); if (container.children.length < 30) { for (let i = 0; i < 5; i++) { const heart = document.createElement('div'); heart.className = 'heart'; heart.innerHTML = '❤️'; heart.style.left = `${Math.random()*100}vw`; heart.style.animationDuration = `${10+Math.random()*15}s`; heart.style.animationDelay = `${Math.random()*5}s`; heart.style.fontSize = `${15+Math.random()*25}px`; container.appendChild(heart); setTimeout(() => heart.remove(), parseFloat(heart.style.animationDuration) * 1000 + parseFloat(heart.style.animationDelay) * 1000 + 100); } }
         }
-
-        // Create floating hearts
-        function createHearts() {
-            const container = document.getElementById('hearts-container');
-            container.innerHTML = '';
-            
-            for (let i = 0; i < 20; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'heart';
-                heart.innerHTML = '❤️';
-                heart.style.left = `${Math.random() * 100}vw`;
-                heart.style.animationDuration = `${10 + Math.random() * 15}s`;
-                heart.style.animationDelay = `${Math.random() * 5}s`;
-                heart.style.fontSize = `${15 + Math.random() * 25}px`;
-                container.appendChild(heart);
-            }
+        function setActiveNav() { /* ... (same logic as before, handles both navs) ... */ 
+            const leftNavItems = document.querySelectorAll('.nav-container-left .nav-item');
+            const rightNavItems = document.querySelectorAll('.nav-container-right .nav-item');
+            const allNavItems = [...leftNavItems, ...rightNavItems];
+            let path = window.location.pathname.split('/').pop(); if (path === "" || path === "index.html") { path = "index.html"; }
+            allNavItems.forEach(item => { item.classList.remove('active'); if (item.getAttribute('href') === path) { item.classList.add('active'); } });
         }
 
-        // Highlight current page in nav
-        function setActiveNav() {
-            const currentPage = window.location.pathname.split('/').pop();
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.getAttribute('href') === currentPage) {
-                    item.classList.add('active');
-                }
-            });
-        }
-
-        // Initialize on page load
         window.addEventListener('load', () => {
-            // Create hearts animation
-            createHearts();
-            
-            // Set active nav item
+            createHearts(); setInterval(createHearts, 5000); // Add a few hearts periodically
             setActiveNav();
-            
-            // Initialize clocks
-            updateClocks();
-            setInterval(updateClocks, 1000); // Update clocks every second
-            
-            // Fetch weather
-            fetchWeather();
-            
-            // Setup flashcards
+            updateClocks(); setInterval(updateClocks, 1000);
+            fetchAllWeather(); setInterval(fetchAllWeather, 10 * 60 * 1000); // Update weather every 10 mins
             setupFlashcards();
         });
     </script>

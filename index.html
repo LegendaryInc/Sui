@@ -18,14 +18,15 @@
             background-color: #f1a1c2;
             color: #333;
             min-height: 100vh;
-            padding-left: 100px;
+            padding-left: 100px; /* Space for left nav */
+            padding-right: 100px; /* Space for right nav */
             text-align: center;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* ===== KUROMI NAVIGATION BAR ===== */
-        .nav-container {
+        /* ===== LEFT NAVIGATION BAR ===== */
+        .nav-container-left { /* Specific class for left nav */
             position: fixed;
             left: 0;
             top: 0;
@@ -41,7 +42,24 @@
             border-right: 3px solid #ff9ec6;
         }
 
-        .nav-item {
+        /* ===== RIGHT NAVIGATION BAR ===== */
+        .nav-container-right { /* Specific class for right nav */
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            width: 100px;
+            background-color: #2a0a3a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            z-index: 1000;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+            border-left: 3px solid #ff9ec6;
+        }
+
+        .nav-item { /* Common style for all nav items */
             width: 100%;
             text-align: center;
             padding: 15px 0;
@@ -71,8 +89,8 @@
 
         /* ===== MAIN CONTENT WRAPPER ===== */
         .page-wrapper {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 800px; /* Adjust as needed based on content */
+            margin: 0 auto; /* Center between the nav bars */
             padding: 20px;
             position: relative;
         }
@@ -300,11 +318,18 @@
         @media (max-width: 768px) {
             body {
                 padding-left: 80px;
+                padding-right: 0; /* Right nav will be hidden or stacked */
             }
-            .nav-container {
-                width: 80px;
+            .nav-container-left { width: 80px; }
+            .nav-container-right {
+                display: none; /* Hide right nav on smaller screens by default */
+                /* Alternative: Stack it if you want it visible but different layout
+                position: relative; width: 100%; height: auto;
+                margin-top: 10px; border-left: none; border-top: 2px solid #ff9ec6;
+                flex-direction: row; justify-content: space-around; padding: 5px 0;
+                */
             }
-            .nav-item {
+            .nav-item { /* For icon-only in left nav */
                 font-size: 0;
                 padding: 15px 0;
             }
@@ -327,12 +352,17 @@
                 font-size: 1.5em;
             }
         }
+         @media (max-width: 480px) {
+             body { padding-left: 60px; }
+             .nav-container-left { width: 60px; }
+             .nav-item img { width: 30px; height: 30px; }
+        }
     </style>
 </head>
 <body>
- <!-- Navigation -->
-    <div class="nav-container">
-        <a href="index.html" class="nav-item home">
+ <!-- Left Navigation -->
+    <div class="nav-container-left">
+        <a href="index.html" class="nav-item home active"> <!-- Assuming this is index.html -->
             <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home">
             Home
         </a>
@@ -344,7 +374,7 @@
             <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator">
             Love Calculator
         </a>
-        <a href="movies.html" class="nav-item movies active">
+        <a href="movies.html" class="nav-item movies">
             <img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker">
             Movie Picker
         </a>
@@ -356,6 +386,7 @@
             <img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge">
             Time Bridge
         </a>
+        <!-- Slime Game link is REMOVED from left nav -->
     </div>
 
     <div class="page-wrapper">
@@ -377,7 +408,6 @@
                 <!-- Birthday messages will be inserted here by JavaScript -->
             </div>
 
-            <!-- Birthday Card with Hover Messages -->
             <div class="birthday-card">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-top">
                 <div class="card-inner">
@@ -391,30 +421,34 @@
                 </div>
             </div>
 
-            <!-- Navigation Button to Love Letters -->
             <a href="loveletters.html" class="nav-button">Read Love Letters 💌</a>
             
-            <!-- Quote Section -->
             <div class="quote" id="love-quote">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow quote-bow-left">
                 "Meeting you was fate, becoming your boyfriend was a choice, but falling in love with you was beyond my control. Happy Birthday to the one who owns my heart."
             </div>
             
-            <!-- Single Image Gallery -->
             <div class="gallery-container">
                 <img src="https://i.imgur.com/PgBn8Pv.jpeg" alt="Birthday Image" class="single-image">
             </div>
         </main>
     </div>
 
-    <!-- Floating Hearts -->
+    <!-- Right Navigation Bar -->
+    <div class="nav-container-right">
+        <a href="slimegame.html" class="nav-item slimegame"> <!-- This will NOT be active on index.html -->
+            <img src="https://i.imgur.com/yFzLbfM.png" alt="Slime Game Icon">
+            Slime Game
+        </a>
+        <!-- You can add more links here if desired -->
+    </div>
+
     <div class="hearts-container" id="hearts-container"></div>
 
     <script>
-        // Create floating hearts
         function createHearts() {
             const container = document.getElementById('hearts-container');
-            container.innerHTML = '';
+            // container.innerHTML = ''; // Only clear if you want to reset them on each call
             
             for (let i = 0; i < 30; i++) {
                 const heart = document.createElement('div');
@@ -428,34 +462,27 @@
             }
         }
         
-        // Random love messages for card hover
         function getRandomMessage() {
             const messages = [
-                "You're the reason for my smile every day 💖",
-                "Thank you for being amazing! 💕",
-                "You light up my world ✨",
-                "Every moment with you is special 🌹",
-                "Your laugh is my favorite sound 😊",
-                "I fall more in love with you daily 💘",
-                "You make my heart skip a beat 💓",
-                "Your eyes mesmerize me every time 👀",
-                "I'm the luckiest to have you 🍀",
-                "You're my dream come true 💫"
+                "You're the reason for my smile every day 💖","Thank you for being amazing! 💕",
+                "You light up my world ✨","Every moment with you is special 🌹",
+                "Your laugh is my favorite sound 😊","I fall more in love with you daily 💘",
+                "You make my heart skip a beat 💓","Your eyes mesmerize me every time 👀",
+                "I'm the luckiest to have you 🍀","You're my dream come true 💫"
             ];
             return messages[Math.floor(Math.random() * messages.length)];
         }
 
-        // Setup card hover effect
         function setupCardHover() {
             const card = document.querySelector('.birthday-card');
             const messageElement = document.getElementById('surprise-message');
-            
-            card.addEventListener('mouseenter', () => {
-                messageElement.textContent = getRandomMessage();
-            });
+            if (card && messageElement) { // Ensure elements exist
+                card.addEventListener('mouseenter', () => {
+                    messageElement.textContent = getRandomMessage();
+                });
+            }
         }
         
-        // Function to change the love quote
         function changeQuote() {
             const quotes = [
                 "\"Meeting you was fate, becoming your boyfriend was a choice, but falling in love with you was beyond my control. Happy Birthday to the one who owns my heart.\"",
@@ -467,60 +494,65 @@
             ];
             
             const quoteElement = document.getElementById('love-quote');
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            quoteElement.innerHTML = '<img src="https://i.imgur.com/tA7aPg4.png" class="bow quote-bow-left">' + randomQuote;
+            if (quoteElement) { // Ensure element exists
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                // Preserve the bow image if it's part of the structure
+                const bowImageHTML = quoteElement.querySelector('.bow') ? quoteElement.querySelector('.bow').outerHTML : '';
+                quoteElement.innerHTML = bowImageHTML + randomQuote;
+            }
         }
         
-        // Check birthday status and show appropriate messages
         function checkBirthday() {
             const today = new Date();
-            const birthday = new Date("May 2, 2026");
+            const birthday = new Date(today.getFullYear(), 4, 2); // May is month 4 (0-indexed)
             const statusElement = document.getElementById('celebration-status');
             const messagesContainer = document.getElementById('birthday-messages');
-            
+
+            if (!statusElement || !messagesContainer) return; // Guard clauses
+
+            // For testing, uncomment one of these:
+            // today = new Date(today.getFullYear(), 4, 2); // Test birthday
+            // today = new Date(today.getFullYear(), 4, 1); // Test day before
+
             if (today.getMonth() === birthday.getMonth() && today.getDate() === birthday.getDate()) {
-                // It's the birthday!
                 statusElement.textContent = "It's your birthday today! 🎉";
                 document.body.style.backgroundImage = "linear-gradient(to bottom, #f1a1c2, #ffc8e5)";
-                
-                // Show birthday messages
                 messagesContainer.innerHTML = `
                     <p class="birthday-message">Wishing you the most magical day full of love and joy! 💖</p>
                     <p class="birthday-submessage">Today is all about celebrating the amazing person you are!</p>
                 `;
-                
-                // Extra celebration hearts
-                createHearts();
-                setTimeout(createHearts, 1000);
-                setTimeout(createHearts, 2000);
+                createHearts(); setTimeout(createHearts, 1000); setTimeout(createHearts, 2000);
             } else {
-                // Not the birthday yet
                 let nextBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
                 if (today > nextBirthday) {
-                    nextBirthday = new Date(today.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
+                    nextBirthday.setFullYear(today.getFullYear() + 1);
                 }
                 const daysUntil = Math.ceil((nextBirthday - today) / (1000 * 60 * 60 * 24));
                 statusElement.textContent = `${daysUntil} days until your birthday! 🎂`;
-                
-                // Show countdown message
                 messagesContainer.innerHTML = `
                     <p class="countdown-message">I'm counting down the days until I can celebrate you!</p>
                 `;
             }
         }
 
-        // Highlight current page in nav
         function setActiveNav() {
-            const currentPage = window.location.pathname.split('/').pop();
-            document.querySelectorAll('.nav-item').forEach(item => {
+            const leftNavItems = document.querySelectorAll('.nav-container-left .nav-item');
+            const rightNavItems = document.querySelectorAll('.nav-container-right .nav-item');
+            const allNavItems = [...leftNavItems, ...rightNavItems];
+
+            let path = window.location.pathname.split('/').pop();
+            if (path === "" || path === "index.html") { // Default to index.html
+                path = "index.html";
+            }
+            
+            allNavItems.forEach(item => {
                 item.classList.remove('active');
-                if (item.getAttribute('href') === currentPage) {
+                if (item.getAttribute('href') === path) {
                     item.classList.add('active');
                 }
             });
         }
 
-        // Initialize on page load
         window.addEventListener('load', () => {
             createHearts();
             setupCardHover();

@@ -18,14 +18,15 @@
             background-color: #f1a1c2;
             color: #333;
             min-height: 100vh;
-            padding-left: 100px; /* Space for nav */
+            padding-left: 100px; /* Space for left nav */
+            padding-right: 100px; /* Space for right nav */
             text-align: center;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* ===== KUROMI NAVIGATION BAR ===== */
-        .nav-container {
+        /* ===== LEFT NAVIGATION BAR ===== */
+        .nav-container-left {
             position: fixed;
             left: 0;
             top: 0;
@@ -41,7 +42,24 @@
             border-right: 3px solid #ff9ec6;
         }
 
-        .nav-item {
+        /* ===== RIGHT NAVIGATION BAR ===== */
+        .nav-container-right {
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            width: 100px;
+            background-color: #2a0a3a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            z-index: 1000;
+            box-shadow: -4px 0 10px rgba(0, 0, 0, 0.2);
+            border-left: 3px solid #ff9ec6;
+        }
+
+        .nav-item { /* Common style for all nav items */
             width: 100%;
             text-align: center;
             padding: 15px 0;
@@ -69,18 +87,18 @@
             font-weight: bold;
         }
 
-        /* ===== MAIN CONTENT WRAPPER ===== */
+        /* ===== MAIN CONTENT WRAPPER (for .container) ===== */
         .page-wrapper {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 700px; /* Adjusted for calculator content */
+            margin: 0 auto; /* Centers between navs */
             padding: 20px;
             position: relative;
         }
 
-        /* ===== MAIN CONTAINER ===== */
+        /* ===== MAIN CONTAINER (Love Calculator content) ===== */
         .container {
-            max-width: 600px;
-            margin: 50px auto;
+            /* max-width: 600px; Removed, page-wrapper handles width */
+            margin: 50px auto; /* Vertical margin, horizontal handled by page-wrapper */
             padding: 40px;
             background: white;
             border-radius: 15px;
@@ -130,7 +148,7 @@
             color: #e91e63;
         }
 
-        button {
+        button { /* General button style, also used for calculate button */
             background-color: #9b4d96;
             color: white;
             border: none;
@@ -188,7 +206,7 @@
             margin: 30px auto;
             transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(233, 30, 99, 0.3);
-            display: none;
+            display: none; /* Initially hidden */
         }
 
         .kiss-btn:hover {
@@ -196,7 +214,7 @@
             box-shadow: 0 6px 20px rgba(233, 30, 99, 0.4);
         }
 
-        /* ===== FLOATING HEARTS ===== */
+        /* ===== FLOATING HEARTS (overall page) ===== */
         .hearts-container {
             position: fixed;
             width: 100%;
@@ -204,7 +222,7 @@
             top: 0;
             left: 0;
             pointer-events: none;
-            z-index: -1;
+            z-index: -1; /* Behind everything */
             overflow: hidden;
         }
 
@@ -212,29 +230,34 @@
             position: absolute;
             width: 30px;
             height: 30px;
-            color: #f5a9bc;
-            font-size: 30px;
+            color: #f5a9bc; /* Or use an image */
+            font-size: 30px; /* If using emoji */
             opacity: 0.7;
-            animation: floatUp 10s linear infinite;
+            animation: floatUpPage 10s linear infinite; /* Different animation name */
         }
 
-        @keyframes floatUp {
+        @keyframes floatUpPage {
             0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
             10% { opacity: 0.7; }
             90% { opacity: 0.7; }
             100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
         }
 
+
         /* ===== RESPONSIVE STYLES ===== */
         @media (max-width: 768px) {
             body {
                 padding-left: 80px;
+                padding-right: 0; /* Hide right nav by default on smaller screens */
             }
-            .nav-container {
+            .nav-container-left {
                 width: 80px;
             }
+            .nav-container-right {
+                display: none; /* Hide right nav */
+            }
             .nav-item {
-                font-size: 0;
+                font-size: 0; /* Icon only */
                 padding: 15px 0;
             }
             .nav-item img {
@@ -242,9 +265,12 @@
                 height: 40px;
                 margin-bottom: 0;
             }
+            .page-wrapper {
+                padding: 10px; /* Reduce padding for page wrapper */
+            }
             .container {
                 padding: 30px 20px;
-                margin: 20px auto;
+                margin: 20px auto; /* Adjust margin for stacked layout */
             }
             
             h1 {
@@ -257,14 +283,22 @@
             }
             
             input {
-                width: 100%;
+                width: 100%; /* Full width inputs in column layout */
             }
+            .percentage { font-size: 3em; }
+            .message { font-size: 1.1em; }
         }
+        @media (max-width: 480px) {
+             body { padding-left: 60px; }
+             .nav-container-left { width: 60px; }
+             .nav-item img { width: 30px; height: 30px; }
+        }
+
     </style>
 </head>
 <body>
- <!-- Navigation -->
-    <div class="nav-container">
+ <!-- Left Navigation -->
+    <div class="nav-container-left">
         <a href="index.html" class="nav-item home">
             <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home">
             Home
@@ -273,11 +307,11 @@
             <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters">
             Love Letters
         </a>
-        <a href="lovecalculator.html" class="nav-item calculator">
+        <a href="lovecalculator.html" class="nav-item calculator active"> <!-- Active on this page -->
             <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator">
             Love Calculator
         </a>
-        <a href="movies.html" class="nav-item movies active">
+        <a href="movies.html" class="nav-item movies">
             <img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker">
             Movie Picker
         </a>
@@ -289,6 +323,7 @@
             <img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge">
             Time Bridge
         </a>
+        <!-- Slime Game link is NOT in the left nav -->
     </div>
 
     <div class="page-wrapper">
@@ -299,7 +334,7 @@
                 <div class="input-group">
                     <input type="text" id="name1" placeholder="Your name">
                     <span class="heart-icon">❤️</span>
-                    <input type="text" id="name2" placeholder="Their name">
+                    <input type="text" id="name2" placeholder="My name"> <!-- Changed placeholder -->
                 </div>
                 
                 <button onclick="calculateLove()">Calculate Our Love</button>
@@ -316,111 +351,169 @@
         </div>
     </div>
     
-    <div class="hearts-container" id="hearts-container"></div>
+    <!-- Right Navigation Bar -->
+    <div class="nav-container-right">
+        <a href="slimegame.html" class="nav-item slimegame"> <!-- Slime Game link here -->
+            <img src="https://i.imgur.com/yFzLbfM.png" alt="Slime Game Icon">
+            Slime Game
+        </a>
+        <!-- You can add other links to the right nav if desired -->
+    </div>
+
+    <div class="hearts-container" id="hearts-container"></div> <!-- For page-wide floating hearts -->
 
     <script>
         // Highlight current page in nav
         function setActiveNav() {
-            const currentPage = window.location.pathname.split('/').pop();
-            document.querySelectorAll('.nav-item').forEach(item => {
+            const leftNavItems = document.querySelectorAll('.nav-container-left .nav-item');
+            const rightNavItems = document.querySelectorAll('.nav-container-right .nav-item');
+            const allNavItems = [...leftNavItems, ...rightNavItems];
+
+            let path = window.location.pathname.split('/').pop();
+            if (path === "" || path === "index.html") { 
+                path = "index.html";
+            }
+            
+            allNavItems.forEach(item => {
                 item.classList.remove('active');
-                if (item.getAttribute('href') === currentPage) {
+                if (item.getAttribute('href') === path) {
                     item.classList.add('active');
                 }
             });
         }
 
         // Create floating hearts background
-        function createHearts() {
+        function createPageHearts() { // Renamed to avoid conflict if calculator creates its own
             const container = document.getElementById('hearts-container');
-            container.innerHTML = '';
+            // container.innerHTML = ''; // Optional: clear if you want to refresh on each call
             
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 20; i++) { // Fewer hearts for overall background
                 const heart = document.createElement('div');
-                heart.className = 'heart';
-                heart.innerHTML = '❤️';
+                heart.className = 'heart'; // Use the .heart style for page-wide hearts
+                heart.innerHTML = '💜'; // Different heart for page background
                 heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = 5 + Math.random() * 10 + 's';
-                heart.style.animationDelay = Math.random() * 3 + 's';
-                heart.style.fontSize = 15 + Math.random() * 25 + 'px';
+                heart.style.animationDuration = 8 + Math.random() * 12 + 's'; // Slower, more ambient
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = 12 + Math.random() * 18 + 'px'; // Smaller, more subtle
+                heart.style.opacity = `${0.3 + Math.random() * 0.4}`;
                 container.appendChild(heart);
             }
         }
         
         // Calculate love percentage
         function calculateLove() {
-            const name1 = document.getElementById('name1').value.trim() || "You";
-            const name2 = document.getElementById('name2').value.trim() || "Me";
+            const name1Input = document.getElementById('name1');
+            const name2Input = document.getElementById('name2');
             const resultDiv = document.getElementById('result');
             const percentageDiv = document.getElementById('percentage');
             const messageDiv = document.getElementById('message');
             const kissBtn = document.getElementById('kissBtn');
+
+            const name1 = name1Input.value.trim();
+            const name2 = name2Input.value.trim();
+
+            if (!name1 || !name2) {
+                messageDiv.textContent = "Please enter both names! ❤️";
+                percentageDiv.textContent = "";
+                resultDiv.style.display = 'block';
+                kissBtn.style.display = 'none';
+                return;
+            }
             
-            // Simple algorithm that usually gives high percentages
-            const basePercentage = Math.min(100, 80 + (name1.length + name2.length) * 2);
-            const percentage = name1.toLowerCase() === "you" && name2.toLowerCase() === "me" ? 100 : basePercentage;
+            // A playful algorithm, heavily biased for specific names
+            let percentage;
+            const sName1 = name1.toLowerCase();
+            const sName2 = name2.toLowerCase();
+
+            // Super high score for specific combination
+            if ((sName1 === "dada" && sName2 === "kristina") || (sName1 === "kristina" && sName2 === "dada")) {
+                percentage = 100;
+            } else {
+                // Simple algorithm for other names
+                let loveScore = 0;
+                for (let i = 0; i < name1.length; i++) {
+                    loveScore += name1.charCodeAt(i);
+                }
+                for (let i = 0; i < name2.length; i++) {
+                    loveScore += name2.charCodeAt(i);
+                }
+                percentage = (loveScore % 51) + 50; // Results between 50 and 100
+                 // Ensure it never goes above 99 unless it's the special pair
+                if (percentage === 100) percentage = 99;
+            }
             
-            // Display results
             percentageDiv.textContent = percentage + '%';
             
             if (percentage === 100) {
-                messageDiv.innerHTML = "Soulmates forever! 💞<br>We're a perfect match in every way!";
+                messageDiv.innerHTML = `Soulmates forever, ${name1} & ${name2}! 💞<br>Our love is a perfect 100!`;
                 kissBtn.style.display = 'inline-block';
-                
-                // Create celebration hearts
-                createHearts();
-                setTimeout(createHearts, 500);
-                setTimeout(createHearts, 1000);
-            } else if (percentage >= 90) {
-                messageDiv.innerHTML = `Incredible connection! 💖<br>${name1} and ${name2} are meant to be together!`;
+                createCelebrationHearts(); // Specific hearts for 100%
+            } else if (percentage >= 95) {
+                messageDiv.innerHTML = `An incredible connection, ${name1} & ${name2}! 💖<br>Almost perfect, destined for happiness!`;
                 kissBtn.style.display = 'none';
+            } else if (percentage >= 90) {
+                messageDiv.innerHTML = `Amazing chemistry! ${name1} & ${name2} have something truly special! ✨`;
+                kissBtn.style.display = 'none';
+            } else if (percentage >= 80) {
+                messageDiv.innerHTML = `A very strong bond, ${name1} & ${name2}! Keep nurturing this love! 💕`;
+                kissBtn.style.display = 'none';
+            } else if (percentage >= 70) {
+                 messageDiv.innerHTML = `A sweet connection, ${name1} & ${name2}! Lots of love potential here! 😊`;
+                 kissBtn.style.display = 'none';
             } else {
-                messageDiv.textContent = getLoveMessage(percentage, name1, name2);
+                messageDiv.textContent = `A lovely start for ${name1} & ${name2}! Every love story is precious. 🌹`;
                 kissBtn.style.display = 'none';
             }
             
             resultDiv.style.display = 'block';
         }
         
-        // Get romantic message based on percentage
-        function getLoveMessage(p, name1, name2) {
-            if (p >= 90) return `Amazing chemistry! ${name1} and ${name2} have something special!`;
-            if (p >= 80) return `Strong potential! With some effort, ${name1} and ${name2} could be perfect!`;
-            if (p >= 70) return `Good foundation! ${name1} and ${name2} have the seeds of something beautiful!`;
-            return `Every love story is unique - ${name1} and ${name2} are just beginning theirs!`;
+        // Creates more intense hearts for 100% celebration
+        function createCelebrationHearts() {
+            const container = document.getElementById('hearts-container'); // Use the main page hearts container
+            for (let i = 0; i < 25; i++) { // More hearts for celebration
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart'; // Use .heart style
+                    heart.innerHTML = '💖'; // Different heart type for celebration
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDuration = 3 + Math.random() * 5 + 's'; // Faster
+                    heart.style.animationDelay = Math.random() * 0.5 + 's'; // Less delay
+                    heart.style.fontSize = 20 + Math.random() * 25 + 'px';
+                    heart.style.opacity = `${0.6 + Math.random() * 0.4}`;
+                    container.appendChild(heart);
+                }, i * 100); // Stagger their appearance
+            }
         }
         
-        // Send kiss function
         function sendKiss() {
             const kissBtn = document.getElementById('kissBtn');
             kissBtn.textContent = "💋 Kiss Sent! 💋";
-            kissBtn.style.background = "linear-gradient(to right, #4CAF50, #2E7D32)";
+            kissBtn.style.background = "linear-gradient(to right, #4CAF50, #2E7D32)"; // Green for sent
             
-            // Create floating kiss emojis
             const container = document.getElementById('hearts-container');
             for (let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     const kiss = document.createElement('div');
-                    kiss.className = 'heart';
+                    kiss.className = 'heart'; // Re-use .heart for animation, but content is different
                     kiss.innerHTML = '💋';
+                    kiss.style.color = '#e91e63'; // Make kisses red
                     kiss.style.left = Math.random() * 100 + 'vw';
-                    kiss.style.animationDuration = 3 + Math.random() * 7 + 's';
+                    kiss.style.animationDuration = 2 + Math.random() * 4 + 's'; // Kisses float up faster
                     kiss.style.animationDelay = '0s';
-                    kiss.style.fontSize = 20 + Math.random() * 30 + 'px';
+                    kiss.style.fontSize = 25 + Math.random() * 35 + 'px'; // Larger kisses
                     container.appendChild(kiss);
-                }, i * 200);
+                }, i * 150); // Stagger kisses
             }
             
-            // Reset button after 2 seconds
             setTimeout(() => {
                 kissBtn.textContent = "💋 Send Me Another Kiss";
-                kissBtn.style.background = "linear-gradient(to right, #e91e63, #9b4d96)";
-            }, 2000);
+                kissBtn.style.background = "linear-gradient(to right, #e91e63, #9b4d96)"; // Reset color
+            }, 2500);
         }
         
-        // Initialize on page load
         window.onload = function() {
-            createHearts();
+            createPageHearts(); // Create ambient hearts for the page
             setActiveNav();
         };
     </script>
