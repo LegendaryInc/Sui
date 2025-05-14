@@ -476,28 +476,35 @@
 
 <script>
     // API Configuration
-    const API_URL = 'https://script.google.com/macros/s/AKfycbz07jJhC5CACJ1XBhvXU-aAz9Yjf4S5Ds_f1J8iKC9b991fCDk8L-samJbEnrKyNypk8A/exec'; // Example - REPLACE
+    // !!! CRITICAL: REPLACE THIS WITH THE URL FROM YOUR VERY LATEST "ANYONE" DEPLOYMENT OF THE APPS SCRIPT !!!
+    const API_URL = 'https://script.google.com/macros/s/AKfycby_xC8Fqr6isE6nsGMlprR4BzX3RIn5uBhX4xebL20p3NUNmwMEmOfVFk0TulA_vIlZIA/exec';
     console.log("INITIALIZING SLIME GAME. API URL:", API_URL);
 
     // --- Game State Variables ---
     let playerData = { playerId: null, username: null, currency: 0 };
     let slimeData = null;
     let inventoryData = [];
-    let storeItems = [];
+    let storeItems = []; // To cache store items once fetched
+
+    // --- Game Loop & Minigame Variables ---
     let gameInterval;
-    const TICK_RATE = 60000; 
-    const STAT_DECREASE_RATE_PER_MINUTE = 2; 
+    const TICK_RATE = 60000; // How often the game loop runs (e.g., for saving, visual decay)
+    const STAT_DECREASE_RATE_PER_MINUTE = 2; // How much stats decrease visually per minute
+
     let minigameState = { activeGame: null, timer: null, timeLeft: 0, score: 0, gameElements: [] };
-    const MINIGAME_DURATION = 30;
+    const MINIGAME_DURATION = 30; // Seconds for each minigame
 
     // --- Utility Functions ---
-    async function fetchData(action, method = 'GET', data = null) {
+    async function fetchData(action, method = 'GET', data = null) { // method is now always GET
         showLoadingIndicator(`Calling: ${action}...`);
-        const url = new URL(API_URL);
+        
+        const url = new URL(API_URL); 
         url.searchParams.append('action', action);
-        if (data) {
+
+        if (data) { // Append all properties of 'data' object as URL parameters
             for (const key in data) {
                 if (data.hasOwnProperty(key)) {
+                    // Special handling for 'updates' object in 'updateSlime' action
                     if (action === 'updateSlime' && key === 'updates' && typeof data[key] === 'object') {
                         const updatesObj = data[key];
                         for (const updateKey in updatesObj) {
@@ -511,111 +518,283 @@
                 }
             }
         }
-        if (playerData.playerId && !(data && data.playerId) && ['getStoreItems', 'getPlayerInventory', 'purchaseItem', 'earnCurrency', 'equipItem', 'createSlime', 'updateSlime'].includes(action)) {
-             url.searchParams.append('playerId', playerData.playerId);
+        
+        if (playerData.playerId && !(data && data.playerId)) {
+            const actionsRequiringPlayerId = ['getStoreItems', 'getPlayerInventory', 'purchaseItem', 'earnCurrency', 'equipItem', 'createSlime', 'updateSlime'];
+            if (actionsRequiringPlayerId.includes(action)) {
+                 url.searchParams.append('playerId', playerData.playerId);
+            }
         }
-        if (slimeData && slimeData.slimeId && !(data && data.slimeId) && ['updateSlime', 'equipItem'].includes(action)) {
-            url.searchParams.append('slimeId', slimeData.slimeId);
+        if (slimeData && slimeData.slimeId && !(data && data.slimeId)) {
+            const actionsRequiringSlimeId = ['updateSlime', 'equipItem'];
+            if (actionsRequiringSlimeId.includes(action)) {
+                url.searchParams.append('slimeId', slimeData.slimeId);
+            }
         }
+        
         const targetUrl = url.toString();
-        const options = { method: 'GET', headers: {}, body: null }; // All GET
+        const options = { method: 'GET', headers: {}, body: null }; 
+
         console.log(`Fetching: ${options.method} ${targetUrl}`);
+
         try {
             const response = await fetch(targetUrl, options);
             if (!response.ok) {
                  const errorBody = await response.text();
-                 console.error(`HTTP error! Status: ${response.status} for ${action}`, errorBody, response);
+                 console.error(`HTTP error! Status: ${response.status} for ${action}. URL: ${targetUrl}. Response:`, errorBody, response);
                  throw new Error(`Server error: ${response.status}. Action: ${action}. See console.`);
             }
             const result = await response.json();
             console.log('API Response for action:', action, result);
+
             if (result.success) {
                 if (result.data) {
-                    if (result.data.newCurrency !== undefined) playerData.currency = result.data.newCurrency;
-                    else if (action === 'loadPlayer' && result.data.currency !== undefined) playerData.currency = result.data.currency;
-                    else if (action === 'createAccount') {
-                         if (result.data.player && result.data.player.currency !== undefined) playerData.currency = result.data.player.currency;
-                         else if (result.data.currency !== undefined) playerData.currency = result.data.currency;
+                    if (result.data.newCurrency !== undefined) {
+                         playerData.currency = parseFloat(result.data.newCurrency) || 0;
+                    } else if (action === 'loadPlayer' && result.data.currency !== undefined) {
+                         playerData.currency = parseFloat(result.data.currency) || 0;
+                    } else if (action === 'createAccount') {
+                         if (result.data.player && result.data.player.currency !== undefined) {
+                            playerData.currency = parseFloat(result.data.player.currency) || 0;
+                         } else if (result.data.currency !== undefined) {
+                            playerData.currency = parseFloat(result.data.currency) || 0;
+                         }
                     }
                 }
                 updateCurrencyDisplay();
                 return result.data;
             } else {
-                console.error('API Error:', action, result.message, result.data?.details);
-                alert('API Error: ' + result.message); return null;
+                console.error('API Reported Error for action:', action, result.message, result.data?.details);
+                alert('API Error: ' + (result.message || 'Unknown error from server.'));
+                return null;
             }
         } catch (error) {
-            console.error('Fetch Exception:', action, error);
-            alert('Network/Script Failed. Check console.'); return null;
+            console.error('Fetch Exception for action:', action, error);
+            alert('Network connection or Script Execution Failed. Check console.');
+            return null;
         } finally {
             hideLoadingIndicator();
         }
     }
-    function showLoadingIndicator(message) { const l=document.getElementById('loading-text');const o=document.getElementById('loading-overlay');if(l)l.textContent=message||'Loading...';if(o)o.style.display='flex';}
-    function hideLoadingIndicator() {const o=document.getElementById('loading-overlay');if(o)o.style.display='none';}
-    function showScreen(screenId){document.querySelectorAll('.game-screen-container').forEach(s=>s.classList.remove('active-screen'));const t=document.getElementById(screenId);if(t)t.classList.add('active-screen');else{console.error("Screen not found:",screenId);const ls=document.getElementById('login-screen');if(ls)ls.classList.add('active-screen');}document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));let an=null;if(screenId==='game-screen')an='game-home-nav';else if(screenId==='store-screen')an='store-nav-right';else if(screenId==='inventory-screen')an='inventory-nav';else if(screenId==='minigame-select-screen'||(screenId.startsWith('minigame-')&&screenId.endsWith('-screen')))an='minigames-nav';if(an){const e=document.getElementById(an);if(e)e.classList.add('active');}if(minigameState.activeGame&&!screenId.startsWith('minigame-'))endCurrentMinigame(false);}
-    
-    async function initializeGame() { 
-        createHearts(); setActiveNav(); // setActiveNav might target old nav item IDs initially
+
+    function showLoadingIndicator(message) {
+        const loadingTextEl = document.getElementById('loading-text');
+        const loadingOverlayEl = document.getElementById('loading-overlay');
+        if (loadingTextEl) loadingTextEl.textContent = message || 'Loading...';
+        if (loadingOverlayEl) loadingOverlayEl.style.display = 'flex';
+    }
+
+    function hideLoadingIndicator() {
+        const loadingOverlayEl = document.getElementById('loading-overlay');
+        if (loadingOverlayEl) loadingOverlayEl.style.display = 'none';
+    }
+
+    function showScreen(screenId) {
+        document.querySelectorAll('.game-screen-container').forEach(s => s.classList.remove('active-screen'));
+        const target = document.getElementById(screenId);
+        if (target) {
+            target.classList.add('active-screen');
+        } else {
+            console.error("Screen not found:", screenId, ". Defaulting to login.");
+            const loginScreen = document.getElementById('login-screen');
+            if (loginScreen) loginScreen.classList.add('active-screen');
+        }
+
+        // Clear active state from ALL nav items first (both left and right)
+        document.querySelectorAll('.nav-container .nav-item, .nav-container-right .nav-item').forEach(item => item.classList.remove('active'));
+        
+        let activeNavId = null;
+        let isRightNavCategory = false;
+
+        if (screenId === 'game-screen') activeNavId = 'game-home-nav'; // Right nav
+        else if (screenId === 'store-screen') {
+            // Store screen is active. The specific category button gets 'active' class via its own click handler.
+            // If no specific category is active, we can default "All" to active.
+            const activeStoreCat = document.querySelector('.nav-container-right .store-category-nav.active');
+            if (!activeStoreCat) {
+                const allCat = document.querySelector('.nav-container-right .nav-item[data-category="all"]');
+                if(allCat) allCat.classList.add('active');
+            }
+            isRightNavCategory = true; // Prevents left nav "Home" from being active
+        }
+        else if (screenId === 'inventory-screen') activeNavId = 'inventory-nav'; // Right nav
+        else if (screenId === 'minigame-select-screen' || (screenId.startsWith('minigame-') && screenId.endsWith('-screen'))) activeNavId = 'minigames-nav'; // Right nav
+        
+        // If a right-nav specific item was identified, activate it
+        if (activeNavId) { 
+            const el = document.getElementById(activeNavId);
+            if (el) el.classList.add('active');
+        }
+
+        // Handle left navigation active state (only if not a right-nav specific screen)
+        // The left nav links to external pages, so its 'active' state is more about visual indication
+        // rather than controlling SPA views. We'll assume slimegame.html maps to 'index.html' for left nav.
+        const leftNavHome = document.querySelector('.nav-container a.nav-item.home-link');
+        if (leftNavHome && (screenId === 'login-screen' || screenId === 'create-slime-screen' || (!activeNavId && !isRightNavCategory) )) {
+            // If it's one of the initial game screens or no specific right-nav item is active
+            // (and it's not the store screen itself), consider the external "Home" active.
+            // This part might need adjustment based on how you want left nav to behave.
+             // For now, let's only activate the left "Home" if no other game screen is active.
+             if (screenId === 'login-screen' || screenId === 'create-slime-screen') {
+                // No specific game content nav is active yet.
+             }
+        }
+        
+        if (minigameState.activeGame && !screenId.startsWith('minigame-')) {
+            endCurrentMinigame(false); 
+        }
+    }
+
+    // --- Core Game Functions ---
+    async function initializeGame() {
+        createHearts(); 
+        setActiveNav(); // Sets initial active nav states
+
         const savedUsername = localStorage.getItem('slimeGame_username');
         if (savedUsername) {
             const data = await fetchData('loadPlayer', 'GET', { playerName: savedUsername });
             if (data && data.player) {
-                playerData = data.player; slimeData = data.slime; inventoryData = data.inventory || [];
+                playerData = data.player; 
+                slimeData = data.slime; 
+                inventoryData = data.inventory || [];
                 localStorage.setItem('slimeGame_playerId', playerData.playerId);
                 localStorage.setItem('slimeGame_username', playerData.username);
-                if (storeItems.length === 0) await fetchStoreItemsOnce();
-                if (slimeData) { showScreen('game-screen'); startGameLoop(); } else { showScreen('create-slime-screen'); }
+                
+                if (storeItems.length === 0) await fetchStoreItemsOnce(); // Essential for equipped items display
+
+                if (slimeData) { 
+                    showScreen('game-screen'); 
+                    startGameLoop(); 
+                } else { 
+                    showScreen('create-slime-screen'); 
+                }
             } else {
-                console.warn("Player data not found. Starting fresh.");
+                console.warn("Player data not found on backend. Starting fresh.");
                 localStorage.removeItem('slimeGame_username'); localStorage.removeItem('slimeGame_playerId');
                 playerData = { playerId: null, username: null, currency: 0 }; slimeData = null; inventoryData = [];
                 showScreen('login-screen');
             }
-        } else { showScreen('login-screen'); }
+        } else { 
+            showScreen('login-screen'); 
+        }
     }
+
     async function handleLogin() {
         const username = document.getElementById('username-input').value.trim();
         if (!username) { alert('Please enter your name'); return; }
+
         const accData = await fetchData('createAccount', 'GET', { username: username }); 
         if (accData && accData.playerId) {
-            playerData.playerId = accData.playerId; playerData.username = accData.username;
+            playerData.playerId = accData.playerId; 
+            playerData.username = accData.username;
             localStorage.setItem('slimeGame_playerId', playerData.playerId);
             localStorage.setItem('slimeGame_username', playerData.username);
+
             const loadData = await fetchData('loadPlayer', 'GET', { playerName: playerData.username });
             if(loadData && loadData.player) {
-                 playerData = loadData.player; slimeData = loadData.slime; inventoryData = loadData.inventory || [];
+                 playerData = loadData.player; 
+                 slimeData = loadData.slime; 
+                 inventoryData = loadData.inventory || [];
                  if (storeItems.length === 0) await fetchStoreItemsOnce();
-                 if (slimeData) { showScreen('game-screen'); startGameLoop(); } else { showScreen('create-slime-screen'); }
+                 if (slimeData) { 
+                     showScreen('game-screen'); 
+                     startGameLoop(); 
+                 } else { 
+                     showScreen('create-slime-screen'); 
+                 }
             } else {
-                 alert('Failed to load player data.'); showScreen('login-screen');
+                 alert('Failed to load full player data after login/creation.');
+                 localStorage.removeItem('slimeGame_username'); localStorage.removeItem('slimeGame_playerId');
+                 playerData = { playerId: null, username: null, currency: 0 }; slimeData = null; inventoryData = [];
+                 showScreen('login-screen');
             }
         }
     }
+
     async function handleCreateSlime() { 
         const n=document.getElementById('slime-name-input').value.trim();const c=document.getElementById('slime-color-input').value;
         if(!n){alert('Name your slime');return;}if(!playerData.playerId){alert('Player not logged in.');initializeGame();return;}
         const sD=await fetchData('createSlime','GET',{playerId:playerData.playerId,slimeName:n,slimeColor:c});
-        if(sD&&sD.slimeId){slimeData=sD;if(storeItems.length===0)await fetchStoreItemsOnce();showScreen('game-screen');startGameLoop();}}
-    async function fetchStoreItemsOnce(){if(storeItems.length>0)return;const i=await fetchData('getStoreItems','GET');if(i)storeItems=i;else console.error("Failed to fetch store items.");}
-    function updateSlimeDisplay(){const mSC=document.getElementById('main-slime-container');const sND=document.getElementById('slime-name-display');const sS=document.querySelector('.slime-stats');const a=document.querySelector('.actions');if(!slimeData){if(mSC)mSC.style.display='none';if(sND)sND.textContent='No Slime';if(sS)sS.style.display='none';if(a)a.style.display='none';return;}if(mSC)mSC.style.display='block';if(sS)sS.style.display='flex';if(a)a.style.display='flex';if(sND)sND.textContent=slimeData.name;const sE=document.getElementById('slime');if(sE)sE.style.setProperty('--slime-color',slimeData.color);['hunger','happiness','health','energy'].forEach(s=>{const fE=document.getElementById(`${s}-fill`);if(fE)fE.style.width=`${Math.max(0,Math.min(100,slimeData[s]))}%`;});let m='happy';if(slimeData.hunger<30)m='hungry';else if(slimeData.energy<30)m='tired';else if(slimeData.health<30)m='sick';else if(slimeData.happiness<30)m='sad';if(sE)sE.dataset.mood=m;[{e:'hunger-fill',v:slimeData.hunger},{e:'happiness-fill',v:slimeData.happiness},{e:'health-fill',v:slimeData.health},{e:'energy-fill',v:slimeData.energy}].forEach(s=>{const el=document.getElementById(s.e);if(el){if(s.v<30)el.style.backgroundColor='#ff5252';else if(s.v<70)el.style.backgroundColor='#ffb142';else el.style.backgroundColor='#9b4d96';}});updateEquippedItemsDisplay();}
-    function updateEquippedItemsDisplay(){const hE=document.getElementById('equipped-hat');const bE=document.getElementById('equipped-background');if(!slimeData||!hE||!bD)return;if(storeItems.length===0&&(slimeData.hat||slimeData.background)){fetchStoreItemsOnce().then(()=>updateEquippedItemsDisplay());return;}const hD=storeItems.find(i=>i.itemId===slimeData.hat&&i.itemType==='Hat');const bD=storeItems.find(i=>i.itemId===slimeData.background&&i.itemType==='Background');if(hD&&hD.dataValue){hE.src=hD.dataValue;hE.style.display='block';}else{hE.src='';hE.style.display='none';}if(bD&&bD.dataValue){bE.innerHTML='';const img=document.createElement('img');img.src=bD.dataValue;img.alt='Background';bE.appendChild(img);bE.style.display='block';}else{bE.innerHTML='';bE.style.display='none';}}
-    async function saveSlimeData(){if(!slimeData||!playerData.playerId)return null;const uP={name:slimeData.name,type:slimeData.type,color:slimeData.color,age:slimeData.age,evolutionStage:slimeData.evolutionStage,hunger:slimeData.hunger,happiness:slimeData.happiness,health:slimeData.health,energy:slimeData.energy,intelligence:slimeData.intelligence,strength:slimeData.strength,agility:slimeData.agility,lastCared:new Date().toISOString(),hat:slimeData.hat,background:slimeData.background};slimeData.lastCared=uP.lastCared;const pFG={slimeId:slimeData.slimeId,...uP};const r=await fetchData('updateSlime','GET',pFG);if(r){console.log("Slime data saved.");return true;}else{console.error("Failed to save slime data.");return false;}}
+        if(sD&&sD.slimeId){
+            slimeData=sD;
+            if(storeItems.length===0) await fetchStoreItemsOnce();
+            showScreen('game-screen');
+            startGameLoop();
+        }
+    }
+    
+    async function fetchStoreItemsOnce(){
+        if(storeItems.length > 0 && storeItems[0].itemId) return; // Already fetched and has actual items
+        console.log("Fetching store items catalog...");
+        const items = await fetchData('getStoreItems','GET');
+        if(items){ storeItems = items; }
+        else { console.error("Failed to fetch store items catalog."); storeItems = []; }
+    }
+
+    function updateSlimeDisplay(){
+        const mSC=document.getElementById('main-slime-container');const sND=document.getElementById('slime-name-display');const sS=document.querySelector('.slime-stats');const a=document.querySelector('.actions');const sE=document.getElementById('slime');
+        if(!slimeData){if(mSC)mSC.style.display='none';if(sND)sND.textContent='No Slime';if(sS)sS.style.display='none';if(a)a.style.display='none';return;}
+        if(mSC)mSC.style.display='block';if(sS)sS.style.display='flex';if(a)a.style.display='flex';if(sND)sND.textContent=slimeData.name;
+        if(sE)sE.style.setProperty('--slime-color',slimeData.color);
+        ['hunger','happiness','health','energy'].forEach(stat=>{const fE=document.getElementById(`${stat}-fill`);if(fE&&slimeData[stat]!==undefined)fE.style.width=`${Math.max(0,Math.min(100,slimeData[stat]))}%`;});
+        let m='happy';if(slimeData.hunger<30)m='hungry';else if(slimeData.energy<30)m='tired';else if(slimeData.health<30)m='sick';else if(slimeData.happiness<30)m='sad';if(sE)sE.dataset.mood=m;
+        [{e:'hunger-fill',v:slimeData.hunger},{e:'happiness-fill',v:slimeData.happiness},{e:'health-fill',v:slimeData.health},{e:'energy-fill',v:slimeData.energy}].forEach(s=>{const el=document.getElementById(s.e);if(el&&s.v!==undefined){if(s.v<30)el.style.backgroundColor='#ff5252';else if(s.v<70)el.style.backgroundColor='#ffb142';else el.style.backgroundColor='#9b4d96';}});
+        updateEquippedItemsDisplay();
+    }
+
+    function updateEquippedItemsDisplay(){
+        const hE=document.getElementById('equipped-hat');const bE=document.getElementById('equipped-background');
+        if(!slimeData||!hE||!bE){return;}
+        if(storeItems.length===0&&(slimeData.hat||slimeData.background)){console.warn("Store items not loaded for equipped display. Fetching now...");fetchStoreItemsOnce().then(()=>{if(slimeData)updateEquippedItemsDisplay();});return;}
+        const hD=storeItems.find(i=>i.itemId===slimeData.hat&&i.itemType==='Hat');const bD=storeItems.find(i=>i.itemId===slimeData.background&&i.itemType==='Background');
+        if(hD&&hD.dataValue){hE.src=hD.dataValue;hE.style.display='block';}else{hE.src='';hE.style.display='none';}
+        if(bD&&bD.dataValue){bE.innerHTML='';const img=document.createElement('img');img.src=bD.dataValue;img.alt='Background';bE.appendChild(img);bE.style.display='block';}else{bE.innerHTML='';bE.style.display='none';}
+    }
+
+    async function saveSlimeData(){
+        if(!slimeData||!playerData.playerId){console.warn("Cannot save: no slime/player ID.");return null;}
+        const uP={name:slimeData.name,type:slimeData.type,color:slimeData.color,age:slimeData.age,evolutionStage:slimeData.evolutionStage,hunger:slimeData.hunger,happiness:slimeData.happiness,health:slimeData.health,energy:slimeData.energy,intelligence:slimeData.intelligence,strength:slimeData.strength,agility:slimeData.agility,lastCared:new Date().toISOString(),hat:slimeData.hat,background:slimeData.background};
+        slimeData.lastCared=uP.lastCared;
+        const pFG={slimeId:slimeData.slimeId,...uP};
+        const r=await fetchData('updateSlime','GET',pFG);
+        if(r){console.log("Slime data saved.");return true;}
+        else{console.error("Failed to save slime data.");return false;}
+    }
+
     function startGameLoop(){if(gameInterval)clearInterval(gameInterval);updateSlimeDisplay();updateCurrencyDisplay();gameInterval=setInterval(()=>{calculateAndApplyVisualDecay();saveSlimeData();},TICK_RATE);}
     function calculateAndApplyVisualDecay(){if(!slimeData)return;const dA=STAT_DECREASE_RATE_PER_MINUTE*(TICK_RATE/60000);slimeData.hunger=Math.max(0,slimeData.hunger-dA);slimeData.happiness=Math.max(0,slimeData.happiness-dA);slimeData.energy=Math.max(0,slimeData.energy-dA);if(slimeData.hunger<30||slimeData.happiness<30)slimeData.health=Math.max(0,slimeData.health-(dA*0.5));updateSlimeDisplay();}
+    
     async function performCareAction(aT,sI,cA){if(!slimeData||!playerData.playerId){alert("Log in/create slime.");initializeGame();return;}calculateAndApplyVisualDecay();if(sI.hunger!==undefined)slimeData.hunger=Math.min(100,slimeData.hunger+sI.hunger);if(sI.happiness!==undefined)slimeData.happiness=Math.min(100,slimeData.happiness+sI.happiness);if(sI.health!==undefined)slimeData.health=Math.min(100,slimeData.health+sI.health);if(sI.energy!==undefined)slimeData.energy=Math.min(100,slimeData.energy+sI.energy);updateSlimeDisplay();const sS=await saveSlimeData();if(sS&&cA>0){const cR=await fetchData('earnCurrency','GET',{playerId:playerData.playerId,amount:cA});if(cR&&cR.newCurrency!==undefined)alert(`Earned ${cA} coins!`);}else if(!sS)alert("Failed to save stats.");}
     function feedSlime(){performCareAction('feed',{hunger:30,health:5},10);}
     function playWithSlime(){performCareAction('play',{happiness:30,energy:-10,hunger:-5},15);}
     function cleanSlime(){performCareAction('clean',{health:20,happiness:5},10);}
     function sleepSlime(){performCareAction('sleep',{energy:40,health:10,happiness:-5},5);}
+
     function updateCurrencyDisplay(){const mD=document.getElementById('currency-display');const sD=document.getElementById('store-currency-display');const iD=document.getElementById('inventory-currency-display');const cC=playerData.currency||0;if(mD)mD.textContent=`Coins: ${cC}`;if(sD)sD.textContent=`Coins: ${cC}`;if(iD)iD.textContent=`Coins: ${cC}`;}
-    async function showStoreScreen(){if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)await saveSlimeData();if(storeItems.length===0)await fetchStoreItemsOnce();renderStoreItems();updateCurrencyDisplay();showScreen('store-screen');}
-    function renderStoreItems(){const lE=document.getElementById('store-items-list');if(!lE)return;lE.innerHTML='';if(!storeItems||storeItems.length===0){lE.innerHTML='<li>No items.</li>';return;}storeItems.forEach(i=>{const li=document.createElement('li');li.className='item-card';li.dataset.itemId=i.itemId;let v=(i.itemType==='Color'&&i.dataValue)?`<div class="item-color-preview" style="background-color: ${i.dataValue};"></div>`:(i.dataValue&&typeof i.dataValue==='string'&&i.dataValue.startsWith('http'))?`<img src="${i.dataValue}" alt="${i.itemName}">`:'<div>?</div>';const o=inventoryData.find(oi=>oi.itemId===i.itemId);const q=o?o.quantity:0;li.innerHTML=`${v}<div class="item-name">${i.itemName}</div><div class="item-price">${i.price} Coins</div>${q>0?`<div class="equipped-status">Owned: ${q}</div>`:''}<button class="buy-btn">Buy</button>`;lE.appendChild(li);});lE.querySelectorAll('.buy-btn').forEach(b=>b.addEventListener('click',handlePurchaseItem));}
-    async function handlePurchaseItem(e){if(!playerData.playerId){alert("Not logged in.");return;}const iC=e.target.closest('.item-card');const iI=iC.dataset.itemId;if(!iI)return;const r=await fetchData('purchaseItem','GET',{playerId:playerData.playerId,itemId:iI});if(r){await fetchAndRenderInventory();const iD=storeItems.find(i=>i.itemId===iI);if(iD)alert(`Purchased ${iD.itemName}!`);else alert("Purchase successful!");renderStoreItems();}}
-    async function showInventoryScreen(){if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)await saveSlimeData();if(storeItems.length===0)await fetchStoreItemsOnce();await fetchAndRenderInventory();updateCurrencyDisplay();showScreen('inventory-screen');}
+    
+    async function showStoreScreen(category = 'all'){ // Default category is 'all'
+        if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)await saveSlimeData();
+        if(storeItems.length===0||!storeItems[0].itemId)await fetchStoreItemsOnce(); // Ensure store catalog is loaded
+        renderStoreItems(category);updateCurrencyDisplay();showScreen('store-screen');
+    }
+
+    function renderStoreItems(category = 'all'){
+        const lE=document.getElementById('store-items-list');if(!lE){console.error("Store list element not found."); return;}lE.innerHTML='';
+        const itemsToDisplay = (category==='all') ? storeItems : storeItems.filter(i=>i.itemType===category);
+        if(!itemsToDisplay||itemsToDisplay.length===0){lE.innerHTML=`<li>No items found for category: ${category}.</li>`;return;}
+        itemsToDisplay.forEach(i=>{const li=document.createElement('li');li.className='item-card';li.dataset.itemId=i.itemId;let v=(i.itemType==='Color'&&i.dataValue)?`<div class="item-color-preview" style="background-color: ${i.dataValue};"></div>`:(i.dataValue&&typeof i.dataValue==='string'&&i.dataValue.startsWith('http'))?`<img src="${i.dataValue}" alt="${i.itemName}">`:'<div>?</div>';const o=inventoryData.find(oi=>oi.itemId===i.itemId);const q=o?o.quantity:0;li.innerHTML=`${v}<div class="item-name">${i.itemName}</div><div class="item-price">${i.price} Coins</div>${q>0?`<div class="equipped-status">Owned: ${q}</div>`:''}<button class="buy-btn">Buy</button>`;lE.appendChild(li);});
+        lE.querySelectorAll('.buy-btn').forEach(b=>b.addEventListener('click',handlePurchaseItem));
+    }
+
+    async function handlePurchaseItem(e){if(!playerData.playerId){alert("Not logged in.");return;}const iC=e.target.closest('.item-card');const iI=iC.dataset.itemId;if(!iI){console.error("No itemId on card.");return;}const r=await fetchData('purchaseItem','GET',{playerId:playerData.playerId,itemId:iI});if(r){await fetchAndRenderInventory();const iD=storeItems.find(i=>i.itemId===iI);if(iD)alert(`Purchased ${iD.itemName}!`);else alert("Purchase successful!");const activeCatNav=document.querySelector('.nav-container-right .store-category-nav.active');const currCat=activeCatNav?activeCatNav.dataset.category:'all';renderStoreItems(currCat);}}
+    
+    async function showInventoryScreen(){if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)await saveSlimeData();if(storeItems.length===0||!storeItems[0].itemId)await fetchStoreItemsOnce();await fetchAndRenderInventory();updateCurrencyDisplay();showScreen('inventory-screen');}
     async function fetchAndRenderInventory(){const i=await fetchData('getPlayerInventory','GET');if(i){inventoryData=i;renderInventoryItems();}else{inventoryData=[];renderInventoryItems();}}
-    function renderInventoryItems(){const lE=document.getElementById('inventory-items-list');if(!lE)return;lE.innerHTML='';if(!inventoryData||inventoryData.length===0){lE.innerHTML='<li>Inventory empty.</li>';return;}if(storeItems.length===0)console.warn("Store items catalog not loaded for inv display.");inventoryData.forEach(i=>{const d=storeItems.find(si=>si.itemId===i.itemId);const dv=d?d.dataValue:(i.dataValue||null);const iN=d?d.itemName:(i.itemName||i.itemId);const iT=d?d.itemType:(i.itemType||'Unknown');const li=document.createElement('li');li.className='item-card inventory-item-card';li.dataset.itemId=i.itemId;let v=(iT==='Color'&&dv)?`<div class="item-color-preview" style="background-color: ${dv};"></div>`:(dv&&typeof dv==='string'&&dv.startsWith('http'))?`<img src="${dv}" alt="${iN}">`:'<div>?</div>';const iEq=['Color','Hat','Background'].includes(iT);const iCE=slimeData&&((iT==='Color'&&slimeData.color===dv)||(iT==='Hat'&&slimeData.hat===i.itemId)||(iT==='Background'&&slimeData.background===i.itemId));li.innerHTML=`${v}<div class="item-name">${iN}</div>${i.quantity>0?`<div class="item-quantity">Qty: ${i.quantity}</div>`:''}${iCE?`<div class="equipped-status">EQUIPPED</div>`:''}${iEq&&!iCE?`<button class="equip-btn">Equip</button>`:''}`;lE.appendChild(li);});lE.querySelectorAll('.equip-btn').forEach(b=>b.addEventListener('click',handleEquipItem));}
-    async function handleEquipItem(e){if(!playerData.playerId||!slimeData||!slimeData.slimeId){alert("Player/Slime not loaded.");return;}const iC=e.target.closest('.item-card');const iI=iC.dataset.itemId;if(!iI)return;const iD=storeItems.find(i=>i.itemId===iI);if(!iD){alert("Error finding item details.");return;}const r=await fetchData('equipItem','GET',{playerId:playerData.playerId,slimeId:slimeData.slimeId,itemId:iI});if(r&&r.updatedSlimeField){if(r.updatedSlimeField==='color')slimeData.color=r.equippedDataValue;else if(r.updatedSlimeField==='hat')slimeData.hat=r.equippedItemId;else if(r.updatedSlimeField==='background')slimeData.background=r.equippedItemId;await saveSlimeData();updateSlimeDisplay();renderInventoryItems();alert(`${iD.itemName} equipped!`);}}
+    function renderInventoryItems(){const lE=document.getElementById('inventory-items-list');if(!lE){console.error("Inv list el not found.");return;}lE.innerHTML='';if(!inventoryData||inventoryData.length===0){lE.innerHTML='<li>Inventory empty.</li>';return;}if(storeItems.length===0)console.warn("Store catalog not loaded for inv display.");inventoryData.forEach(i=>{const d=storeItems.find(si=>si.itemId===i.itemId);const dv=d?d.dataValue:(i.dataValue||null);const iN=d?d.itemName:(i.itemName||i.itemId);const iT=d?d.itemType:(i.itemType||'Unknown');const li=document.createElement('li');li.className='item-card inventory-item-card';li.dataset.itemId=i.itemId;let v=(iT==='Color'&&dv)?`<div class="item-color-preview" style="background-color: ${dv};"></div>`:(dv&&typeof dv==='string'&&dv.startsWith('http'))?`<img src="${dv}" alt="${iN}">`:'<div>?</div>';const iEq=['Color','Hat','Background'].includes(iT);const iCE=slimeData&&((iT==='Color'&&slimeData.color===dv)||(iT==='Hat'&&slimeData.hat===i.itemId)||(iT==='Background'&&slimeData.background===i.itemId));li.innerHTML=`${v}<div class="item-name">${iN}</div>${i.quantity>0?`<div class="item-quantity">Qty: ${i.quantity}</div>`:''}${iCE?`<div class="equipped-status">EQUIPPED</div>`:''}${iEq&&!iCE?`<button class="equip-btn">Equip</button>`:''}`;lE.appendChild(li);});lE.querySelectorAll('.equip-btn').forEach(b=>b.addEventListener('click',handleEquipItem));}
+    
+    async function handleEquipItem(e){if(!playerData.playerId||!slimeData||!slimeData.slimeId){alert("Player/Slime not loaded.");return;}const iC=e.target.closest('.item-card');const iI=iC.dataset.itemId;if(!iI){console.error("No itemId to equip.");return;}const iD=storeItems.find(i=>i.itemId===iI);if(!iD){alert("Error finding item details.");return;}const r=await fetchData('equipItem','GET',{playerId:playerData.playerId,slimeId:slimeData.slimeId,itemId:iI});if(r&&r.updatedSlimeField){if(r.updatedSlimeField==='color')slimeData.color=r.equippedDataValue;else if(r.updatedSlimeField==='hat')slimeData.hat=r.equippedItemId;else if(r.updatedSlimeField==='background')slimeData.background=r.equippedItemId;await saveSlimeData();updateSlimeDisplay();renderInventoryItems();alert(`${iD.itemName} equipped!`);}}
+    
+    // Minigame Functions
     function showMinigameSelectScreen(){if(document.getElementById('game-screen').classList.contains('active-screen')&&slimeData)saveSlimeData();updateCurrencyDisplay();showScreen('minigame-select-screen');}
     function handleMinigameSelect(e){const b=e.target.closest('.minigame-select-btn');if(!b)return;const gT=b.dataset.game;if(!gT)return;if(!playerData.playerId||!slimeData){alert("Log in & create slime.");initializeGame();return;}startMinigame(gT);}
     function startMinigame(gT){endCurrentMinigame(false);minigameState={activeGame:gT,timeLeft:MINIGAME_DURATION,score:0,gameElements:[]};const sCI=`minigame-${gT}-screen`;const sC=document.getElementById(sCI);if(!sC){showScreen('minigame-select-screen');return;}showScreen(sCI);const mC=sC.querySelector('.minigame-container');if(mC)mC.style.display='flex';else{showScreen('minigame-select-screen');return;}const tE=sC.querySelector('.minigame-timer');const sE=sC.querySelector('.minigame-score');const msgE=sC.querySelector('.minigame-message');const rE=sC.querySelector('.minigame-results');if(tE)tE.textContent=`Time: ${minigameState.timeLeft}`;if(sE)sE.textContent=`${gT==='tapper'?'Taps':gT==='bubble'?'Popped':'Fed'}: ${minigameState.score}`;if(msgE)msgE.style.display='none';if(rE)rE.style.display='none';switch(gT){case'tapper':startSlimeTapper();break;case'bubble':startBubblePop();break;case'feed':startFeedTheSlime();break;}minigameState.timer=setInterval(()=>{minigameState.timeLeft--;if(tE)tE.textContent=`Time: ${minigameState.timeLeft}`;if(minigameState.timeLeft<=0)endCurrentMinigame(true);},1000);}
@@ -634,11 +813,107 @@
     function scheduleNextFood(){if(minigameState.timeLeft<=0||minigameState.activeGame!=='feed')return;if(foodTimeout===null)foodTimeout=setTimeout(createFoodTarget,1500);}
     function stopFeedTheSlime(){if(foodTimeout){clearTimeout(foodTimeout);foodTimeout=null;}const ga=document.getElementById('feed-game-area');if(ga)ga.removeEventListener('click',handleMissedClickInFeedGame);}
     function removeMinigameElement(e){if(e&&e.parentNode){if(e._removalTimerId)clearTimeout(e._removalTimerId);e.parentNode.removeChild(e);minigameState.gameElements=minigameState.gameElements.filter(el=>el!==e);}}
-    function setupEventListeners(){const lb=document.getElementById('login-button');if(lb)lb.addEventListener('click',handleLogin);const csb=document.getElementById('create-slime-button');if(csb)csb.addEventListener('click',handleCreateSlime);const fb=document.getElementById('feed-btn');if(fb)fb.addEventListener('click',feedSlime);const pb=document.getElementById('play-btn');if(pb)pb.addEventListener('click',playWithSlime);const cb=document.getElementById('clean-btn');if(cb)cb.addEventListener('click',cleanSlime);const sb=document.getElementById('sleep-btn');if(sb)sb.addEventListener('click',sleepSlime);const nc=document.querySelector('.nav-container');if(nc)nc.addEventListener('click',async e=>{const ni=e.target.closest('.nav-item');if(!ni)return;const ogs=document.getElementById('game-screen').classList.contains('active-screen');const oms=document.getElementById('minigame-select-screen').classList.contains('active-screen');if((ogs||oms)&&slimeData)await saveSlimeData();const navId=ni.id;switch(navId){case'home-nav':if(playerData.playerId&&slimeData){showScreen('game-screen');startGameLoop();}else if(playerData.playerId)showScreen('create-slime-screen');else showScreen('login-screen');break;}});const rightNav=document.querySelector('.nav-container-right');if(rightNav)rightNav.addEventListener('click',async e=>{const ni=e.target.closest('.nav-item');if(!ni)return;document.querySelectorAll('.nav-container-right .nav-item').forEach(i=>i.classList.remove('active'));ni.classList.add('active');const ogs=document.getElementById('game-screen').classList.contains('active-screen');const oms=document.getElementById('minigame-select-screen').classList.contains('active-screen');if((ogs||oms)&&slimeData)await saveSlimeData();const navId=ni.id;if(navId==='game-home-nav'){if(playerData.playerId&&slimeData){showScreen('game-screen');startGameLoop();}else if(playerData.playerId)showScreen('create-slime-screen');else showScreen('login-screen');}else if(navId==='inventory-nav'){if(playerData.playerId)showInventoryScreen();else{alert("Log in for inventory.");showScreen('login-screen');}}else if(navId==='minigames-nav'){if(playerData.playerId&&slimeData)showMinigameSelectScreen();else if(playerData.playerId){alert("Create slime first!");showScreen('create-slime-screen');}else{alert("Log in for minigames.");showScreen('login-screen');}}else if(ni.classList.contains('store-category-nav')){if(playerData.playerId)showStoreScreen(ni.dataset.category);else{alert("Log in for store.");showScreen('login-screen');}}});const mss=document.getElementById('minigame-select-screen');if(mss)mss.addEventListener('click',handleMinigameSelect);const me=document.querySelector('main');if(me)me.addEventListener('click',e=>{const bb=e.target.closest('.minigame-back-btn');if(!bb)return;const ts=bb.dataset.target;if(ts){endCurrentMinigame(false);showScreen(ts);}}); }
-    function setActiveNav(){const hn=document.getElementById('home-nav');if(hn)hn.classList.add('active');const storeAll=document.querySelector('.nav-container-right .nav-item[data-category="all"]');if(storeAll)storeAll.classList.add('active');}
-    function createHearts(){const c=document.getElementById('hearts-container');if(!c)return;c.innerHTML='';for(let i=0;i<20;i++){const h=document.createElement('div');h.className='heart';h.innerHTML='❤️';h.style.left=`${Math.random()*100}vw`;h.style.animationDuration=`${15+Math.random()*10}s`;h.style.animationDelay=`${Math.random()*5}s`;h.style.fontSize=`${20+Math.random()*20}px`;c.appendChild(h);}}
-    window.addEventListener('load',()=>{createHearts();setupEventListeners();initializeGame();});
-    window.addEventListener('beforeunload',e=>{if(slimeData&&playerData.playerId){saveSlimeData();}});
+    
+    // --- Event Listeners ---
+    function setupEventListeners() {
+        const loginBtn = document.getElementById('login-button'); if(loginBtn) loginBtn.addEventListener('click', handleLogin);
+        const createSlimeBtn = document.getElementById('create-slime-button'); if(createSlimeBtn) createSlimeBtn.addEventListener('click', handleCreateSlime);
+        const feedBtn = document.getElementById('feed-btn'); if(feedBtn) feedBtn.addEventListener('click', feedSlime);
+        const playBtn = document.getElementById('play-btn'); if(playBtn) playBtn.addEventListener('click', playWithSlime);
+        const cleanBtn = document.getElementById('clean-btn'); if(cleanBtn) cleanBtn.addEventListener('click', cleanSlime);
+        const sleepBtn = document.getElementById('sleep-btn'); if(sleepBtn) sleepBtn.addEventListener('click', sleepSlime);
+        
+        // Left Navigation (External Links - assuming they navigate away)
+        const leftNavContainer = document.querySelector('.nav-container');
+        if (leftNavContainer) {
+            leftNavContainer.querySelectorAll('a.nav-item').forEach(item => {
+                item.addEventListener('click', async (event) => {
+                    // No preventDefault, allow link to navigate
+                    // If on game screen and slime exists, save data before navigating away
+                    if (document.getElementById('game-screen').classList.contains('active-screen') && slimeData) {
+                        // We can't reliably 'await' here if it's a true navigation away
+                        // Fire-and-forget save is the best we can do.
+                        saveSlimeData(); 
+                    }
+                    // Active class handling for external links is usually done by the target page
+                    // or server-side. For a pure client-side SPA, this part would be different.
+                });
+            });
+        }
+
+        // Right Navigation (Internal Game Screens & Store Categories)
+        const rightNavContainer = document.querySelector('.nav-container-right');
+        if (rightNavContainer) {
+            rightNavContainer.addEventListener('click', async (event) => {
+                const navItem = event.target.closest('.nav-item');
+                if (!navItem) return;
+
+                // Visually activate the clicked item in the right nav
+                document.querySelectorAll('.nav-container-right .nav-item').forEach(i => i.classList.remove('active'));
+                navItem.classList.add('active');
+
+                // Save current slime data before switching internal screens
+                const onGameScreen = document.getElementById('game-screen').classList.contains('active-screen');
+                const onMinigameSelect = document.getElementById('minigame-select-screen').classList.contains('active-screen');
+                // Also save if coming from a minigame screen itself (though endCurrentMinigame might handle saves too)
+                const onAnyMinigameScreen = Array.from(document.querySelectorAll('.minigame-screen-container')).some(s => s.classList.contains('active-screen'));
+
+                if ((onGameScreen || onMinigameSelect || onAnyMinigameScreen) && slimeData) {
+                    await saveSlimeData();
+                }
+
+                const navId = navItem.id;
+                const category = navItem.dataset.category;
+
+                if (navId === 'game-home-nav') {
+                    if (playerData.playerId && slimeData) { showScreen('game-screen'); startGameLoop(); }
+                    else if (playerData.playerId) { showScreen('create-slime-screen'); }
+                    else { showScreen('login-screen'); }
+                } else if (navId === 'inventory-nav') {
+                    if (playerData.playerId) { showInventoryScreen(); }
+                    else { alert("Log in for inventory."); showScreen('login-screen'); }
+                } else if (navId === 'minigames-nav') {
+                    if (playerData.playerId && slimeData) { showMinigameSelectScreen(); }
+                    else if (playerData.playerId) { alert("Create slime first!"); showScreen('create-slime-screen'); }
+                    else { alert("Log in for minigames."); showScreen('login-screen'); }
+                } else if (navItem.classList.contains('store-category-nav')) {
+                    if (playerData.playerId) { showStoreScreen(category); } // Pass category to store
+                    else { alert("Log in for store."); showScreen('login-screen'); }
+                }
+            });
+        }
+
+        const minigameSelectScreen = document.getElementById('minigame-select-screen');
+        if(minigameSelectScreen) minigameSelectScreen.addEventListener('click', handleMinigameSelect);
+        
+        const mainElement = document.querySelector('main');
+        if(mainElement) mainElement.addEventListener('click', (event) => {
+            const backBtn = event.target.closest('.minigame-back-btn');
+            if (!backBtn) return;
+            const targetScreenId = backBtn.dataset.target;
+            if (targetScreenId) {
+                endCurrentMinigame(false); 
+                showScreen(targetScreenId); 
+            }
+        });
+    }
+
+    function setActiveNav() { 
+        // For left nav, we won't try to set 'active' from slimegame.html as those are external.
+        // The target pages (index.html, loveletters.html) would handle their own active states.
+
+        // For right nav, activate the "Slime" (game home) and "All" store category by default on load
+        const gameHomeNav = document.getElementById('game-home-nav');
+        if(gameHomeNav) gameHomeNav.classList.add('active'); 
+        
+        const storeAllCategory = document.querySelector('.nav-container-right .nav-item[data-category="all"]');
+        if(storeAllCategory) storeAllCategory.classList.add('active');
+    }
+
+    function createHearts() { /* ... same ... */ const c=document.getElementById('hearts-container');if(!c)return;c.innerHTML='';for(let i=0;i<20;i++){const h=document.createElement('div');h.className='heart';h.innerHTML='❤️';h.style.left=`${Math.random()*100}vw`;h.style.animationDuration=`${15+Math.random()*10}s`;h.style.animationDelay=`${Math.random()*5}s`;h.style.fontSize=`${20+Math.random()*20}px`;c.appendChild(h);}}
+
+    window.addEventListener('load', () => { createHearts(); setupEventListeners(); initializeGame(); });
+    window.addEventListener('beforeunload', e => { if (slimeData && playerData.playerId) { saveSlimeData(); } });
 </script>
 </body>
-</html> 
+</html>
