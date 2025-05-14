@@ -1,0 +1,2785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slime Tamagotchi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        /* ===== GENERAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1a1c2;
+            color: #333;
+            min-height: 100vh;
+            padding-left: 100px;
+            text-align: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ===== KUROMI NAVIGATION BAR ===== */
+        .nav-container {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100px;
+            background-color: #2a0a3a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            z-index: 1000;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+            border-right: 3px solid #ff9ec6;
+        }
+
+        .nav-item {
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            margin: 5px 0; /* Adjusted margin */
+            color: white;
+            font-size: 0.8em; /* Adjusted font size */
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer; /* Added cursor pointer */
+        }
+
+        .nav-item img {
+            width: 45px; /* Adjusted image size */
+            height: 45px; /* Adjusted image size */
+            object-fit: contain;
+            margin-bottom: 5px; /* Adjusted margin */
+        }
+
+        .nav-item:hover {
+            background-color: #9b4d96;
+            transform: scale(1.05);
+        }
+
+        .active {
+            background-color: #ff66a3;
+            font-weight: bold;
+        }
+
+        /* ===== MAIN CONTENT WRAPPER ===== */
+        .page-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* ===== HEADER STYLES ===== */
+        header {
+            background-color: #9b4d96;
+            color: white;
+            padding: 20px;
+            font-size: 2em;
+            text-transform: uppercase;
+            font-weight: bold;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* ===== MAIN CONTENT STYLES ===== */
+        main {
+            width: 100%;
+            padding: 40px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+            position: relative;
+            min-height: 500px; /* Give main a min height */
+            display: flex; /* Use flexbox for main content */
+            flex-direction: column; /* Arrange content vertically */
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+        }
+
+        /* Hide all game screens by default */
+        .game-screen-container {
+            display: none; /* Hide by default */
+            width: 100%; /* Take full width of main */
+            text-align: center; /* Center content inside */
+        }
+
+        /* Make the active screen visible */
+        .game-screen-container.active-screen {
+            display: block;
+        }
+
+
+        /* ===== TEXT STYLES ===== */
+        .celebration-status {
+            font-family: 'Pacifico', cursive;
+            font-size: 2em;
+            color: #e91e63;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .birthday-message {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #9b4d96;
+            font-weight: 600;
+        }
+
+        .birthday-submessage {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        /* ===== SLIME TAMAGOTCHI STYLES ===== */
+        /* Removed slime-game-container, screens are now direct children of main */
+        /* Styles for login/create/game/store/inventory screens */
+        .login-container, .create-slime-container, .game-screen, .store-screen, .inventory-screen, .minigame-select-screen, .minigame-container {
+             max-width: 600px;
+             margin: 0 auto;
+             padding: 20px;
+             background-color: #fff8fa;
+             border-radius: 15px;
+             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+             border: 3px solid #f5a9bc;
+             width: 100%; /* Take full width of parent */
+             display: flex; /* Use flex for internal layout */
+             flex-direction: column; /* Stack content vertically */
+             align-items: center; /* Center horizontally */
+        }
+
+        .game-title {
+            font-family: 'Pacifico', cursive;
+            color: #9b4d96;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .login-container, .create-slime-container {
+             /* Add specific styles if needed */
+        }
+
+        .login-form, .slime-form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%; /* Ensure forms take available width */
+        }
+
+        #username-input, #slime-name-input {
+            padding: 12px 20px;
+            border: 2px solid #f5a9bc;
+            border-radius: 30px;
+            font-size: 1.1em;
+            width: 100%;
+            max-width: 300px; /* Kept max-width for input fields */
+            margin-bottom: 15px;
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            outline: none;
+        }
+
+        #username-input:focus, #slime-name-input:focus {
+            border-color: #9b4d96;
+            box-shadow: 0 0 8px rgba(155, 77, 150, 0.4);
+        }
+
+        .color-picker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .color-picker span {
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #9b4d96;
+        }
+
+        #slime-color-input {
+            width: 80px;
+            height: 80px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        #slime-color-input::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+            padding: 0;
+        }
+
+        #slime-color-input::-webkit-color-swatch-wrapper {
+            border: none;
+            border-radius: 50%;
+            padding: 0;
+        }
+
+        .login-button, .create-slime-button {
+            background-color: #9b4d96;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .login-button:hover, .create-slime-button:hover {
+            background-color: #7c3c79;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+
+        /* Game screen specific adjustments */
+        .game-screen {
+             justify-content: flex-start; /* Align content to top */
+             padding-top: 40px; /* Add padding at top */
+        }
+
+         .currency-display {
+             font-size: 1.3em;
+             font-weight: 600;
+             color: #2a0a3a;
+             margin-bottom: 20px;
+         }
+
+        .slime-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            overflow: hidden; /* Ensure equipped items don't overflow */
+            cursor: pointer; /* Add cursor for tapping games */
+        }
+
+        .slime {
+            width: 100%;
+            height: 80%;
+            background-color: var(--slime-color, #88ff88);
+            border-radius: 50% 50% 40% 40%;
+            position: relative;
+            animation: slimeBounce 2s infinite alternate ease-in-out;
+            z-index: 5; /* Ensure slime is above shadow */
+        }
+
+        /* Equipped Item Styles */
+        .equipped-item {
+             position: absolute;
+             object-fit: contain;
+             z-index: 6; /* Above slime */
+        }
+
+        .equipped-hat {
+            width: 80px; /* Adjust size as needed */
+            height: 80px; /* Adjust size as needed */
+            top: -20px; /* Position above slime head */
+            left: calc(50% - 40px); /* Center horizontally */
+        }
+
+        .equipped-background {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1; /* Behind the slime and shadow */
+            /* background-size: cover; /* Or contain */
+            /* background-position: center; */
+        }
+         /* Use img tag for background */
+        .equipped-background img {
+             width: 100%;
+             height: 100%;
+             object-fit: cover; /* Or 'contain' depending on desired effect */
+             display: block; /* Remove extra space below image */
+        }
+
+
+        .slime::before {
+            content: '';
+            position: absolute;
+            width: 40%;
+            height: 35%;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            top: 15%;
+            left: 10%;
+        }
+
+        .eyes {
+            position: absolute;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            top: 40%;
+            z-index: 7; /* Above hat if hat covers eyes */
+        }
+
+        .eye {
+            width: 14px;
+            height: 14px;
+            background: black;
+            border-radius: 50%;
+        }
+
+        .mouth {
+            position: absolute;
+            width: 30px;
+            height: 10px;
+            background: black;
+            border-radius: 25px;
+            bottom: 25%;
+            left: calc(50% - 15px);
+             z-index: 7; /* Above hat */
+        }
+
+        [data-mood="happy"] .mouth {
+            height: 10px;
+            border-radius: 0 0 20px 20px;
+            background: transparent;
+            border-bottom: 3px solid black;
+        }
+
+        [data-mood="hungry"] .mouth {
+            height: 10px;
+            border-radius: 20px 20px 0 0;
+            background: transparent;
+            border-top: 3px solid black;
+            bottom: 22%;
+        }
+
+        [data-mood="tired"] .mouth {
+            width: 20px;
+            height: 2px;
+            background: black;
+            left: calc(50% - 10px);
+            bottom: 25%;
+        }
+
+        [data-mood="sick"] .mouth {
+            height: 10px;
+            border-radius: 20px 20px 0 0;
+            background: transparent;
+            border-top: 3px solid black;
+            transform: rotate(180deg);
+            bottom: 22%;
+        }
+
+        @keyframes slimeBounce {
+            0% { transform: translateY(0) scale(1, 0.95); }
+            100% { transform: translateY(-5px) scale(0.95, 1.05); }
+        }
+
+        .slime-shadow {
+            width: 80%;
+            height: 15px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            z-index: 4; /* Between background and slime */
+        }
+
+        .slime-name {
+            font-family: 'Pacifico', cursive;
+            font-size: 1.5em;
+            color: #9b4d96;
+            margin: 10px 0;
+        }
+
+        .slime-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+            width: 100%; /* Ensure stats take full width */
+        }
+
+        .stat-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .stat-label {
+            font-weight: 600;
+            color: #9b4d96;
+            margin-bottom: 5px;
+        }
+
+        .stat-bar {
+            width: 100%;
+            height: 15px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background-color: #9b4d96;
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            background-color: #f5a9bc;
+            color: #2a0a3a;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .action-btn:hover {
+            background-color: #e91e63;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Store/Inventory/Minigame Select Screens */
+        .store-screen, .inventory-screen, .minigame-select-screen {
+            /* Basic flex layout for screens */
+            align-items: flex-start; /* Align items to the start (left) */
+            padding-top: 30px;
+        }
+
+        .screen-title {
+             font-family: 'Pacifico', cursive;
+             color: #9b4d96;
+             font-size: 1.6em;
+             margin-bottom: 20px;
+             text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+             width: 100%; /* Title takes full width */
+             text-align: center; /* Center the title */
+        }
+
+        .store-items-list, .inventory-items-list {
+             width: 100%;
+             list-style: none; /* Remove list bullets */
+             padding: 0;
+             margin: 0;
+             display: flex;
+             flex-wrap: wrap; /* Allow items to wrap */
+             gap: 15px; /* Space between items */
+             justify-content: center; /* Center items */
+        }
+
+        .item-card {
+            background-color: #fff0f5;
+            border: 2px solid #ffb1cc;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            width: 120px; /* Fixed width for item cards */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .item-card img {
+            width: 60px; /* Size for item icons/previews */
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 8px;
+        }
+
+         /* Placeholder/visual for color items */
+        .item-color-preview {
+             width: 60px;
+             height: 60px;
+             border-radius: 50%;
+             margin-bottom: 8px;
+             border: 1px solid #ccc; /* Add slight border */
+        }
+
+
+        .item-name {
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            color: #2a0a3a;
+        }
+
+        .item-price {
+            font-size: 0.8em;
+            color: #e91e63;
+            margin-bottom: 10px;
+        }
+
+        .buy-btn, .equip-btn {
+            background-color: #ffb1cc;
+            color: #2a0a3a;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+
+        .buy-btn:hover, .equip-btn:hover {
+            background-color: #ff9ec6;
+        }
+
+        /* Inventory specific styles */
+        .inventory-item-card {
+             /* Share styles with item-card but potentially adjust */
+             background-color: #ffe6f0; /* Slightly different background */
+             border-color: #ffcce0;
+        }
+
+        .inventory-item-card .item-quantity {
+             font-size: 0.9em;
+             color: #9b4d96;
+             margin-bottom: 5px;
+        }
+
+        .inventory-item-card .equip-btn {
+            /* Styles for equip button */
+        }
+
+         .item-card .equipped-status {
+             font-size: 0.8em;
+             font-weight: bold;
+             color: green; /* Or another color */
+             margin-top: 5px;
+         }
+
+
+        /* Minigame Select Screen */
+        .minigame-buttons {
+             display: flex;
+             flex-direction: column; /* Stack buttons */
+             gap: 15px;
+             width: 80%; /* Limit width */
+             max-width: 300px; /* Max width */
+             margin-top: 20px;
+        }
+
+        .minigame-select-btn {
+             background-color: #9b4d96;
+             color: white;
+             border: none;
+             padding: 12px 30px;
+             font-size: 1.2em;
+             border-radius: 30px;
+             cursor: pointer;
+             transition: all 0.3s;
+             font-family: 'Poppins', sans-serif;
+             font-weight: 600;
+        }
+
+         .minigame-select-btn:hover {
+             background-color: #7c3c79;
+             transform: translateY(-3px);
+             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+         }
+
+
+        /* Individual Minigame Containers */
+         .minigame-container {
+             position: relative; /* Needed for absolute positioning of game elements */
+             overflow: hidden; /* Hide elements outside the container */
+             /* Specific dimensions for minigames */
+             width: 100%;
+             height: 400px; /* Fixed height for minigame area */
+             background-color: #e6f7ff; /* Light blue background for game area */
+             border: 3px solid #a9d8ff;
+         }
+
+        .minigame-info {
+             position: absolute;
+             top: 10px;
+             left: 10px;
+             text-align: left;
+             font-size: 1.1em;
+             font-weight: 600;
+             color: #2a0a3a;
+             z-index: 20; /* Above game elements */
+        }
+
+         .minigame-score { margin-bottom: 5px; }
+
+         .minigame-timer { color: #e91e63; }
+
+         .minigame-message {
+             position: absolute;
+             top: 50%;
+             left: 50%;
+             transform: translate(-50%, -50%);
+             font-size: 2em;
+             font-family: 'Pacifico', cursive;
+             color: #9b4d96;
+             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+             z-index: 25; /* Above everything */
+             display: none; /* Hidden initially */
+         }
+
+
+         /* Minigame Specific Elements */
+
+         /* Bubble Pop / Falling Food */
+         .minigame-target {
+             position: absolute;
+             width: 40px; /* Size of bubbles/food */
+             height: 40px;
+             object-fit: contain;
+             cursor: pointer;
+             z-index: 10; /* Above background, below info/message */
+         }
+
+         .minigame-target.food {
+             /* Specific food icon/style */
+             background: url('https://i.imgur.com/ExampleFood.png') center/contain no-repeat; /* Replace with actual food URL */
+         }
+         .minigame-target.bubble {
+             /* Specific bubble icon/style */
+              width: 30px;
+              height: 30px;
+              background-color: rgba(155, 77, 150, 0.5); /* Semi-transparent purple */
+              border-radius: 50%;
+              border: 2px solid rgba(255,255,255,0.8);
+              box-shadow: inset 5px 5px 10px rgba(255,255,255,0.3);
+              /* Add simple bubble float animation */
+              animation: bubbleFloat linear infinite; /* Name, duration, timing, iteration */
+              animation-duration: 8s; /* Example duration */
+         }
+
+         @keyframes bubbleFloat {
+             0% { transform: translateY(100%); }
+             100% { transform: translateY(-10%); } /* Float upwards */
+         }
+
+
+         /* Game End/Results */
+         .minigame-results {
+              margin-top: 20px;
+              font-size: 1.3em;
+              color: #2a0a3a;
+              display: none; /* Hidden initially */
+         }
+
+         .minigame-results p { margin-bottom: 10px; }
+
+         .minigame-back-btn {
+             margin-top: 20px;
+             background-color: #f5a9bc;
+             color: #2a0a3a;
+             border: none;
+             padding: 10px 20px;
+             border-radius: 20px;
+             font-size: 1em;
+             cursor: pointer;
+             transition: all 0.3s;
+             font-family: 'Poppins', sans-serif;
+             font-weight: 600;
+         }
+
+         .minigame-back-btn:hover {
+             background-color: #e91e63;
+             color: white;
+         }
+
+
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 2000;
+            display: none;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(155, 77, 150, 0.2);
+            border-radius: 50%;
+            border-top-color: #9b4d96;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 15px;
+            color: #9b4d96;
+            font-weight: 600;
+        }
+
+        /* ===== DECORATIVE ELEMENTS ===== */
+        .bow {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('https://i.imgur.com/tA7aPg4.png') center/contain no-repeat;
+            z-index: 10;
+        }
+
+        .hearts-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            color: #f5a9bc;
+            font-size: 30px;
+            opacity: 0.7;
+            animation: floatUp 15s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        /* ===== POSITIONING FOR BOWS ===== */
+        .header-bow-left { top: -15px; left: -15px; }
+        .header-bow-right { top: -15px; right: -15px; }
+        .main-bow-tl { top: -15px; left: -15px; }
+        .main-bow-tr { top: -15px; right: -15px; }
+        .main-bow-bl { bottom: -15px; left: -15px; }
+        .main-bow-br { bottom: -15px; right: -15px; }
+
+        /* ===== RESPONSIVE STYLES ===== */
+        @media (max-width: 768px) {
+            body {
+                padding-left: 80px;
+            }
+            .nav-container {
+                width: 80px;
+            }
+            .nav-item {
+                font-size: 0.7em; /* Further adjusted for smaller screens */
+                padding: 10px 0; /* Adjusted padding */
+                margin: 3px 0; /* Adjusted margin */
+            }
+             .nav-item img {
+                width: 35px; /* Adjusted image size */
+                height: 35px; /* Adjusted image size */
+                margin-bottom: 3px; /* Adjusted margin */
+            }
+
+            header {
+                font-size: 1.5em; /* Adjusted size */
+                padding: 12px;
+            }
+            main {
+                padding: 20px;
+                min-height: 400px; /* Adjusted min height */
+            }
+
+            .game-screen-container, .login-container, .create-slime-container, .store-screen, .inventory-screen, .minigame-select-screen, .minigame-container {
+                padding: 15px; /* Adjusted padding */
+            }
+
+            .game-title {
+                font-size: 1.5em; /* Adjusted size */
+            }
+
+            #username-input, #slime-name-input {
+                 max-width: 250px; /* Adjusted max-width */
+                 padding: 10px 15px; /* Adjusted padding */
+                 font-size: 1em; /* Adjusted size */
+            }
+
+            .login-button, .create-slime-button, .minigame-select-btn {
+                padding: 10px 20px;
+                font-size: 1em;
+            }
+
+             .currency-display {
+                font-size: 1.1em; /* Adjusted size */
+             }
+
+            .slime-container {
+                width: 150px; /* Adjusted size */
+                height: 150px; /* Adjusted size */
+            }
+
+             .slime {
+                /* Adjust slime relative size if needed */
+             }
+
+             .equipped-hat {
+                 width: 60px; /* Adjusted size */
+                 height: 60px;
+                 top: -15px;
+                 left: calc(50% - 30px);
+             }
+             .equipped-background {
+                /* Adjust as needed */
+             }
+
+
+            .slime-name {
+                font-size: 1.2em;
+            }
+             .slime-stats {
+                 margin: 15px 0;
+             }
+             .stat-label {
+                 font-size: 0.9em;
+             }
+
+            .actions {
+                flex-direction: row; /* Keep row layout for actions if space allows */
+                justify-content: center;
+                gap: 8px; /* Smaller gap */
+                 margin-top: 15px;
+            }
+             .action-btn {
+                 padding: 8px 15px;
+                 font-size: 0.9em;
+             }
+
+            .store-items-list, .inventory-items-list {
+                 gap: 10px; /* Smaller gap */
+            }
+
+            .item-card {
+                width: 100px; /* Adjusted size */
+                padding: 8px;
+            }
+            .item-card img, .item-color-preview {
+                width: 50px; /* Adjusted size */
+                height: 50px;
+            }
+             .item-name, .item-quantity {
+                font-size: 0.8em; /* Adjusted size */
+             }
+             .item-price {
+                font-size: 0.7em; /* Adjusted size */
+             }
+             .buy-btn, .equip-btn {
+                 padding: 4px 8px;
+                 font-size: 0.7em;
+             }
+
+             .minigame-container {
+                 height: 300px; /* Adjusted height */
+             }
+
+             .minigame-info {
+                 font-size: 0.9em; /* Adjusted size */
+             }
+
+             .minigame-message {
+                 font-size: 1.5em; /* Adjusted size */
+             }
+
+             .minigame-target {
+                 width: 30px; /* Adjusted size */
+                 height: 30px;
+             }
+
+             .minigame-back-btn {
+                 padding: 8px 15px;
+                 font-size: 0.9em;
+             }
+
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loading-text">Loading...</div>
+    </div>
+
+    <!-- Floating Hearts -->
+    <div class="hearts-container" id="hearts-container"></div>
+
+    <!-- Navigation -->
+    <div class="nav-container">
+        <!-- Renamed to home-nav, etc. for clarity in JS handling -->
+        <div class="nav-item" id="home-nav">
+            <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home">
+            Home
+        </div>
+        <!-- Add new nav items for Store, Inventory, Minigames -->
+        <div class="nav-item" id="store-nav">
+             <img src="https://i.imgur.com/StoreIcon.png" alt="Store"> <!-- Replace with actual store icon -->
+             Store
+        </div>
+        <div class="nav-item" id="inventory-nav">
+             <img src="https://i.imgur.com/InventoryIcon.png" alt="Inventory"> <!-- Replace with actual inventory icon -->
+             Inventory
+        </div>
+         <div class="nav-item" id="minigames-nav">
+             <img src="https://i.imgur.com/MinigameIcon.png" alt="Minigames"> <!-- Replace with actual minigame icon -->
+             Minigames
+        </div>
+
+        <!-- Existing placeholder nav items (remove if not part of this game) -->
+        <!-- Leaving them commented out for now -->
+        <!--
+        <a href="loveletters.html" class="nav-item letters">
+            <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters">
+            Love Letters
+        </a>
+        <a href="lovecalculator.html" class="nav-item calculator">
+            <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator">
+            Love Calculator
+        </a>
+        <a href="movies.html" class="nav-item movies">
+            <img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker">
+            Movie Picker
+        </a>
+        <a href="bookdate.html" class="nav-item bookdate">
+            <img src="https://i.imgur.com/megzmKr.png" alt="Book a Date">
+            Book a Date
+        </a>
+        <a href="timezone.html" class="nav-item timezone">
+            <img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge">
+            Time Bridge
+        </a>
+        -->
+    </div>
+
+    <div class="page-wrapper">
+        <header>
+            Slime Tamagotchi 🌟
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-left">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-right">
+        </header>
+
+        <main>
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tl">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tr">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-bl">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-br">
+
+            <!-- --- Game Screens Container --- -->
+            <!-- All main game screens live inside here -->
+
+            <!-- Login screen -->
+            <div class="game-screen-container" id="login-screen">
+                <div class="login-container">
+                    <h2 class="game-title">Welcome to Slime Tamagotchi!</h2>
+                    <p>Enter your name to start caring for your virtual slime pet</p>
+                    <div class="login-form">
+                        <input type="text" id="username-input" placeholder="Your Name">
+                        <button class="login-button" id="login-button">Start Game</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create slime screen -->
+            <div class="game-screen-container" id="create-slime-screen">
+                 <div class="create-slime-container">
+                    <h2 class="game-title">Create Your Slime Friend!</h2>
+                    <p>Give your slime a name and choose its color</p>
+                    <div class="slime-form">
+                        <input type="text" id="slime-name-input" placeholder="Name your slime">
+                        <div class="color-picker">
+                            <span>Choose a color:</span>
+                            <input type="color" id="slime-color-input" value="#88ff88">
+                        </div>
+                        <button class="create-slime-button" id="create-slime-button">Create Slime</button>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- Main Game screen -->
+            <div class="game-screen-container" id="game-screen">
+                <div class="game-screen">
+                     <div class="currency-display" id="currency-display">Coins: 0</div> <!-- Currency Display -->
+                    <h2 class="game-title" id="game-slime-name">Your Slime Pet</h2>
+
+                    <!-- Slime display -->
+                    <div class="slime-container" id="main-slime-container">
+                        <!-- Equipped Background goes here -->
+                        <div class="equipped-background" id="equipped-background"></div>
+                        <div class="slime" id="slime" data-mood="happy">
+                             <!-- Equipped Hat goes here -->
+                             <img src="" class="equipped-item equipped-hat" id="equipped-hat" style="display: none;">
+                            <div class="eyes">
+                                <div class="eye"></div>
+                                <div class="eye"></div>
+                            </div>
+                            <div class="mouth"></div>
+                        </div>
+                        <div class="slime-shadow"></div>
+                    </div>
+
+                    <div class="slime-name" id="slime-name-display">Gooey</div> <!-- Updated ID -->
+
+                    <!-- Stats display -->
+                    <div class="slime-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Hunger</span>
+                            <div class="stat-bar">
+                                <div class="stat-fill" id="hunger-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Happiness</span>
+                            <div class="stat-bar">
+                                <div class="stat-fill" id="happiness-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Health</span>
+                            <div class="stat-bar">
+                                <div class="stat-fill" id="health-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Energy</span>
+                            <div class="stat-bar">
+                                <div class="stat-fill" id="energy-fill" style="width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="actions">
+                        <button class="action-btn" id="feed-btn">Feed 🍎</button>
+                        <button class="action-btn" id="play-btn">Play 🎾</button>
+                        <button class="action-btn" id="clean-btn">Clean 🧼</button>
+                        <button class="action-btn" id="sleep-btn">Sleep 😴</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Store screen -->
+            <div class="game-screen-container" id="store-screen">
+                 <div class="store-screen">
+                    <h2 class="screen-title">Slime Shop</h2>
+                     <div class="currency-display" id="store-currency-display">Coins: 0</div> <!-- Currency Display for Store -->
+                    <ul class="store-items-list" id="store-items-list">
+                        <!-- Store items will be loaded and displayed here by JavaScript -->
+                        <li>Loading store items...</li>
+                    </ul>
+                 </div>
+            </div>
+
+            <!-- Inventory screen -->
+            <div class="game-screen-container" id="inventory-screen">
+                 <div class="inventory-screen">
+                     <h2 class="screen-title">My Inventory</h2>
+                     <div class="currency-display" id="inventory-currency-display">Coins: 0</div> <!-- Currency Display for Inventory -->
+                     <ul class="inventory-items-list" id="inventory-items-list">
+                        <!-- Player inventory items will be loaded and displayed here by JavaScript -->
+                         <li>Loading inventory...</li>
+                     </ul>
+                 </div>
+            </div>
+
+             <!-- Minigame Select screen -->
+            <div class="game-screen-container" id="minigame-select-screen">
+                 <div class="minigame-select-screen">
+                     <h2 class="screen-title">Play Minigames</h2>
+                     <p>Earn coins by playing fun games with your slime!</p>
+                     <div class="minigame-buttons">
+                         <button class="minigame-select-btn" data-game="tapper">Slime Tapper</button>
+                         <button class="minigame-select-btn" data-game="bubble">Slime Bubble Pop</button>
+                         <button class="minigame-select-btn" data-game="feed">Feed The Slime</button>
+                     </div>
+                 </div>
+            </div>
+
+             <!-- Minigame containers -->
+             <!-- Each minigame has its own container, shown one at a time -->
+
+            <!-- Slime Tapper Minigame -->
+             <div class="game-screen-container" id="minigame-tapper-screen">
+                 <div class="minigame-container">
+                     <h2 class="screen-title">Slime Tapper!</h2>
+                     <div class="minigame-info">
+                         <p class="minigame-timer" id="tapper-timer">Time: 0</p>
+                         <p class="minigame-score" id="tapper-score">Taps: 0</p>
+                     </div>
+                      <!-- Slime area (can reuse main slime container visual styles) -->
+                     <div class="slime-container" id="tapper-slime-area">
+                         <div class="slime" data-mood="happy">
+                             <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+                             <div class="mouth"></div>
+                         </div>
+                         <div class="slime-shadow"></div>
+                     </div>
+                     <p class="minigame-message" id="tapper-message"></p>
+                     <div class="minigame-results" id="tapper-results">
+                         <p id="tapper-final-score"></p>
+                         <p id="tapper-coins-earned"></p>
+                         <button class="minigame-back-btn" data-target="minigame-select-screen">Back to Games</button>
+                     </div>
+                 </div>
+             </div>
+
+             <!-- Slime Bubble Pop Minigame -->
+            <div class="game-screen-container" id="minigame-bubble-screen">
+                 <div class="minigame-container" id="bubble-game-area">
+                     <h2 class="screen-title">Bubble Pop!</h2>
+                      <div class="minigame-info">
+                         <p class="minigame-timer" id="bubble-timer">Time: 0</p>
+                         <p class="minigame-score" id="bubble-score">Popped: 0</p>
+                     </div>
+                     <!-- Bubbles will be added here by JS -->
+                      <p class="minigame-message" id="bubble-message"></p>
+                      <div class="minigame-results" id="bubble-results">
+                         <p id="bubble-final-score"></p>
+                         <p id="bubble-coins-earned"></p>
+                         <button class="minigame-back-btn" data-target="minigame-select-screen">Back to Games</button>
+                     </div>
+                 </div>
+             </div>
+
+             <!-- Feed The Slime Minigame -->
+             <div class="game-screen-container" id="minigame-feed-screen">
+                 <div class="minigame-container" id="feed-game-area">
+                     <h2 class="screen-title">Feed The Slime!</h2>
+                      <div class="minigame-info">
+                         <p class="minigame-timer" id="feed-timer">Time: 0</p>
+                         <p class="minigame-score" id="feed-score">Fed: 0</p>
+                     </div>
+                     <!-- Slime area (can reuse visual styles) -->
+                      <div class="slime-container" style="position: relative; margin: 0 auto; pointer-events: none;"> <!-- Disable clicking slime itself -->
+                          <div class="slime" data-mood="happy">
+                             <div class="eyes"><div class="eye"></div><div class="eye"></div></div>
+                             <div class="mouth"></div>
+                         </div>
+                         <div class="slime-shadow"></div>
+                      </div>
+                     <!-- Food targets will appear here by JS -->
+                     <p class="minigame-message" id="feed-message"></p>
+                     <div class="minigame-results" id="feed-results">
+                         <p id="feed-final-score"></p>
+                         <p id="feed-coins-earned"></p>
+                         <button class="minigame-back-btn" data-target="minigame-select-screen">Back to Games</button>
+                     </div>
+                 </div>
+             </div>
+
+
+        </main>
+    </div>
+
+    <script>
+        // API Configuration
+        // !!! REPLACE THIS WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL !!!
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwC1_XxlYbZhb-vkg2GCS_k7uPRxqEwos-yfwfeEixaNGfWi_Q0DlFWPwOWDqIti8W-8A/exec';
+
+        // --- Game State Variables ---
+        let playerData = {
+            playerId: null,
+            username: null,
+            currency: 0 // Added currency
+        };
+        let slimeData = null; // Full data for the active slime
+        let inventoryData = []; // Array of items the player owns (from PlayerItems sheet)
+        let storeItems = []; // Array of all items in the store (from Items sheet)
+
+        // --- Game Loop Variables ---
+        let gameInterval; // Interval for stat decay/periodic save
+        const TICK_RATE = 5000; // 5 seconds per tick (visual decay update)
+        const STAT_DECREASE_RATE = 0.5; // Stats decrease by 0.5 per tick (visual decay)
+
+        // --- Minigame Variables ---
+        let minigameState = {
+            activeGame: null, // 'tapper', 'bubble', 'feed', or null
+            timer: null, // Interval for minigame timer countdown
+            timeLeft: 0,
+            score: 0,
+            gameElements: [] // Array to keep track of dynamically created minigame elements (bubbles, food)
+        };
+         const MINIGAME_DURATION = 30; // Seconds
+
+        // --- Utility Functions ---
+
+        // Fetch wrapper with loading indicator and error handling
+        async function fetchData(action, method = 'GET', data = null) {
+            showLoadingIndicator();
+            const url = new URL(API_URL);
+            url.searchParams.append('action', action);
+            // Add player ID to requests if available and needed
+            if (playerData.playerId && action !== 'createAccount' && action !== 'loadPlayer') {
+                 // For GET requests, add to params
+                 if (method === 'GET') {
+                    url.searchParams.append('playerId', playerData.playerId);
+                 }
+                 // For POST requests, it's expected to be in the data payload sent to script
+            }
+             // Add playerName to loadPlayer GET requests
+             if (action === 'loadPlayer' && data && data.playerName) {
+                 url.searchParams.append('playerName', data.playerName);
+             }
+
+
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // If method is POST and data exists, stringify it
+                body: (method === 'POST' && data) ? JSON.stringify({ action: action, data: data }) : null,
+            };
+
+            try {
+                const response = await fetch(url, options);
+                // Check if response is OK (status 200-299)
+                if (!response.ok) {
+                     const errorBody = await response.text(); // Get response body for more info
+                     throw new Error(`HTTP error! status: ${response.status}. Body: ${errorBody}`);
+                }
+                const result = await response.json(); // Assuming response is always JSON
+
+                if (result.success) {
+                    // Optional: Display success message from script
+                    // console.log('API Success:', result.message);
+                    // Update currency if the response includes it (most POST actions do, loadPlayer also)
+                    if (result.data && result.data.newCurrency !== undefined) { // Script provides newCurrency after earning/purchase
+                         playerData.currency = result.data.newCurrency;
+                         updateCurrencyDisplay();
+                     } else if (action === 'loadPlayer' && result.data && result.data.currency !== undefined) { // loadPlayer provides the total currency
+                          playerData.currency = result.data.currency;
+                           updateCurrencyDisplay();
+                     }
+
+
+                    return result.data; // Return the data part on success
+                } else {
+                    // Handle API reported error (success: false)
+                    console.error('API Error:', result.message);
+                    alert('Error: ' + result.message); // Show user-friendly error
+                    return null; // Indicate failure
+                }
+            } catch (error) {
+                console.error('Fetch Error:', error);
+                alert('Network Error or Script Failed. Check console.'); // Generic network error
+                return null; // Indicate failure
+            } finally {
+                hideLoadingIndicator();
+            }
+        }
+
+        // Show loading indicator
+        function showLoadingIndicator(message) {
+            document.getElementById('loading-text').textContent = message || 'Loading...';
+            document.getElementById('loading-overlay').style.display = 'flex';
+        }
+
+        // Hide loading indicator
+        function hideLoadingIndicator() {
+            document.getElementById('loading-overlay').style.display = 'none';
+        }
+
+         // --- Screen Management ---
+         // Updated to use .game-screen-container and .active-screen classes
+         function showScreen(screenId) {
+             // Hide all screens
+             document.querySelectorAll('.game-screen-container').forEach(screen => {
+                 screen.classList.remove('active-screen');
+             });
+             // Show the target screen
+             const targetScreen = document.getElementById(screenId);
+             if (targetScreen) {
+                 targetScreen.classList.add('active-screen');
+             } else {
+                 console.error("Screen not found:", screenId);
+             }
+
+             // Update active navigation item
+             document.querySelectorAll('.nav-item').forEach(item => {
+                 item.classList.remove('active');
+             });
+              // Determine which nav item corresponds to the screen
+             let activeNavId = null;
+             if (screenId === 'game-screen') activeNavId = 'home-nav';
+             else if (screenId === 'store-screen') activeNavId = 'store-nav';
+             else if (screenId === 'inventory-screen') activeNavId = 'inventory-nav';
+             else if (screenId === 'minigame-select-screen' || screenId.startsWith('minigame-') && screenId.endsWith('-screen')) activeNavId = 'minigames-nav';
+
+             if(activeNavId) {
+                 const activeNavElement = document.getElementById(activeNavId);
+                 if(activeNavElement) activeNavElement.classList.add('active');
+             }
+
+              // Stop any active minigame when changing screens away from it
+             if (minigameState.activeGame && !screenId.startsWith('minigame-')) {
+                 endCurrentMinigame(false); // End game without awarding points/saving
+             }
+
+         }
+
+
+        // --- Core Game Functions ---
+
+        // Initialize the game (Called on window load)
+        async function initializeGame() {
+            createHearts(); // Start floating hearts background
+            setActiveNav(); // Set initial active nav item (home)
+
+            // Check localStorage for player username
+            const savedUsername = localStorage.getItem('slimeGame_username');
+
+            if (savedUsername) {
+                // Attempt to load player data from script
+                showLoadingIndicator('Loading player...');
+                const data = await fetchData('loadPlayer', 'GET', { playerName: savedUsername }); // fetchData now handles playerName for loadPlayer
+
+                if (data && data.player) {
+                    // Player found and loaded
+                    playerData = data.player;
+                    slimeData = data.slime; // Slime data will be null if no active slime
+                    inventoryData = data.inventory || []; // Ensure it's an array
+                    // Currency is updated by fetchData wrapper because loadPlayer returns it
+
+
+                    localStorage.setItem('slimeGame_playerId', playerData.playerId); // Save playerId from backend
+                    localStorage.setItem('slimeGame_username', playerData.username); // Use username from backend
+
+                    if (slimeData) {
+                        // Player and Slime exist - Go to game screen
+                        showScreen('game-screen');
+                         startGameLoop(); // Start the game loop only on main game screen
+                    } else {
+                        // Player exists but has no slime - Go to create slime screen
+                        showScreen('create-slime-screen');
+                    }
+                } else {
+                     // Player not found on backend despite localStorage (e.g., sheet cleared)
+                    console.warn("Player data not found on backend despite localStorage. Starting fresh.");
+                     // Clear old local storage completely
+                     localStorage.removeItem('slimeGame_username');
+                     localStorage.removeItem('slimeGame_playerId');
+                     localStorage.removeItem('slimeGame_slimeData'); // Old data structure if any
+                     playerData = { playerId: null, username: null, currency: 0 }; // Reset local state
+                     slimeData = null;
+                     inventoryData = [];
+
+                     showScreen('login-screen'); // Go to login screen
+                }
+
+            } else {
+                // No username in localStorage, show login
+                showScreen('login-screen');
+            }
+        }
+
+        // Handle login (Called by login button)
+        async function handleLogin() {
+            const username = document.getElementById('username-input').value.trim();
+
+            if (!username) {
+                alert('Please enter your name');
+                return;
+            }
+
+            showLoadingIndicator('Checking account...');
+            const data = await fetchData('createAccount', 'POST', { username: username }); // Script handles finding existing or creating new
+
+            if (data && data.playerId) {
+                playerData.playerId = data.playerId;
+                playerData.username = data.username; // Use the username returned by the script
+                // Currency might be returned here for new accounts, or fetched by loadPlayer
+
+                localStorage.setItem('slimeGame_playerId', playerData.playerId);
+                localStorage.setItem('slimeGame_username', playerData.username);
+
+                 // After createAccount/login, load the rest of the player data (slime, inventory, etc.)
+                 showLoadingIndicator('Loading player data...');
+                 const loadData = await fetchData('loadPlayer', 'GET', { playerName: playerData.username });
+
+                 if(loadData && loadData.player) {
+                     playerData = loadData.player; // Use the player object from loadData
+                     slimeData = loadData.slime;
+                     inventoryData = loadData.inventory || [];
+                     // Currency updated by fetchData wrapper
+
+                     if (slimeData) {
+                         showScreen('game-screen');
+                         startGameLoop(); // Start game loop
+                     } else {
+                         showScreen('create-slime-screen');;
+                     }
+                 } else {
+                     // Should not happen if createAccount was successful, but handle defensively
+                     alert('Failed to load full player data after login.');
+                     console.error('Failed to load player after createAccount', loadData);
+                      // Reset state and go back to login
+                     localStorage.removeItem('slimeGame_username');
+                     localStorage.removeItem('slimeGame_playerId');
+                     playerData = { playerId: null, username: null, currency: 0 };
+                     slimeData = null;
+                     inventoryData = [];
+                     showScreen('login-screen');
+                 }
+
+            } else {
+                // Error handled by fetchData (e.g., network error, script error)
+                 // Stay on login screen, fetchData alert provides error info.
+            }
+        }
+
+        // Handle slime creation (Called by create slime button)
+        async function handleCreateSlime() {
+            const slimeName = document.getElementById('slime-name-input').value.trim();
+            const slimeColor = document.getElementById('slime-color-input').value;
+
+            if (!slimeName) {
+                alert('Please name your slime');
+                return;
+            }
+             if (!playerData.playerId) {
+                 alert('Player not logged in correctly. Please try logging in again.');
+                 console.error("Attempted to create slime without player ID.");
+                 initializeGame(); // Restart init process
+                 return;
+             }
+
+            showLoadingIndicator('Creating your slime...');
+            const data = await fetchData('createSlime', 'POST', {
+                playerId: playerData.playerId,
+                slimeName: slimeName,
+                slimeColor: slimeColor
+            });
+
+            if (data && data.slimeId) {
+                slimeData = data; // The script should return the new slime data object
+                 // Inventory/currency should already be loaded or initialized by createAccount/loadPlayer
+                 // We might need to explicitly fetch player inventory here if starter items are given on slime creation
+                 // and they are not returned by the createSlime endpoint.
+                 // For now, assume inventory doesn't change on slime creation (unless starter items logic is added)
+
+                showScreen('game-screen');
+                 startGameLoop(); // Start game loop
+            } else {
+                 // Error handled by fetchData
+                 // Stay on create slime screen
+            }
+        }
+
+        // Update slime display on screen
+        function updateSlimeDisplay() {
+            if (!slimeData) {
+                 // Hide slime related elements or show a "no slime" message
+                document.getElementById('main-slime-container').style.display = 'none';
+                document.getElementById('slime-name-display').textContent = 'No Slime Active';
+                // Check if elements exist before trying to access style
+                const slimeStatsElement = document.querySelector('.slime-stats');
+                const actionsElement = document.querySelector('.actions');
+                 if(slimeStatsElement) slimeStatsElement.style.display = 'none';
+                 if(actionsElement) actionsElement.style.display = 'none';
+
+                return;
+            }
+
+            // Ensure elements are visible
+            document.getElementById('main-slime-container').style.display = 'block';
+            const slimeStatsElement = document.querySelector('.slime-stats');
+            const actionsElement = document.querySelector('.actions');
+            if(slimeStatsElement) slimeStatsElement.style.display = 'flex'; // Or block/grid depending on CSS
+            if(actionsElement) actionsElement.style.display = 'flex'; // Or block/grid
+
+
+            document.getElementById('slime-name-display').textContent = slimeData.name;
+
+            // Update slime color using CSS variable
+            document.getElementById('slime').style.setProperty('--slime-color', slimeData.color);
+
+            // Update stat bars (clamp values between 0 and 100 just in case)
+            document.getElementById('hunger-fill').style.width = `${Math.max(0, Math.min(100, slimeData.hunger))}%`;
+            document.getElementById('happiness-fill').style.width = `${Math.max(0, Math.min(100, slimeData.happiness))}%`;
+            document.getElementById('health-fill').style.width = `${Math.max(0, Math.min(100, slimeData.health))}%`;
+            document.getElementById('energy-fill').style.width = `${Math.max(0, Math.min(100, slimeData.energy))}%`;
+
+            // Set mood based on stats
+            let mood = 'happy';
+            if (slimeData.hunger < 30) {
+                mood = 'hungry';
+            } else if (slimeData.energy < 30) {
+                mood = 'tired';
+            } else if (slimeData.health < 30) {
+                mood = 'sick'; // Or some other indicator for low health
+            } else if (slimeData.happiness < 30) {
+                 mood = 'sad'; // Add a sad mood if you have the CSS for it
+            }
+            document.getElementById('slime').dataset.mood = mood;
+
+            // Change stat bar colors based on values
+            const colorStats = [
+                { element: 'hunger-fill', value: slimeData.hunger },
+                { element: 'happiness-fill', value: slimeData.happiness },
+                { element: 'health-fill', value: slimeData.health },
+                { element: 'energy-fill', value: slimeData.energy }
+            ];
+
+            colorStats.forEach(stat => {
+                const element = document.getElementById(stat.element);
+                if (stat.value < 30) {
+                    element.style.backgroundColor = '#ff5252'; // Red for low
+                } else if (stat.value < 70) {
+                    element.style.backgroundColor = '#ffb142'; // Orange for medium
+                } else {
+                    element.style.backgroundColor = '#9b4d96'; // Purple for good
+                }
+            });
+
+            // Update equipped items display (Hat and Background)
+             updateEquippedItemsDisplay();
+
+        }
+
+        // Update equipped items visuals
+        function updateEquippedItemsDisplay() {
+            const equippedHatElement = document.getElementById('equipped-hat');
+            const equippedBackgroundElement = document.getElementById('equipped-background'); // This is a div, put img inside
+
+            if (!slimeData || !equippedHatElement || !equippedBackgroundElement) {
+                 console.warn("Missing elements or slimeData for equipped display update.");
+                 return;
+            }
+
+
+            // Find the hat and background items in the storeItems catalog for DataValue (Image URL/Color)
+            // We need the catalog loaded for this. It's loaded when visiting the store.
+            // A more robust way: ensure item details are included in inventoryData or fetch them here if needed.
+            // For now, assume storeItems has been loaded at least once.
+             if (storeItems.length === 0) {
+                  console.warn("Store items not loaded. Cannot display equipped items visuals.");
+                   // Hide any currently displayed equipped items
+                  equippedHatElement.style.display = 'none';
+                  equippedBackgroundElement.innerHTML = '';
+                  equippedBackgroundElement.style.display = 'none';
+                  return;
+             }
+
+
+            const hatDetails = storeItems.find(item => item.itemId === slimeData.hat && item.itemType === 'Hat');
+            const bgDetails = storeItems.find(item => item.itemId === slimeData.background && item.itemType === 'Background');
+             const colorDetails = storeItems.find(item => item.itemType === 'Color' && item.dataValue === slimeData.color); // Find color item by its dataValue
+
+
+            // Update Hat
+            if (hatDetails && hatDetails.dataValue) {
+                equippedHatElement.src = hatDetails.dataValue;
+                equippedHatElement.style.display = 'block';
+            } else {
+                equippedHatElement.src = '';
+                equippedHatElement.style.display = 'none';
+            }
+
+            // Update Background
+             if (bgDetails && bgDetails.dataValue) {
+                 // Remove any previous background img
+                 equippedBackgroundElement.innerHTML = '';
+                 const bgImg = document.createElement('img');
+                 bgImg.src = bgDetails.dataValue;
+                 bgImg.alt = 'Background';
+                 // Add a class for potential styling if needed
+                 // bgImg.className = 'equipped-background-img';
+                 equippedBackgroundElement.appendChild(bgImg);
+                 equippedBackgroundElement.style.display = 'block'; // Show the container div
+             } else {
+                  equippedBackgroundElement.innerHTML = ''; // Remove the image
+                  equippedBackgroundElement.style.display = 'none'; // Hide the container div
+             }
+
+             // Slime color is already handled in updateSlimeDisplay using slimeData.color
+
+
+        }
+
+
+        // Save slime data to backend (replaces localStorage save)
+        async function saveSlimeData() {
+            if (!slimeData || !playerData.playerId) {
+                console.warn("Cannot save slime data: Missing slime data or player ID.");
+                return null; // Indicate save did not happen
+            }
+
+            // Create an updates object containing all current slime stats/properties to save
+            const updates = {
+                // Include all columns you want to save
+                name: slimeData.name,
+                type: slimeData.type,
+                color: slimeData.color,
+                age: slimeData.age,
+                evolutionStage: slimeData.evolutionStage,
+                hunger: slimeData.hunger,
+                happiness: slimeData.happiness,
+                health: slimeData.health,
+                energy: slimeData.energy,
+                intelligence: slimeData.intelligence,
+                strength: slimeData.strength,
+                agility: slimeData.agility,
+                lastCared: new Date().toISOString(), // Update last cared time on save
+                hat: slimeData.hat, // Save equipped hat ItemID
+                background: slimeData.background // Save equipped background ItemID
+                // Add any other stats/properties here
+            };
+
+            // Update local slimeData.lastCared immediately so decay calculation is based on now
+            slimeData.lastCared = updates.lastCared;
+
+            // Send the update request to the script
+            // Use fetchData directly, it handles loading indicator and success check
+            const result = await fetchData('updateSlime', 'POST', {
+                slimeId: slimeData.slimeId,
+                updates: updates // Send the updates object
+            });
+
+            if (result) {
+                console.log("Slime data saved to backend.");
+                 // Optional: Update local slimeData with returned data in case script changed anything
+                 // slimeData = result; // Assuming script returns the full updated slime object
+                return true; // Indicate success
+            } else {
+                console.error("Failed to save slime data to backend.");
+                return false; // Indicate failure
+            }
+        }
+
+
+        // Game loop (primarily for periodic saving and visual decay)
+        function startGameLoop() {
+            // Clear any existing interval before starting a new one
+            if (gameInterval) {
+                clearInterval(gameInterval);
+            }
+
+             // Initial display update based on loaded data
+             updateSlimeDisplay();
+             updateCurrencyDisplay(); // Make sure currency is displayed when entering game screen
+
+            // Start the interval for periodic updates
+            gameInterval = setInterval(() => {
+                 // Calculate decay visually based on local timer
+                 calculateAndApplyDecay();
+
+                 // Save data to backend periodically
+                saveSlimeData();
+
+            }, 60000); // Save and apply visual decay tick every 60 seconds (adjust as needed)
+        }
+
+         // Function to calculate and apply decay locally for display updates
+         // Note: The authoritative decay calculation should happen on the backend
+         // when loading data based on the actual time elapsed since last save.
+         // This client-side decay simulation is just for visual feedback while game is open.
+         function calculateAndApplyDecay() {
+             if (!slimeData) return;
+
+             // This calculation is more complex to do purely client-side accurately
+             // without knowing exactly when the last tick happened.
+             // A simpler approach for visual decay: decrease stats by a fixed amount
+             // each tick, but make sure the backend is the source of truth on load/save.
+             // Let's use a simpler per-interval decay for visual effect:
+
+             const decayAmount = STAT_DECREASE_RATE * (60000 / 1000); // Decay per minute based on per-second rate
+
+             slimeData.hunger = Math.max(0, slimeData.hunger - decayAmount);
+             slimeData.happiness = Math.max(0, slimeData.happiness - decayAmount);
+             slimeData.energy = Math.max(0, slimeData.energy - decayAmount);
+
+             // Health decreases if other stats are low
+             if (slimeData.hunger < 30 || slimeData.happiness < 30) {
+                 slimeData.health = Math.max(0, slimeData.health - (decayAmount * 0.5)); // Health decays slower
+             }
+
+             updateSlimeDisplay(); // Update display after local decay calc
+
+             // Importantly: the backend's load/save logic must apply decay based on *real time* elapsed.
+
+         }
+
+
+        // --- Action Functions (Feed, Play, Clean, Sleep) ---
+        // Modified to also earn currency and save data via API
+
+        async function performCareAction(actionType, statIncreases, currencyAmount) {
+            if (!slimeData || !playerData.playerId) {
+                console.warn("Cannot perform action: Missing slime data or player ID.");
+                alert("Please log in or create a slime first.");
+                // Potentially redirect to login/create
+                 initializeGame();
+                return;
+            }
+
+             // Apply stats changes locally for immediate feedback
+             // Apply decay *before* increasing stats for accuracy
+             calculateAndApplyDecay(); // Apply any decay since last visual tick
+
+            if (statIncreases.hunger !== undefined) slimeData.hunger = Math.min(100, slimeData.hunger + statIncreases.hunger);
+            if (statIncreases.happiness !== undefined) slimeData.happiness = Math.min(100, slimeData.happiness + statIncreases.happiness);
+            if (statIncreases.health !== undefined) slimeData.health = Math.min(100, slimeData.health + statIncreases.health);
+            if (statIncreases.energy !== undefined) slimeData.energy = Math.min(100, slimeData.energy + statIncreases.energy);
+
+            updateSlimeDisplay(); // Update display immediately
+
+            // Save updated stats to backend + update lastCared time on backend
+            const saveSuccess = await saveSlimeData(); // saveSlimeData sends current stats to backend and updates backend lastCared
+
+            // Earn currency via backend
+            if (saveSuccess && currencyAmount > 0) {
+                 // Loading indicator handled by fetchData inside earnCurrency
+                const currencyResult = await fetchData('earnCurrency', 'POST', {
+                    playerId: playerData.playerId,
+                    amount: currencyAmount
+                });
+                // currencyData and display updated by fetchData wrapper if successful
+                if (currencyResult && currencyResult.newCurrency !== undefined) {
+                     alert(`Earned ${currencyAmount} coins!`);
+                 } else {
+                     // Error handled by fetchData, just a fallback alert
+                     // alert("Failed to earn coins.");
+                 }
+            } else if (!saveSuccess) {
+                 alert("Failed to save slime stats after action."); // Inform player if save failed
+            }
+
+             // Final display update after all async calls complete (optional, usually already done)
+             // updateSlimeDisplay(); // Stats already updated locally
+             // updateCurrencyDisplay(); // Updated by fetchData wrapper
+        }
+
+
+        function feedSlime() {
+            performCareAction('feed', { hunger: 30, health: 5 }, 10); // +30 Hunger, +5 Health, Earn 10 coins
+        }
+
+        function playWithSlime() {
+             performCareAction('play', { happiness: 30, energy: -10, hunger: -5 }, 15); // +30 Happiness, -10 Energy, -5 Hunger, Earn 15 coins
+        }
+
+        function cleanSlime() {
+             performCareAction('clean', { health: 20, happiness: 5 }, 10); // +20 Health, +5 Happiness, Earn 10 coins
+        }
+
+        function sleepSlime() {
+             performCareAction('sleep', { energy: 40, health: 10, happiness: -5 }, 5); // +40 Energy, +10 Health, -5 Happiness, Earn 5 coins
+        }
+
+
+        // --- Currency Display ---
+        function updateCurrencyDisplay() {
+             // Find all elements that display currency and update them
+             document.getElementById('currency-display').textContent = `Coins: ${playerData.currency || 0}`;
+             const storeCurrencyElement = document.getElementById('store-currency-display');
+             if(storeCurrencyElement) storeCurrencyElement.textContent = `Coins: ${playerData.currency || 0}`;
+             const inventoryCurrencyElement = document.getElementById('inventory-currency-display');
+             if(inventoryCurrencyElement) inventoryCurrencyElement.textContent = `Coins: ${playerData.currency || 0}`;
+        }
+
+
+        // --- Store Functions ---
+
+        async function showStoreScreen() {
+             // Save current slime state before leaving game screen
+             if (document.getElementById('game-screen').classList.contains('active-screen') && slimeData) {
+                await saveSlimeData(); // Use await here to ensure save finishes before loading store
+             }
+             showLoadingIndicator('Loading store...');
+             // Fetch all items from the backend (this is the store catalog)
+            const items = await fetchData('getStoreItems', 'GET');
+
+            if (items) {
+                storeItems = items; // Store the catalog
+                renderStoreItems(); // Display them
+                updateCurrencyDisplay(); // Ensure currency is shown correctly
+                showScreen('store-screen'); // Switch screen
+            } else {
+                // Error handled by fetchData
+                 alert("Failed to load store items.");
+                 showScreen('game-screen'); // Go back to game screen or other default
+            }
+        }
+
+        function renderStoreItems() {
+            const itemListElement = document.getElementById('store-items-list');
+            if (!itemListElement) {
+                 console.error("Store items list element not found.");
+                 return;
+            }
+            itemListElement.innerHTML = ''; // Clear current list
+
+            if (!storeItems || storeItems.length === 0) {
+                itemListElement.innerHTML = '<li>No items available in the store.</li>';
+                return;
+            }
+
+            storeItems.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.className = 'item-card';
+                listItem.dataset.itemId = item.itemId; // Store item ID on the element
+
+                let itemVisualHTML = '';
+                if (item.itemType === 'Color' && item.dataValue) {
+                    // For colors, show a color circle
+                    itemVisualHTML = `<div class="item-color-preview" style="background-color: ${item.dataValue};"></div>`;
+                } else if (item.dataValue && typeof item.dataValue === 'string' && item.dataValue.startsWith('http')) {
+                    // For items with image URLs (Hats, Backgrounds, Food icons etc.)
+                    itemVisualHTML = `<img src="${item.dataValue}" alt="${item.itemName}">`;
+                } else {
+                     // Placeholder if no visual data or not a valid URL
+                    itemVisualHTML = '<div>?</div>'; // Or a default icon
+                }
+
+                 // Check if player already owns this item and how many
+                 const ownedItem = inventoryData.find(owned => owned.itemId === item.itemId);
+                 const ownedQuantity = ownedItem ? ownedItem.quantity : 0;
+
+                listItem.innerHTML = `
+                    ${itemVisualHTML}
+                    <div class="item-name">${item.itemName}</div>
+                    <div class="item-price">${item.price} Coins</div>
+                     ${ownedQuantity > 0 ? `<div class="equipped-status">Owned: ${ownedQuantity}</div>` : ''}
+                    <button class="buy-btn">Buy</button>
+                `;
+                itemListElement.appendChild(listItem);
+            });
+
+             // Add event listeners to the new buy buttons
+            itemListElement.querySelectorAll('.buy-btn').forEach(button => {
+                button.addEventListener('click', handlePurchaseItem);
+            });
+        }
+
+        async function handlePurchaseItem(event) {
+             if (!playerData.playerId) {
+                 alert("Player not logged in.");
+                 return;
+             }
+
+            const button = event.target;
+            const itemCard = button.closest('.item-card'); // Get the parent item card element
+            const itemIdToBuy = itemCard.dataset.itemId; // Get the item ID from the data attribute
+
+            if (!itemIdToBuy) {
+                console.error("Could not get item ID from button click.");
+                return;
+            }
+
+            // Show loading indicator is handled by fetchData
+
+            const result = await fetchData('purchaseItem', 'POST', {
+                playerId: playerData.playerId,
+                itemId: itemIdToBuy
+            });
+
+            if (result) {
+                // Update inventory data locally after a successful purchase
+                // Re-fetching inventory is safer than manually updating local array
+                await fetchAndRenderInventory();
+
+                // Currency display is updated by fetchData wrapper because purchaseItem returns newCurrency
+                const purchasedItemDetails = storeItems.find(item => item.itemId === itemIdToBuy); // Get details from store list
+                 if (purchasedItemDetails) {
+                     alert(`Successfully purchased ${purchasedItemDetails.itemName}!`);
+                 } else {
+                     alert("Purchase successful!"); // Fallback if details not found
+                 }
+
+
+                // Update the store display to show "Owned" status if applicable
+                renderStoreItems(); // Re-render store to show ownership
+
+
+            } else {
+                // Error message shown by fetchData
+            }
+        }
+
+
+        // --- Inventory Functions ---
+
+        async function showInventoryScreen() {
+             // Save current slime state before leaving game screen
+            if (document.getElementById('game-screen').classList.contains('active-screen') && slimeData) {
+                await saveSlimeData(); // Use await here
+            } else if (document.getElementById('store-screen').classList.contains('active-screen')) {
+                 // Also save before leaving store if needed (depends if stats decay in store)
+                 // For now, stats only decay visually on game screen, so maybe not needed here.
+            }
+
+
+             showLoadingIndicator('Loading inventory...');
+             await fetchAndRenderInventory(); // Fetch and render inventory
+             updateCurrencyDisplay(); // Ensure currency is shown
+             showScreen('inventory-screen'); // Switch screen
+
+        }
+
+        async function fetchAndRenderInventory() {
+             // Fetch player's inventory from backend
+            const inventory = await fetchData('getPlayerInventory', 'GET');
+
+            if (inventory) {
+                inventoryData = inventory; // Store the inventory
+                renderInventoryItems(); // Display them
+            } else {
+                // Error handled by fetchData
+                 console.error("Failed to fetch inventory.");
+                 inventoryData = []; // Clear local inventory on failure
+                 renderInventoryItems(); // Render empty list
+                 // Decide if you want to stay on inventory screen or go back
+                 // alert("Failed to load inventory.");
+                 // showScreen('game-screen'); // Go back to game screen
+            }
+        }
+
+
+        function renderInventoryItems() {
+            const itemListElement = document.getElementById('inventory-items-list');
+             if (!itemListElement) {
+                  console.error("Inventory items list element not found.");
+                  return;
+             }
+            itemListElement.innerHTML = ''; // Clear current list
+
+            if (!inventoryData || inventoryData.length === 0) {
+                itemListElement.innerHTML = '<li>Your inventory is empty.</li>';
+                return;
+            }
+
+             // Ensure storeItems is loaded to get item details for display
+            if (storeItems.length === 0) {
+                 // If storeItems wasn't loaded (e.g., user went straight to inventory)
+                 // Fetch it now or rely only on details provided in inventoryData (if script includes them)
+                 // Let's assume script's getPlayerInventory includes details like itemName, itemType, dataValue
+                 console.warn("Store items not loaded when rendering inventory. Display might be limited.");
+                 // Use details from inventoryData if available
+            }
+
+
+            inventoryData.forEach(item => {
+                 // Get item details from storeItems catalog or use details from inventoryData if available
+                 const itemDetails = storeItems.find(sItem => sItem.itemId === item.itemId);
+                 const dataValue = itemDetails ? itemDetails.dataValue : (item.dataValue || null); // Prefer catalog, fallback to inventory data
+                 const itemName = itemDetails ? itemDetails.itemName : (item.itemName || item.itemId); // Prefer catalog, fallback to inventory data
+                 const itemType = itemDetails ? itemDetails.itemType : (item.itemType || 'Unknown Type'); // Prefer catalog, fallback to inventory data
+
+
+                const listItem = document.createElement('li');
+                listItem.className = 'item-card inventory-item-card'; // Add inventory specific class
+                listItem.dataset.itemId = item.itemId; // Store item ID
+                 // Store PlayerItem ID if needed for IsEquipped update later (optional for this basic equip)
+                 // listItem.dataset.playerItemId = item.playerItemId;
+
+
+                let itemVisualHTML = '';
+                if (itemType === 'Color' && dataValue) {
+                     itemVisualHTML = `<div class="item-color-preview" style="background-color: ${dataValue};"></div>`;
+                 } else if (dataValue && typeof dataValue === 'string' && dataValue.startsWith('http')) {
+                     itemVisualHTML = `<img src="${dataValue}" alt="${itemName}">`;
+                 } else {
+                     itemVisualHTML = '<div>?</div>'; // Or a default icon
+                 }
+
+                 // Determine if equip button is needed
+                 const isEquipable = ['Color', 'Hat', 'Background'].includes(itemType);
+
+                 // Check if this specific item is currently equipped on the *active* slime
+                 // Need to match both itemId AND potentially the DataValue for colors
+                 const isCurrentlyEquipped = slimeData && (
+                     (itemType === 'Color' && slimeData.color === dataValue) ||
+                     (itemType === 'Hat' && slimeData.hat === item.itemId) ||
+                     (itemType === 'Background' && slimeData.background === item.itemId)
+                 );
+
+                listItem.innerHTML = `
+                    ${itemVisualHTML}
+                    <div class="item-name">${itemName}</div>
+                     ${item.quantity > 1 ? `<div class="item-quantity">Qty: ${item.quantity}</div>` : ''} <!-- Show quantity only if > 1 -->
+                     ${isCurrentlyEquipped ? `<div class="equipped-status">EQUIPPED</div>` : ''}
+                    ${isEquipable && !isCurrentlyEquipped ? `<button class="equip-btn">Equip</button>` : ''}
+                `;
+                itemListElement.appendChild(listItem);
+            });
+
+             // Add event listeners to the new equip buttons
+            itemListElement.querySelectorAll('.equip-btn').forEach(button => {
+                button.addEventListener('click', handleEquipItem);
+            });
+        }
+
+        async function handleEquipItem(event) {
+            if (!playerData.playerId || !slimeData || !slimeData.slimeId) {
+                alert("Player or active slime not loaded.");
+                 console.error("Attempted to equip without player or slime.");
+                 return;
+            }
+
+            const button = event.target;
+            const itemCard = button.closest('.item-card');
+            const itemIdToEquip = itemCard.dataset.itemId;
+
+            if (!itemIdToEquip) {
+                console.error("Could not get item ID from button click.");
+                return;
+            }
+
+             // Find the item in the local inventory and the catalog to get its type and data value
+             const inventoryItem = inventoryData.find(item => item.itemId === itemIdToEquip);
+             const itemDetails = storeItems.find(item => item.itemId === itemIdToEquip);
+
+             if (!inventoryItem || !itemDetails) {
+                 console.error("Equip item not found in local inventory or store items list.");
+                 alert("Error finding item details.");
+                 return;
+             }
+
+            // Show loading indicator is handled by fetchData
+            const result = await fetchData('equipItem', 'POST', {
+                playerId: playerData.playerId,
+                slimeId: slimeData.slimeId,
+                itemId: itemIdToEquip // Send the ItemID to equip
+            });
+
+            if (result && result.updatedSlimeField) {
+                 // Update local slimeData with the newly equipped item info
+                 // Script returns updatedSlimeField, equippedItemId, equippedItemType, equippedDataValue
+                 if (result.updatedSlimeField === 'color') {
+                     slimeData.color = result.equippedDataValue; // Color uses DataValue (hex code)
+                 } else if (result.updatedSlimeField === 'hat') {
+                     slimeData.hat = result.equippedItemId; // Hat stores ItemID
+                 } else if (result.updatedSlimeField === 'background') {
+                      slimeData.background = result.equippedItemId; // Background stores ItemID
+                 }
+                 // Note: If backend manages PlayerItems IsEquipped status, you might need to re-fetch inventory here
+                 // await fetchAndRenderInventory(); // Uncomment if backend sets IsEquipped
+
+                 updateSlimeDisplay(); // Update slime visual on main game screen
+                 renderInventoryItems(); // Re-render inventory to update 'EQUIPPED' status
+
+                 alert(`${itemDetails.itemName} equipped!`);
+
+            } else {
+                // Error message shown by fetchData
+            }
+        }
+
+
+         // --- Minigame Selection ---
+
+         function showMinigameSelectScreen() {
+              // Save current slime state before leaving game screen
+             if (document.getElementById('game-screen').classList.contains('active-screen') && slimeData) {
+                saveSlimeData(); // Fire and forget save
+             }
+              updateCurrencyDisplay(); // Show current coins on minigame select screen
+              showScreen('minigame-select-screen');
+         }
+
+         function handleMinigameSelect(event) {
+              const button = event.target.closest('.minigame-select-btn');
+              if (!button) return;
+
+              const gameType = button.dataset.game; // 'tapper', 'bubble', 'feed'
+              if (!gameType) {
+                  console.error("Minigame button missing data-game attribute.");
+                  return;
+              }
+
+             // Ensure player and slime data are available before starting a game
+             if (!playerData.playerId || !slimeData || !slimeData.slimeId) {
+                 alert("Please log in and create a slime before playing minigames.");
+                 // Optionally redirect to login/create screen
+                 initializeGame();
+                 return;
+             }
+
+             // Start the selected minigame
+             startMinigame(gameType);
+         }
+
+         function startMinigame(gameType) {
+             // Clear any interval/timeout from previous game or timers
+             endCurrentMinigame(false); // Ensure everything is stopped and cleaned up first
+
+             // Reset minigame state for the new game
+             minigameState.activeGame = gameType;
+             minigameState.timeLeft = MINIGAME_DURATION;
+             minigameState.score = 0;
+             minigameState.gameElements = []; // Array to keep track of dynamically created elements
+
+             // Hide all minigame containers initially
+             document.querySelectorAll('.minigame-screen-container .minigame-container').forEach(container => {
+                 container.style.display = 'none';
+             });
+
+
+             // Show the specific minigame container within its parent screen container
+             const containerId = `minigame-${gameType}-screen`; // The parent screen container
+             const minigameScreenContainer = document.getElementById(containerId);
+             if (!minigameScreenContainer) {
+                 console.error("Minigame screen container not found:", containerId);
+                 showScreen('minigame-select-screen'); // Go back to select
+                 return;
+             }
+             // Show the screen container first
+             showScreen(containerId);
+
+             // Then show the specific game container inside it
+             const minigameContainer = minigameScreenContainer.querySelector('.minigame-container');
+             if (minigameContainer) {
+                  minigameContainer.style.display = 'flex'; // Or block, based on CSS
+             } else {
+                 console.error("Inner minigame container not found for:", gameType);
+                  showScreen('minigame-select-screen'); // Go back to select
+                 return;
+             }
+
+
+             // Update initial display elements for this game
+             const timerElement = minigameScreenContainer.querySelector('.minigame-timer');
+             const scoreElement = minigameScreenContainer.querySelector('.minigame-score');
+             const messageElement = minigameScreenContainer.querySelector('.minigame-message');
+             const resultsElement = minigameScreenContainer.querySelector('.minigame-results');
+
+
+             if(timerElement) timerElement.textContent = `Time: ${minigameState.timeLeft}`;
+             if(scoreElement) scoreElement.textContent = `${gameType === 'tapper' ? 'Taps' : gameType === 'bubble' ? 'Popped' : 'Fed'}: ${minigameState.score}`;
+             if(messageElement) messageElement.style.display = 'none';
+             if(resultsElement) resultsElement.style.display = 'none';
+
+
+             // Start game logic based on type
+             switch (gameType) {
+                 case 'tapper':
+                     startSlimeTapper();
+                     break;
+                 case 'bubble':
+                     startBubblePop();
+                     break;
+                 case 'feed':
+                     startFeedTheSlime();
+                     break;
+             }
+
+             // Start the main minigame timer countdown
+             minigameState.timer = setInterval(() => {
+                 minigameState.timeLeft--;
+                 if(timerElement) timerElement.textContent = `Time: ${minigameState.timeLeft}`;
+
+                 if (minigameState.timeLeft <= 0) {
+                     endCurrentMinigame(true); // End game and process results
+                 }
+             }, 1000); // 1 second interval
+         }
+
+         function endCurrentMinigame(processResults) {
+              if (!minigameState.activeGame) return; // No game active
+
+              // Stop the main timer if it's running
+              if(minigameState.timer) {
+                 clearInterval(minigameState.timer);
+                 minigameState.timer = null;
+              }
+
+
+              // Remove specific game listeners and stop game-specific intervals/timeouts
+              switch (minigameState.activeGame) {
+                  case 'tapper':
+                      const tapperSlimeArea = document.getElementById('tapper-slime-area');
+                      if (tapperSlimeArea) tapperSlimeArea.removeEventListener('click', handleSlimeTap);
+                      break;
+                  case 'bubble':
+                       stopBubblePop(); // Remove listeners and stop bubble generation
+                      break;
+                  case 'feed':
+                       stopFeedTheSlime(); // Remove listeners and stop food generation
+                      break;
+              }
+
+               // Clean up dynamically created elements
+              minigameState.gameElements.forEach(el => el.remove());
+              minigameState.gameElements = [];
+
+
+              if (processResults) {
+                 // Display results and award coins
+                 displayMinigameResults(minigameState.activeGame, minigameState.score);
+              } else {
+                 // Just hide specific game container elements if not processing results (e.g., changing screens)
+                 // The main screen container visibility is handled by showScreen
+                 const gameType = minigameState.activeGame;
+                 const screenContainer = document.getElementById(`minigame-${gameType}-screen`);
+                 if(screenContainer) {
+                      const messageElement = screenContainer.querySelector('.minigame-message');
+                      const resultsElement = screenContainer.querySelector('.minigame-results');
+                      const minigameContainer = screenContainer.querySelector('.minigame-container');
+                      if(messageElement) messageElement.style.display = 'none';
+                      if(resultsElement) resultsElement.style.display = 'none';
+                      if(minigameContainer) minigameContainer.style.display = 'none'; // Hide the inner game area
+                 }
+              }
+
+
+              minigameState.activeGame = null; // Reset active game state
+         }
+
+        async function displayMinigameResults(gameType, score) {
+            const screenContainer = document.getElementById(`minigame-${gameType}-screen`);
+            if (!screenContainer) {
+                 console.error("Minigame screen container not found for results:", gameType);
+                 showScreen('minigame-select-screen');
+                 return;
+            }
+
+            const resultsElement = screenContainer.querySelector('.minigame-results');
+            const finalScoreElement = screenContainer.querySelector('.minigame-final-score') || resultsElement.querySelector('p:nth-child(1)'); // Get first paragraph if no specific ID
+            const coinsEarnedElement = screenContainer.querySelector('.minigame-coins-earned') || resultsElement.querySelector('p:nth-child(2)'); // Get second paragraph
+            const messageElement = screenContainer.querySelector('.minigame-message');
+
+
+            // Calculate coins based on score (adjust rates per game)
+            let coinsEarned = 0;
+            switch (gameType) {
+                case 'tapper':
+                    coinsEarned = Math.floor(score / 3); // Example: 1 coin per 3 taps
+                    break;
+                case 'bubble':
+                    coinsEarned = score * 2; // Example: 2 coins per bubble popped
+                    break;
+                case 'feed':
+                    coinsEarned = score * 5; // Example: 5 coins per food fed
+                    break;
+            }
+            coinsEarned = Math.max(0, coinsEarned); // Ensure non-negative coins
+
+
+            if(messageElement) {
+                 messageElement.textContent = "Time's Up!"; // Display a message first
+                 messageElement.style.display = 'block';
+            }
+
+
+            // Award coins via backend
+            if (coinsEarned > 0 && playerData.playerId) {
+                 // Loading indicator handled by fetchData inside earnCurrency
+                const currencyResult = await fetchData('earnCurrency', 'POST', {
+                    playerId: playerData.playerId,
+                    amount: coinsEarned
+                });
+
+                if (currencyResult && currencyResult.newCurrency !== undefined) {
+                    // Currency updated by fetchData wrapper
+                     if(coinsEarnedElement) coinsEarnedElement.textContent = `You earned ${coinsEarned} coins!`;
+                     updateCurrencyDisplay(); // Ensure all currency displays are updated
+                } else {
+                    if(coinsEarnedElement) coinsEarnedElement.textContent = `Failed to award coins.`; // Error handled by fetchData
+                }
+                 // hideLoadingIndicator() is handled by fetchData
+            } else {
+                if(coinsEarnedElement) coinsEarnedElement.textContent = "You earned 0 coins.";
+            }
+
+
+            if(finalScoreElement) finalScoreElement.textContent = `Final Score: ${score}`;
+            if(resultsElement) resultsElement.style.display = 'block'; // Show results section
+             if(messageElement) messageElement.style.display = 'none'; // Hide "Time's Up" message once results are shown
+
+
+        }
+
+
+         // --- Specific Minigame Implementations ---
+
+         // Slime Tapper
+         function startSlimeTapper() {
+             const slimeArea = document.getElementById('tapper-slime-area');
+             if (slimeArea) {
+                // Ensure click listener is ONLY active during the game
+                // removeEventListener is important in endCurrentMinigame
+                slimeArea.addEventListener('click', handleSlimeTap);
+             }
+             // Initial score/timer display is set in startMinigame
+         }
+
+         function handleSlimeTap() {
+             // Check minigameState.activeGame and timeLeft
+             if (minigameState.activeGame === 'tapper' && minigameState.timeLeft > 0) {
+                 minigameState.score++;
+                 const scoreElement = document.getElementById('tapper-score');
+                 if(scoreElement) scoreElement.textContent = `Taps: ${minigameState.score}`;
+                 // Optional: Add visual feedback to the slime on tap (e.g., scale down slightly)
+                 const slimeElement = document.getElementById('tapper-slime-area').querySelector('.slime');
+                 if(slimeElement) {
+                      slimeElement.style.transform = 'scale(0.95)';
+                      setTimeout(() => { slimeElement.style.transform = 'scale(1)'; }, 100); // Quick bounce back
+                 }
+
+             }
+         }
+
+         // Slime Bubble Pop
+         let bubbleInterval; // Interval for creating new bubbles
+         const BUBBLE_CREATE_DELAY = 1000; // Create a bubble every 1 second
+         const BUBBLE_LIFESPAN = 8000; // milliseconds bubble stays before disappearing (matches CSS animation duration)
+
+         function startBubblePop() {
+              const gameArea = document.getElementById('bubble-game-area');
+              if (!gameArea) {
+                  console.error("Bubble game area not found.");
+                   endCurrentMinigame(false); // Stop the game
+                   return;
+              }
+             // Generate bubbles periodically
+             bubbleInterval = setInterval(createBubble, BUBBLE_CREATE_DELAY);
+              // The game area itself is not clickable in a way that interferes with bubbles
+         }
+
+         function createBubble() {
+             if (minigameState.timeLeft <= 0 || minigameState.activeGame !== 'bubble') return; // Stop creating if game ended or game type changed
+
+             const gameArea = document.getElementById('bubble-game-area');
+             const bubble = document.createElement('div');
+             bubble.className = 'minigame-target bubble'; // Use shared class and specific class
+
+             // Position horizontally randomly within the game area width
+             const gameAreaWidth = gameArea.clientWidth;
+             const bubbleSize = 30; // Match CSS .minigame-target.bubble size
+             // Ensure bubbles are fully within bounds horizontally
+             const randomX = Math.random() * (gameAreaWidth - bubbleSize);
+             bubble.style.left = `${randomX}px`;
+
+             // Start from below the visible area
+             bubble.style.bottom = `-${bubbleSize}px`; // Start from just below
+
+             // Randomize animation duration slightly for variety (adjust CSS animation as well if needed)
+             // CSS animation 'bubbleFloat' duration is set in CSS, using JS animation is another option.
+             // Let's rely on the CSS animation `animation-duration` for movement speed set in CSS.
+             // We'll use JS here potentially for lifespan *if not* relying on animationend
+
+              // Add click listener to the bubble
+             bubble.addEventListener('click', handleBubbleClick);
+
+             // Add to game area and state tracking
+             gameArea.appendChild(bubble);
+             minigameState.gameElements.push(bubble);
+
+             // Remove bubble when its animation finishes (assuming CSS animation 'bubbleFloat' moves it off-screen)
+             bubble.addEventListener('animationend', () => {
+                 console.log('Bubble animation ended');
+                 removeMinigameElement(bubble); // Remove the bubble element
+             });
+
+             // Alternative/Fallback: Remove bubble after its lifespan via JS timer
+             // This can be a fallback if animationend isn't reliable or you want JS to control lifespan precisely
+             // bubble._removalTimer = setTimeout(() => {
+             //     console.log('Bubble lifespan ended (JS timer)');
+             //     removeMinigameElement(bubble);
+             // }, BUBBLE_LIFESPAN); // Use the constant lifespan
+
+         }
+
+         function handleBubbleClick(event) {
+              // Check minigameState.activeGame and timeLeft
+              if (minigameState.activeGame === 'bubble' && minigameState.timeLeft > 0) {
+                 event.stopPropagation(); // Prevent potential background clicks
+
+                 const bubble = event.target;
+                 minigameState.score++;
+                 const scoreElement = document.getElementById('bubble-score');
+                 if(scoreElement) scoreElement.textContent = `Popped: ${minigameState.score}`;
+
+                 // If using JS removal timer, clear it before removing
+                 // if (bubble._removalTimer) {
+                 //    clearTimeout(bubble._removalTimer);
+                 // }
+
+                 removeMinigameElement(bubble); // Remove the popped bubble element
+             }
+         }
+
+         function stopBubblePop() {
+             // Stop interval that creates new bubbles
+             if(bubbleInterval) {
+                 clearInterval(bubbleInterval);
+                 bubbleInterval = null;
+             }
+
+             // Clear any pending JS removal timers for existing bubbles (if using that method)
+             // minigameState.gameElements.forEach(el => {
+             //     if (el._removalTimer) clearTimeout(el._removalTimer);
+             // });
+             // The elements themselves are removed by endCurrentMinigame cleanup
+         }
+
+
+         // Feed The Slime
+         let foodTimeout; // Use setTimeout for scheduling next food item
+         const FOOD_CREATE_DELAY = 1500; // milliseconds delay before next food appears after one is clicked or disappears
+         const FOOD_LIFESPAN = 2000; // milliseconds food stays visible before disappearing if not clicked
+
+         function startFeedTheSlime() {
+             const gameArea = document.getElementById('feed-game-area');
+              if (!gameArea) {
+                  console.error("Feed game area not found.");
+                   endCurrentMinigame(false); // Stop the game
+                   return;
+              }
+              // Add listener to the game area background to detect missed clicks (optional feedback)
+             gameArea.addEventListener('click', handleMissedClickInFeedGame);
+
+             // Schedule the first food item appearance
+             scheduleNextFood();
+         }
+
+         function createFoodTarget() {
+             // Check minigameState.timeLeft and activeGame *before* creating
+             if (minigameState.timeLeft <= 0 || minigameState.activeGame !== 'feed') {
+                 foodTimeout = null; // Clear timeout variable as we are stopping
+                 return; // Stop creating if game ended or game type changed
+             }
+
+             const gameArea = document.getElementById('feed-game-area');
+             const food = document.createElement('img'); // Use img for food icon
+             food.src = 'https://i.imgur.com/ExampleFood.png'; // Replace with actual food icon URL (or define in Items sheet?)
+             food.className = 'minigame-target food';
+
+             // Position randomly within the game area, avoiding edges slightly
+             const gameAreaRect = gameArea.getBoundingClientRect();
+             const foodSize = 40; // Match CSS .minigame-target size
+             const padding = 50; // Keep away from edges
+
+              // Calculate random position relative to the game area
+             const randomX = padding + Math.random() * (gameAreaRect.width - foodSize - 2 * padding);
+             const randomY = padding + Math.random() * (gameAreaRect.height - foodSize - 2 * padding); // Y from top
+
+             // Use absolute positioning relative to the gameArea container
+             food.style.position = 'absolute'; // Make sure CSS allows absolute positioning
+             food.style.left = `${randomX}px`;
+             food.style.top = `${randomY}px`; // Use top for positioning from the top
+
+             // Add click listener to the food item
+             food.addEventListener('click', handleFoodClick);
+
+             // Add to game area and state tracking
+             gameArea.appendChild(food);
+             minigameState.gameElements.push(food);
+
+             // Schedule removal if not clicked within lifespan
+             const removalTimer = setTimeout(() => {
+                 console.log('Food disappeared');
+                 removeMinigameElement(food); // Remove food if not clicked
+                 // Schedule the next food item immediately after one disappears
+                 scheduleNextFood();
+             }, FOOD_LIFESPAN);
+
+             // Store the removal timer ID with the element to clear it if clicked
+             food._removalTimerId = removalTimer;
+
+              // Clear the foodTimeout variable as the creation is done for this cycle
+              foodTimeout = null;
+         }
+
+         function handleFoodClick(event) {
+              // Check minigameState.activeGame and timeLeft
+              if (minigameState.activeGame === 'feed' && minigameState.timeLeft > 0) {
+                 event.stopPropagation(); // Prevent click from bubbling up to the game area background
+
+                 const food = event.target;
+                 minigameState.score++;
+                 const scoreElement = document.getElementById('feed-score');
+                 if(scoreElement) scoreElement.textContent = `Fed: ${minigameState.score}`;
+
+                 // Clear the removal timer because it was clicked
+                 if (food._removalTimerId) {
+                    clearTimeout(food._removalTimerId);
+                 }
+                 removeMinigameElement(food); // Remove the fed food item
+
+                 // Schedule the next food item appearance immediately after one is clicked
+                 scheduleNextFood();
+             }
+         }
+
+         // If the player clicks the background during Feed The Slime (misses or clicks too early/late)
+         function handleMissedClickInFeedGame(event) {
+              // Check minigameState.activeGame and timeLeft
+              if (minigameState.activeGame === 'feed' && minigameState.timeLeft > 0) {
+                 // If there's currently food visible, this was a miss
+                 const foodElements = document.querySelectorAll('#feed-game-area .minigame-target.food');
+                 if (foodElements.length > 0) {
+                     console.log('Missed click!');
+                     // Optional: Add a visual "Miss!" feedback or temporary penalty
+                     // For simplicity, we won't penalize here.
+                 }
+                 // If no food is visible, clicking background does nothing (correct behavior)
+              }
+         }
+
+
+         function scheduleNextFood() {
+             // Check minigameState.timeLeft and activeGame before scheduling
+             if (minigameState.timeLeft <= 0 || minigameState.activeGame !== 'feed') return; // Stop scheduling if game ended
+
+             // Only schedule if there isn't already a food item waiting to be created
+             if (foodTimeout === null) {
+                foodTimeout = setTimeout(createFoodTarget, FOOD_CREATE_DELAY);
+             }
+         }
+
+
+         function stopFeedTheSlime() {
+             // Stop the timeout that schedules the *next* food item
+             if(foodTimeout) {
+                 clearTimeout(foodTimeout);
+                 foodTimeout = null;
+             }
+             // Remove the click listener from the game area background
+             const gameArea = document.getElementById('feed-game-area');
+              if(gameArea) gameArea.removeEventListener('click', handleMissedClickInFeedGame);
+
+              // Existing food elements will be removed by endCurrentMinigame cleanup,
+              // and their individual removal timers will also be cleared by removeMinigameElement
+         }
+
+
+         // Helper to remove a minigame element and update state
+         function removeMinigameElement(element) {
+             if (element && element.parentNode) {
+                 // If element has a JS removal timer, clear it before removing
+                 if (element._removalTimerId) {
+                     clearTimeout(element._removalTimerId);
+                 }
+                 element.parentNode.removeChild(element);
+                 // Remove from the state array by filtering
+                 minigameState.gameElements = minigameState.gameElements.filter(el => el !== element);
+             }
+         }
+
+
+        // --- Event Listeners ---
+
+        function setupEventListeners() {
+            // Login button
+            const loginBtn = document.getElementById('login-button');
+            if(loginBtn) loginBtn.addEventListener('click', handleLogin);
+
+            // Create slime button
+            const createSlimeBtn = document.getElementById('create-slime-button');
+            if(createSlimeBtn) createSlimeBtn.addEventListener('click', handleCreateSlime);
+
+            // Action buttons (Feed, Play, Clean, Sleep)
+            const feedBtn = document.getElementById('feed-btn');
+            const playBtn = document.getElementById('play-btn');
+            const cleanBtn = document.getElementById('clean-btn');
+            const sleepBtn = document.getElementById('sleep-btn');
+             // Check existence before adding listeners
+            if(feedBtn) feedBtn.addEventListener('click', feedSlime);
+            if(playBtn) playBtn.addEventListener('click', playWithSlime);
+            if(cleanBtn) cleanBtn.addEventListener('click', cleanSlime);
+            if(sleepBtn) sleepBtn.addEventListener('click', sleepSlime);
+
+
+            // Navigation event listeners (using event delegation on the container)
+            const navContainer = document.querySelector('.nav-container');
+            if(navContainer) {
+                 navContainer.addEventListener('click', async (event) => { // Added async here because we await saveSlimeData
+                    const navItem = event.target.closest('.nav-item');
+                    if (!navItem) return; // Not a nav item click
+
+                    // Save current slime data before switching screens (if on game screen or minigame select)
+                    // Check both screens as they are the main ones holding potential unsaved state
+                     const onGameScreen = document.getElementById('game-screen').classList.contains('active-screen');
+                     const onMinigameSelect = document.getElementById('minigame-select-screen').classList.contains('active-screen');
+
+                    if ((onGameScreen || onMinigameSelect) && slimeData) {
+                       await saveSlimeData(); // Wait for save to complete
+                    }
+
+
+                    // Handle navigation
+                    const navId = navItem.id;
+                    switch (navId) {
+                        case 'home-nav':
+                            // Determine which screen to show based on player/slime data presence
+                            if (playerData.playerId && slimeData) {
+                                showScreen('game-screen');
+                                startGameLoop(); // Restart game loop if going back to game screen
+                            } else if (playerData.playerId) {
+                                 showScreen('create-slime-screen');
+                            } else {
+                                 showScreen('login-screen');
+                            }
+                            break;
+                        case 'store-nav':
+                             if (playerData.playerId) {
+                                  showStoreScreen(); // This function handles loading data and showing screen
+                             } else {
+                                 alert("Please log in to access the store.");
+                                 showScreen('login-screen');
+                             }
+                            break;
+                        case 'inventory-nav':
+                             if (playerData.playerId) {
+                                 showInventoryScreen(); // This function handles loading data and showing screen
+                             } else {
+                                 alert("Please log in to access your inventory.");
+                                 showScreen('login-screen');
+                             }
+                            break;
+                         case 'minigames-nav':
+                             if (playerData.playerId && slimeData) {
+                                 showMinigameSelectScreen(); // This function shows the selection screen
+                             } else if (playerData.playerId) {
+                                  alert("Please create a slime first!");
+                                  showScreen('create-slime-screen');
+                             }
+                             else {
+                                 alert("Please log in to play minigames.");
+                                 showScreen('login-screen');
+                             }
+                             break;
+                        // Add cases for other nav items if they go to other pages
+                    }
+                });
+            }
+
+
+            // Minigame Select button listeners (using delegation on the select screen container)
+            const minigameSelectScreen = document.getElementById('minigame-select-screen');
+            if(minigameSelectScreen) minigameSelectScreen.addEventListener('click', handleMinigameSelect);
+
+
+             // Minigame "Back to Games" button listeners (using event delegation on main container)
+             const mainElement = document.querySelector('main'); // Or document.body
+             if(mainElement) {
+                  mainElement.addEventListener('click', (event) => {
+                     const backBtn = event.target.closest('.minigame-back-btn');
+                     if (!backBtn) return;
+
+                     const targetScreenId = backBtn.dataset.target;
+                     if (targetScreenId) {
+                         endCurrentMinigame(false); // End minigame without processing results/saving
+                         showScreen(targetScreenId); // Go back to the select screen
+                     }
+                 });
+             }
+
+
+             // Add listener to the main slime container for the tapper game only when that game is active
+             // The listener is added/removed in startSlimeTapper/endCurrentMinigame
+
+
+        }
+
+        // Highlight current page in nav (modified to use IDs)
+        function setActiveNav() {
+             // On page load, we don't know the screen yet, it's determined by initializeGame
+             // The showScreen function now handles setting the active nav class.
+             // This function just ensures *a* nav item is active on initial load.
+             const homeNav = document.getElementById('home-nav');
+             if(homeNav) homeNav.classList.add('active');
+
+             // If you use actual page URLs for other nav items, this would need adjustment
+        }
+
+        // Create floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            if (!container) {
+                console.error("Hearts container not found.");
+                return;
+            }
+            container.innerHTML = ''; // Clear existing hearts
+
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️'; // Use actual heart emoji
+                // Ensure positioning and animation properties are numbers/strings as expected
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${15 + Math.random() * 10}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                heart.style.fontSize = `${20 + Math.random() * 20}px`;
+                container.appendChild(heart);
+            }
+        }
+
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            createHearts(); // Start background hearts
+            setupEventListeners(); // Set up all button clicks etc.
+            initializeGame(); // Start the game initialization flow (login/load)
+        });
+
+         // Optional: Save data when the user tries to close or leave the page
+         // Note: Asynchronous operations in beforeunload are unreliable.
+         // Rely more on periodic saves and saves before changing screens/closing mini-games.
+         window.addEventListener('beforeunload', (event) => {
+            if (slimeData && playerData.playerId) {
+                 console.log("Attempting to save before unload...");
+                 // Fire and forget async save attempt. Cannot reliably await here.
+                 saveSlimeData();
+
+                 // Optional: Prompt user. Uncomment below lines if you want the browser's warning.
+                 // event.preventDefault(); // Keep the browser's "Leave site?" dialog open
+                 // event.returnValue = ''; // Set the return value to prompt the user (required in some browsers)
+             }
+         });
+
+
+    </script>
+</body>
+</html>
