@@ -1238,67 +1238,86 @@
     const MINIGAME_DURATION = 30; // Seconds
 
     // --- Utility Functions ---
-    async function fetchData(action, method = 'GET', data = null) {
-        showLoadingIndicator(`Calling: ${action}...`);
-        const url = new URL(API_URL);
-        url.searchParams.append('action', action);
+async function fetchData(action, method = 'GET', data = null) {
+    showLoadingIndicator(`Calling: ${action}...`);
+    let targetUrl = API_URL; // Base URL
 
-        if (method === 'GET') {
-            if (data) { // Append all properties of 'data' object as URL parameters
-                for (const key in data) {
-                    if (data.hasOwnProperty(key)) {
-                        url.searchParams.append(key, data[key]);
-                    }
+    const url = new URL(API_URL); // Always start with the base API_URL
+
+    // Action is always added as a query parameter for both GET and POST
+    // (Google Apps Script web apps often expect action in query for routing, even for POST)
+    url.searchParams.append('action', action);
+
+    if (method === 'GET') {
+        if (data) { // Append all properties of 'data' object as URL parameters
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    url.searchParams.append(key, data[key]);
                 }
             }
-            // Add playerId if it's a GET request that needs it and wasn't already in 'data'
-            // (e.g. for getStoreItems, getPlayerInventory)
-            if (playerData.playerId && action !== 'createAccount' && action !== 'loadPlayer' && !(data && data.playerId)) {
-                 url.searchParams.append('playerId', playerData.playerId);
-            }
         }
-        // For POST, data goes in the body. URL will only have 'action' from above.
-
-        const options = {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: (method === 'POST' && data) ? JSON.stringify({ action: action, data: data }) : null,
-        };
-        const targetUrl = url.toString();
-        console.log(`Fetching: ${method} ${targetUrl}`, method === 'POST' ? options.body : '');
-
-        try {
-            const response = await fetch(targetUrl, options);
-            if (!response.ok) {
-                 const errorBody = await response.text();
-                 console.error(`HTTP error! Status: ${response.status}`, errorBody, response);
-                 throw new Error(`Server error: ${response.status}. Check console for details.`);
-            }
-            const result = await response.json();
-            console.log('API Response:', action, result);
-
-            if (result.success) {
-                if (result.data && result.data.newCurrency !== undefined) {
-                     playerData.currency = result.data.newCurrency;
-                     updateCurrencyDisplay();
-                 } else if (action === 'loadPlayer' && result.data && result.data.currency !== undefined) {
-                      playerData.currency = result.data.currency;
-                       updateCurrencyDisplay();
-                 }
-                return result.data;
-            } else {
-                console.error('API Reported Error:', result.message, result.data ? result.data.details : '');
-                alert('API Error: ' + result.message);
-                return null;
-            }
-        } catch (error) {
-            console.error('Fetch Exception:', error);
-            alert('Network or Script Execution Failed. Check console.');
-            return null;
-        } finally {
-            hideLoadingIndicator();
+        // Add playerId if it's a GET request that needs it and wasn't already in 'data'
+        if (playerData.playerId && action !== 'createAccount' && action !== 'loadPlayer' && !(data && data.playerId)) {
+             url.searchParams.append('playerId', playerData.playerId);
         }
+        targetUrl = url.toString();
+    } else if (method === 'POST') {
+        // For POST, the action might also be in the URL if the server expects it,
+        // but primary data is in the body. The current setup adds action to URL for both.
+        targetUrl = url.toString();
     }
+
+
+    const options = {
+        method: method,
+        // Conditionally set headers: Only add Content-Type for POST
+        headers: method === 'POST' ? { 'Content-Type': 'application/json' } : {}, // <<< MODIFIED HERE
+        body: (method === 'POST' && data) ? JSON.stringify({ action: action, data: data }) : null, // For POST, action is also in body
+    };
+
+    console.log(`Fetching: ${method} ${targetUrl}`, method === 'POST' ? options.body : '');
+
+    try {
+        const response = await fetch(targetUrl, options);
+        if (!response.ok) {
+             const errorBody = await response.text();
+             console.error(`HTTP error! Status: ${response.status}`, errorBody, response);
+             throw new Error(`Server error: ${response.status}. Check console for details.`);
+        }
+        const result = await response.json();
+        console.log('API Response:', action, result);
+
+        if (result.success) {
+            if (result.data && result.data.newCurrency !== undefined) {
+                 playerData.currency = result.data.newCurrency;
+                 updateCurrencyDisplay();
+             } else if (action === 'loadPlayer' && result.data && result.data.currency !== undefined) {
+                  playerData.currency = result.data.currency;
+                   updateCurrencyDisplay();
+             }
+             // For createAccount (now GET), the script's doGet returns the player data which includes currency
+             else if (action === 'createAccount' && result.data && result.data.player && result.data.player.currency !== undefined) {
+                  playerData.currency = result.data.player.currency; // Assuming createAccount might return full player object
+                  updateCurrencyDisplay();
+             } else if (action === 'createAccount' && result.data && result.data.currency !== undefined){ // If createAccount directly returns currency
+                  playerData.currency = result.data.currency;
+                  updateCurrencyDisplay();
+             }
+
+            return result.data;
+        } else {
+            console.error('API Reported Error:', result.message, result.data ? result.data.details : '');
+            alert('API Error: ' + result.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Fetch Exception:', error);
+        alert('Network or Script Execution Failed. Check console.');
+        return null;
+    } finally {
+        hideLoadingIndicator();
+    }
+}
     function showLoadingIndicator(message) { /* ... same ... */ 
         document.getElementById('loading-text').textContent = message || 'Loading...';
         document.getElementById('loading-overlay').style.display = 'flex';
