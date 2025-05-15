@@ -7,16 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root {
+        :root { 
             --primary: #9b4d96; --secondary: #f5a9bc; --dark: #2a0a3a;
-            --light: #fce4ec; --accent: #e91e63; --success: #4CAF50; --danger: #f44336;
-            --admin-bg: #f4f6f8; --admin-card-bg: #ffffff; --admin-text: #333;
+            --light: #fce4ec; --accent: #e91e63; --success: #4CAF50; 
+            --danger: #d32f2f; --edit: #FFC107; --admin-bg: #f4f6f8; 
+            --admin-card-bg: #ffffff; --admin-text: #333;
         }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--admin-bg); margin: 0; padding: 20px; color: var(--admin-text); }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--admin-bg); margin: 0; padding: 20px; color: var(--admin-text); line-height: 1.6; }
         .admin-container { max-width: 1200px; margin: 20px auto; background-color: var(--admin-card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         h1, h2 { font-family: 'Pacifico', cursive; color: var(--primary); text-align: center; margin-bottom: 20px; }
         h1 { font-size: 2.5rem; }
-        h2 { font-size: 1.8rem; margin-top: 30px; border-bottom: 2px solid var(--secondary); padding-bottom: 10px; }
+        h2 { font-size: 1.8rem; margin-top: 40px; border-bottom: 2px solid var(--secondary); padding-bottom: 10px; }
         
         .section { margin-bottom: 40px; }
         .item-list { list-style-type: none; padding: 0; }
@@ -25,49 +26,112 @@
             padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .item-card h3 { color: var(--accent); margin-top: 0; margin-bottom: 8px; font-size: 1.2em; }
-        .item-card p { margin-bottom: 5px; font-size: 0.9em; line-height: 1.5; }
+        .item-card p { margin-bottom: 5px; font-size: 0.95em; line-height: 1.5; word-break: break-word; }
         .item-card p strong { color: var(--dark); }
         .item-card .meta-info { font-size: 0.8em; color: #777; margin-top: 10px; }
         
-        .actions button {
+        .actions button, .form-buttons button {
             padding: 8px 15px; font-size: 0.9em; border-radius: 5px; cursor: pointer;
-            border: none; color: white; transition: background-color 0.2s ease; margin-right: 10px;
+            border: none; color: white; transition: opacity 0.2s ease; margin: 5px 5px 5px 0;
+            display: inline-flex; align-items: center; gap: 5px;
         }
-        .approve-btn { background-color: var(--success); } .approve-btn:hover { background-color: #388E3C; }
-        .reject-btn { background-color: var(--danger); } .reject-btn:hover { background-color: #D32F2F; }
+        .actions button:hover, .form-buttons button:hover { opacity: 0.85; }
+        .actions button:disabled, .form-buttons button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .approve-btn { background-color: var(--success); }
+        .edit-approve-btn { background-color: var(--edit); color: var(--dark); }
+        .reject-btn, .delete-btn { background-color: var(--danger); }
+        
         .toggle-approval-btn { background-color: var(--secondary); color: var(--dark); }
         .toggle-approval-btn.approved { background-color: var(--primary); color: white; }
-        .toggle-approval-btn:hover { opacity: 0.8; }
+        
+        .loading-indicator, .no-items { text-align: center; font-style: italic; color: var(--primary); padding: 20px; }
+        .error-message { text-align: center; color: var(--danger); padding: 10px; background-color: #ffcdd2; border-radius: 5px; margin-top:10px;}
+        .success-message { text-align: center; color: var(--success); padding: 10px; background-color: #C8E6C9; border-radius: 5px; margin-top:10px;}
 
-        .loading-indicator { text-align: center; font-style: italic; color: var(--primary); padding: 20px; }
-        .error-message { text-align: center; color: var(--danger); padding: 10px; background-color: #ffcdd2; border-radius: 5px; }
-        .success-message { text-align: center; color: var(--success); padding: 10px; background-color: #C8E6C9; border-radius: 5px; }
-        .no-items { text-align: center; color: #777; padding: 20px; font-style: italic; }
-
-        /* Simple table for scheduled dates */
-        .scheduled-dates-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .scheduled-dates-table th, .scheduled-dates-table td {
-            border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 0.9em;
+        /* Modal Styles */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0;
+            width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);
+            align-items: center; justify-content: center;
         }
-        .scheduled-dates-table th { background-color: var(--light); color: var(--primary); font-weight: 600; }
-        .scheduled-dates-table tr:nth-child(even) { background-color: #f9f9f9; }
-        .scheduled-dates-table tr:hover { background-color: #f1f1f1; }
-        .scheduled-dates-table .actions { text-align: center; }
+        .modal-content {
+            background-color: #fff; margin: auto; padding: 25px; border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2); width: 90%; max-width: 600px;
+            position: relative;
+        }
+        .modal-content h3 { font-family: 'Pacifico', cursive; color: var(--primary); margin-bottom: 20px; text-align: center;}
+        .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover, .close-btn:focus { color: var(--dark); text-decoration: none; }
+
+        /* Form Styles within Modal & Direct Add */
+        .admin-form .form-group { margin-bottom: 15px; text-align: left; }
+        .admin-form label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--dark); font-size: 0.9em;}
+        .admin-form input[type="text"], .admin-form textarea, .admin-form select {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95em;
+        }
+        .admin-form textarea { min-height: 80px; resize: vertical; }
+        .form-buttons { text-align: right; margin-top: 20px; }
+
+        /* Table Styles */
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .data-table th, .data-table td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 0.9em; }
+        .data-table th { background-color: var(--light); color: var(--primary); font-weight: 600; }
+        .data-table tr:nth-child(even) { background-color: #f9f9f9; }
+        .data-table tr:hover { background-color: #f1f1f1; }
+        .data-table .actions { text-align: center; white-space: nowrap; }
+        .data-table .actions button { margin: 2px; }
+
 
         @media (max-width: 768px) {
-            body { padding: 10px; }
-            .admin-container { padding: 15px; }
+            body { padding: 10px; } .admin-container { padding: 15px; }
             h1 { font-size: 2rem; } h2 { font-size: 1.5rem; }
             .item-card { padding: 12px; }
-            .actions button { display: block; width: 100%; margin-bottom: 5px; }
-            .scheduled-dates-table th, .scheduled-dates-table td { font-size: 0.8em; padding: 6px; }
-            .scheduled-dates-table { display: block; overflow-x: auto; /* Make table scrollable */ }
+            .actions button { display: block; width: calc(100% - 10px); margin: 5px auto; }
+            .data-table { display: block; overflow-x: auto; }
+            .modal-content { width: 95%; padding: 20px;}
         }
     </style>
 </head>
 <body>
     <div class="admin-container">
         <h1><i class="fas fa-cogs"></i> Enchanted Dates - Admin Panel</h1>
+        <p style="text-align:center; margin-bottom: 30px; color: #555;">Manage date ideas, suggestions, and scheduled events.</p>
+
+        <!-- Section: Add New Date Idea Directly -->
+        <section class="section">
+            <h2><i class="fas fa-plus-circle"></i> Add New Date Idea Directly</h2>
+            <form id="directAddDateForm" class="admin-form item-card">
+                <div class="form-group">
+                    <label for="directTitle">Idea Title:</label>
+                    <input type="text" id="directTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="directDescription">Description:</label>
+                    <textarea id="directDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="directCategory">Category:</label>
+                    <select id="directCategory" required>
+                        <option value="virtual">Virtual</option>
+                        <option value="creative">Creative</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="spicy">Spicy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="directSpicyDesc">Spicy Description (Optional):</label>
+                    <textarea id="directSpicyDesc" rows="2"></textarea>
+                </div>
+                <div class="form-group"> <label for="directTags">Tags (comma-separated):</label> <input type="text" id="directTags"> </div>
+                <div class="form-group"> <label for="directDuration">Est. Duration:</label> <input type="text" id="directDuration"> </div>
+                <div class="form-group"> <label for="directCost">Approx. Cost:</label> <input type="text" id="directCost"> </div>
+                <div class="form-group"> <label for="directRequires">Requires:</label> <input type="text" id="directRequires"> </div>
+                <div class="form-buttons">
+                    <button type="submit" class="approve-btn"><i class="fas fa-plus"></i> Add to Date Ideas</button>
+                </div>
+            </form>
+        </section>
 
         <!-- Pending Suggestions Section -->
         <section class="section">
@@ -77,11 +141,34 @@
             </div>
         </section>
 
+        <!-- Edit Suggestion Modal -->
+        <div id="editSuggestionModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeEditModal()">×</span>
+                <h3>Edit & Approve Suggestion</h3>
+                <form id="editSuggestionForm" class="admin-form">
+                    <input type="hidden" id="editOriginalRowIndex">
+                    <div class="form-group"> <label for="editTitle">Title:</label> <input type="text" id="editTitle" required> </div>
+                    <div class="form-group"> <label for="editDescription">Description:</label> <textarea id="editDescription" rows="4" required></textarea> </div>
+                    <div class="form-group"> <label for="editCategory">Category:</label> <select id="editCategory" required> <option value="virtual">Virtual</option> <option value="creative">Creative</option> <option value="gaming">Gaming</option> <option value="spicy">Spicy</option> </select> </div>
+                    <div class="form-group"> <label for="editSpicyDesc">Spicy Desc (Optional):</label> <textarea id="editSpicyDesc" rows="3"></textarea> </div>
+                    <div class="form-group"> <label for="editTags">Tags (comma-separated):</label> <input type="text" id="editTags"> </div>
+                    <div class="form-group"> <label for="editDuration">Est. Duration:</label> <input type="text" id="editDuration"> </div>
+                    <div class="form-group"> <label for="editCost">Approx. Cost:</label> <input type="text" id="editCost"> </div>
+                    <div class="form-group"> <label for="editRequires">Requires:</label> <input type="text" id="editRequires"> </div>
+                    <div class="form-buttons">
+                        <button type="submit" class="approve-btn"><i class="fas fa-save"></i> Save & Approve</button>
+                        <button type="button" class="reject-btn" onclick="closeEditModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Scheduled Dates Management Section -->
         <section class="section">
             <h2><i class="fas fa-calendar-check"></i> Manage Scheduled Dates</h2>
             <p style="text-align:center; margin-bottom:15px; font-size:0.9em; color:#555;">
-                Here you can approve which scheduled dates appear on the main "View Our Scheduled Dates" list.
+                Approve dates to be shown on the main site's "View Our Scheduled Dates" list.
             </p>
             <div id="allScheduledDatesList">
                 <p class="loading-indicator">Loading all scheduled dates...</p>
@@ -90,32 +177,31 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxj4XBnTOHAREXfQ9SgVlVuwB9D4_mnT4yEWH_18_2TUYpiyJbc9gjm4UCFC0x3AJkkZA/exec"; // YOUR SCRIPT URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7ZJD95q3L0nWY1zVdGsIgKkqmc8DPOvTYoZhpctCWRhkJT0Wh9fCzz0KpAp8qovhHBw/exec"; 
 
         // --- PENDING SUGGESTIONS ---
         const pendingSuggestionsListDiv = document.getElementById('pendingSuggestionsList');
+        const editModal = document.getElementById('editSuggestionModal');
+        const editSuggestionForm = document.getElementById('editSuggestionForm');
 
         async function fetchPendingSuggestions() {
+            // ... (fetchPendingSuggestions function - same as before, but ensure it calls addSuggestionActionListeners)
             if (!pendingSuggestionsListDiv) return;
             pendingSuggestionsListDiv.innerHTML = '<p class="loading-indicator">Loading pending suggestions...</p>';
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getPendingSuggestions&cb=${new Date().getTime()}`);
                 if (!response.ok) throw new Error(`Network error: ${response.statusText}`);
                 const suggestions = await response.json();
-
                 if (suggestions.status === "error") throw new Error(suggestions.message);
 
-                pendingSuggestionsListDiv.innerHTML = ''; // Clear loading
+                pendingSuggestionsListDiv.innerHTML = ''; 
                 if (suggestions.length === 0) {
-                    pendingSuggestionsListDiv.innerHTML = '<p class="no-items">No pending suggestions right now. ✨</p>';
+                    pendingSuggestionsListDiv.innerHTML = '<p class="no-items">No pending suggestions. ✨</p>';
                     return;
                 }
-
-                const ul = document.createElement('ul');
-                ul.className = 'item-list';
+                const ul = document.createElement('ul'); ul.className = 'item-list';
                 suggestions.forEach(sugg => {
-                    const li = document.createElement('li');
-                    li.className = 'item-card';
+                    const li = document.createElement('li'); li.className = 'item-card';
                     li.innerHTML = `
                         <h3>${sugg.suggestedTitle}</h3>
                         <p><strong>Category:</strong> ${sugg.suggestedCategory}</p>
@@ -123,8 +209,10 @@
                         ${sugg.suggestedSpicyDescription ? `<p><strong>Spicy Details:</strong> <em>${sugg.suggestedSpicyDescription}</em></p>` : ''}
                         <p class="meta-info">Submitted: ${new Date(sugg.timestamp).toLocaleString()} by ${sugg.submitterInfo}</p>
                         <div class="actions">
-                            <button class="approve-btn" data-rowindex="${sugg.rowIndex}" data-title="${sugg.suggestedTitle}" data-desc="${sugg.suggestedDescription}" data-cat="${sugg.suggestedCategory}" data-spicy="${sugg.suggestedSpicyDescription || ''}"><i class="fas fa-check"></i> Approve</button>
+                            <button class="approve-btn direct-approve-btn" data-rowindex="${sugg.rowIndex}" data-title="${sugg.suggestedTitle}" data-desc="${sugg.suggestedDescription}" data-cat="${sugg.suggestedCategory}" data-spicy="${sugg.suggestedSpicyDescription || ''}"><i class="fas fa-check-double"></i> Approve Directly</button>
+                            <button class="edit-approve-btn" data-rowindex="${sugg.rowIndex}" data-sugg='${JSON.stringify(sugg).replace(/'/g, "'")}'> <i class="fas fa-edit"></i> Edit & Approve</button>
                             <button class="reject-btn" data-rowindex="${sugg.rowIndex}"><i class="fas fa-times"></i> Reject</button>
+                            <button class="delete-btn delete-suggestion-btn" data-rowindex="${sugg.rowIndex}"><i class="fas fa-trash-alt"></i> Delete</button>
                         </div>
                     `;
                     ul.appendChild(li);
@@ -138,147 +226,206 @@
         }
 
         function addSuggestionActionListeners() {
-            document.querySelectorAll('.approve-btn').forEach(button => {
+            document.querySelectorAll('.direct-approve-btn').forEach(button => { // Direct Approve
                 button.addEventListener('click', async function() {
+                    if (!confirm("Are you sure you want to directly approve this suggestion?")) return;
                     this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Approving...'; this.disabled = true;
                     const params = new URLSearchParams({
-                        action: "approveSuggestion",
-                        rowIndex: this.dataset.rowindex,
-                        title: this.dataset.title,
-                        description: this.dataset.desc,
-                        category: this.dataset.cat,
-                        spicyDesc: this.dataset.spicy
+                        action: "approveSuggestion", rowIndex: this.dataset.rowindex,
+                        title: this.dataset.title, description: this.dataset.desc,
+                        category: this.dataset.cat, spicyDesc: this.dataset.spicy
                     });
                     try {
                         const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
                         const result = await response.json();
-                        if (result.status === "success") {
-                            alert("Suggestion approved and added to Date Ideas!");
-                            fetchPendingSuggestions(); // Refresh list
-                        } else { throw new Error(result.message); }
-                    } catch (error) {
-                        console.error("Error approving suggestion:", error);
-                        alert(`Error: ${error.message}`);
-                        this.innerHTML = '<i class="fas fa-check"></i> Approve'; this.disabled = false;
-                    }
+                        if (result.status === "success") { alert("Suggestion approved!"); fetchPendingSuggestions(); } 
+                        else { throw new Error(result.message); }
+                    } catch (error) { console.error("Error approving:", error); alert(`Error: ${error.message}`); this.innerHTML = '<i class="fas fa-check-double"></i> Approve Directly'; this.disabled = false; }
                 });
             });
 
-            document.querySelectorAll('.reject-btn').forEach(button => {
-                button.addEventListener('click', async function() {
+            document.querySelectorAll('.edit-approve-btn').forEach(button => { // Edit & Approve
+                button.addEventListener('click', function() {
+                    const suggData = JSON.parse(this.dataset.sugg.replace(/'/g, "'"));
+                    document.getElementById('editOriginalRowIndex').value = suggData.rowIndex;
+                    document.getElementById('editTitle').value = suggData.suggestedTitle;
+                    document.getElementById('editDescription').value = suggData.suggestedDescription;
+                    document.getElementById('editCategory').value = suggData.suggestedCategory;
+                    document.getElementById('editSpicyDesc').value = suggData.suggestedSpicyDescription || '';
+                    // Pre-fill new fields for editing if they exist, otherwise leave blank
+                    document.getElementById('editTags').value = ''; 
+                    document.getElementById('editDuration').value = '';
+                    document.getElementById('editCost').value = '';
+                    document.getElementById('editRequires').value = '';
+                    editModal.style.display = 'flex';
+                });
+            });
+
+            document.querySelectorAll('.reject-btn').forEach(button => { /* ... (same as before) ... */ 
+                 button.addEventListener('click', async function() {
+                    if (!confirm("Are you sure you want to reject this suggestion?")) return;
                     this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Rejecting...'; this.disabled = true;
-                    const params = new URLSearchParams({
-                        action: "rejectSuggestion",
-                        rowIndex: this.dataset.rowindex
-                    });
+                    const params = new URLSearchParams({ action: "rejectSuggestion", rowIndex: this.dataset.rowindex });
                     try {
                         const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
                         const result = await response.json();
-                        if (result.status === "success") {
-                            alert("Suggestion rejected.");
-                            fetchPendingSuggestions(); // Refresh list
-                        } else { throw new Error(result.message); }
-                    } catch (error) {
-                        console.error("Error rejecting suggestion:", error);
-                        alert(`Error: ${error.message}`);
-                        this.innerHTML = '<i class="fas fa-times"></i> Reject'; this.disabled = false;
-                    }
+                        if (result.status === "success") { alert("Suggestion rejected."); fetchPendingSuggestions(); } 
+                        else { throw new Error(result.message); }
+                    } catch (error) { console.error("Error rejecting:", error); alert(`Error: ${error.message}`); this.innerHTML = '<i class="fas fa-times"></i> Reject'; this.disabled = false; }
+                });
+            });
+            
+            document.querySelectorAll('.delete-suggestion-btn').forEach(button => { // Delete Suggestion
+                button.addEventListener('click', async function() {
+                    if (!confirm("Are you sure you want to PERMANENTLY DELETE this suggestion? This cannot be undone.")) return;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...'; this.disabled = true;
+                    const params = new URLSearchParams({ action: "deletePendingSuggestion", rowIndex: this.dataset.rowindex });
+                    try {
+                        const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+                        const result = await response.json();
+                        if (result.status === "success") { alert("Suggestion deleted."); fetchPendingSuggestions(); } 
+                        else { throw new Error(result.message); }
+                    } catch (error) { console.error("Error deleting suggestion:", error); alert(`Error: ${error.message}`); this.innerHTML = '<i class="fas fa-trash-alt"></i> Delete'; this.disabled = false; }
                 });
             });
         }
 
+        if (editSuggestionForm) {
+            editSuggestionForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...'; submitBtn.disabled = true;
+
+                const params = new URLSearchParams({
+                    action: "editAndApproveSuggestion",
+                    originalRowIndex: document.getElementById('editOriginalRowIndex').value,
+                    title: document.getElementById('editTitle').value,
+                    description: document.getElementById('editDescription').value,
+                    category: document.getElementById('editCategory').value,
+                    spicyDesc: document.getElementById('editSpicyDesc').value,
+                    tags: document.getElementById('editTags').value,
+                    duration: document.getElementById('editDuration').value,
+                    cost: document.getElementById('editCost').value,
+                    requires: document.getElementById('editRequires').value
+                });
+                try {
+                    const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+                    const result = await response.json();
+                    if (result.status === "success") {
+                        alert("Suggestion edited and approved!");
+                        closeEditModal();
+                        fetchPendingSuggestions();
+                    } else { throw new Error(result.message); }
+                } catch (error) {
+                    console.error("Error editing/approving suggestion:", error);
+                    alert(`Error: ${error.message}`);
+                } finally {
+                    submitBtn.innerHTML = '<i class="fas fa-save"></i> Save & Approve'; submitBtn.disabled = false;
+                }
+            });
+        }
+        function closeEditModal() { if(editModal) editModal.style.display = 'none'; }
+        
+        // --- DIRECT ADD DATE IDEA ---
+        const directAddDateForm = document.getElementById('directAddDateForm');
+        if (directAddDateForm) {
+            directAddDateForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...'; submitBtn.disabled = true;
+
+                const params = new URLSearchParams({
+                    action: "addDirectDateIdea",
+                    title: document.getElementById('directTitle').value,
+                    description: document.getElementById('directDescription').value,
+                    category: document.getElementById('directCategory').value,
+                    spicyDesc: document.getElementById('directSpicyDesc').value,
+                    tags: document.getElementById('directTags').value,
+                    duration: document.getElementById('directDuration').value,
+                    cost: document.getElementById('directCost').value,
+                    requires: document.getElementById('directRequires').value
+                });
+                try {
+                    const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+                    const result = await response.json();
+                    if (result.status === "success") {
+                        alert("New date idea added directly to DateIdeas sheet!");
+                        this.reset(); // Reset the form
+                    } else { throw new Error(result.message); }
+                } catch (error) {
+                    console.error("Error adding direct date idea:", error);
+                    alert(`Error: ${error.message}`);
+                } finally {
+                     submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add to Date Ideas'; submitBtn.disabled = false;
+                }
+            });
+        }
+
+
         // --- SCHEDULED DATES MANAGEMENT ---
         const allScheduledDatesListDiv = document.getElementById('allScheduledDatesList');
 
-        async function fetchAllScheduledDatesAdmin() {
+        async function fetchAllScheduledDatesAdmin() { /* ... (same as before, ensure addScheduledDateActionListeners is called) ... */ 
             if (!allScheduledDatesListDiv) return;
             allScheduledDatesListDiv.innerHTML = '<p class="loading-indicator">Loading all scheduled dates...</p>';
             try {
                 const response = await fetch(`${SCRIPT_URL}?action=getAllScheduledDatesForAdmin&cb=${new Date().getTime()}`);
                 if (!response.ok) throw new Error(`Network error: ${response.statusText}`);
                 const dates = await response.json();
-
                 if (dates.status === "error") throw new Error(dates.message);
                 
-                allScheduledDatesListDiv.innerHTML = ''; // Clear loading
-                if (dates.length === 0) {
-                    allScheduledDatesListDiv.innerHTML = '<p class="no-items">No dates have been scheduled yet.</p>';
-                    return;
-                }
+                allScheduledDatesListDiv.innerHTML = ''; 
+                if (dates.length === 0) { allScheduledDatesListDiv.innerHTML = '<p class="no-items">No dates scheduled.</p>'; return; }
 
-                const table = document.createElement('table');
-                table.className = 'scheduled-dates-table';
-                table.innerHTML = `
-                    <thead>
-                        <tr>
-                            <th>Idea Title</th>
-                            <th>Scheduled For (UTC)</th>
-                            <th>Status</th>
-                            <th>Display on Site?</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                `;
+                const table = document.createElement('table'); table.className = 'data-table'; // Changed class
+                table.innerHTML = `<thead><tr><th>Idea</th><th>Scheduled (UTC)</th><th>Status</th><th>Display?</th><th>Actions</th></tr></thead><tbody></tbody>`;
                 const tbody = table.querySelector('tbody');
                 dates.forEach(dateEntry => {
                     const tr = tbody.insertRow();
                     const eventDateUTC = new Date(dateEntry.scheduledDate);
-                    const formattedDateTimeUTC = eventDateUTC.toLocaleString('en-US', { 
-                        year: 'numeric', month: 'short', day: 'numeric', 
-                        hour: '2-digit', minute: '2-digit', timeZone: 'UTC' 
-                    });
-
+                    const formattedDateTimeUTC = eventDateUTC.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
                     tr.innerHTML = `
-                        <td>${dateEntry.ideaTitle}</td>
-                        <td>${formattedDateTimeUTC}</td>
-                        <td>${dateEntry.status}</td>
-                        <td>${dateEntry.approvedForDisplay ? 'Yes (Visible)' : 'No (Hidden)'}</td>
+                        <td>${dateEntry.ideaTitle}</td> <td>${formattedDateTimeUTC}</td>
+                        <td>${dateEntry.status}</td> <td>${dateEntry.approvedForDisplay ? 'Yes' : 'No'}</td>
                         <td class="actions">
-                            <button class="toggle-approval-btn ${dateEntry.approvedForDisplay ? 'approved' : ''}" data-rowindex="${dateEntry.rowIndex}" data-currentstatus="${dateEntry.approvedForDisplay}">
-                                ${dateEntry.approvedForDisplay ? '<i class="fas fa-eye-slash"></i> Hide' : '<i class="fas fa-eye"></i> Show'}
-                            </button>
+                            <button class="toggle-approval-btn ${dateEntry.approvedForDisplay ? 'approved' : ''}" data-rowindex="${dateEntry.rowIndex}" data-currentstatus="${dateEntry.approvedForDisplay}">${dateEntry.approvedForDisplay ? '<i class="fas fa-eye-slash"></i> Hide' : '<i class="fas fa-eye"></i> Show'}</button>
+                            <button class="delete-btn delete-scheduled-btn" data-rowindex="${dateEntry.rowIndex}"><i class="fas fa-trash-alt"></i> Delete</button>
                         </td>
                     `;
                 });
                 allScheduledDatesListDiv.appendChild(table);
                 addScheduledDateActionListeners();
-
             } catch (error) {
-                console.error("Error fetching all scheduled dates:", error);
-                allScheduledDatesListDiv.innerHTML = `<p class="error-message">Error loading scheduled dates: ${error.message}</p>`;
+                console.error("Error fetching scheduled dates for admin:", error);
+                allScheduledDatesListDiv.innerHTML = `<p class="error-message">Error: ${error.message}</p>`;
             }
         }
 
         function addScheduledDateActionListeners() {
-            document.querySelectorAll('.toggle-approval-btn').forEach(button => {
+            document.querySelectorAll('.toggle-approval-btn').forEach(button => { /* ... (same as before) ... */ 
                 button.addEventListener('click', async function() {
-                    const originalText = this.innerHTML;
-                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...'; this.disabled = true;
-                    
-                    const rowIndex = this.dataset.rowindex;
-                    const currentStatus = this.dataset.currentstatus === 'true';
-                    const newStatus = !currentStatus;
-
-                    const params = new URLSearchParams({
-                        action: "toggleScheduledDateApproval",
-                        rowIndex: rowIndex,
-                        isApproved: newStatus.toString() // Send as "true" or "false" string
-                    });
-
+                    const originalText = this.innerHTML; this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...'; this.disabled = true;
+                    const rowIndex = this.dataset.rowindex; const currentStatus = this.dataset.currentstatus === 'true'; const newStatus = !currentStatus;
+                    const params = new URLSearchParams({ action: "toggleScheduledDateApproval", rowIndex: rowIndex, isApproved: newStatus.toString() });
                     try {
                         const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
                         const result = await response.json();
-                        if (result.status === "success") {
-                            // alert("Approval status updated!");
-                            fetchPendingSuggestions(); // Refresh suggestions in case status changed something relevant
-                            fetchAllScheduledDatesAdmin(); // Refresh this list
-                        } else { throw new Error(result.message); }
-                    } catch (error) {
-                        console.error("Error toggling approval:", error);
-                        alert(`Error: ${error.message}`);
-                        this.innerHTML = originalText; this.disabled = false;
-                    }
+                        if (result.status === "success") { fetchAllScheduledDatesAdmin(); /* Refresh just this list */ } 
+                        else { throw new Error(result.message); }
+                    } catch (error) { console.error("Error toggling approval:", error); alert(`Error: ${error.message}`); this.innerHTML = originalText; this.disabled = false; }
+                });
+            });
+             document.querySelectorAll('.delete-scheduled-btn').forEach(button => { // Delete Scheduled Date
+                button.addEventListener('click', async function() {
+                    if (!confirm("Are you sure you want to PERMANENTLY DELETE this scheduled date? This cannot be undone.")) return;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...'; this.disabled = true;
+                    const params = new URLSearchParams({ action: "deleteScheduledDate", rowIndex: this.dataset.rowindex });
+                    try {
+                        const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+                        const result = await response.json();
+                        if (result.status === "success") { alert("Scheduled date deleted."); fetchAllScheduledDatesAdmin(); } 
+                        else { throw new Error(result.message); }
+                    } catch (error) { console.error("Error deleting scheduled date:", error); alert(`Error: ${error.message}`); this.innerHTML = '<i class="fas fa-trash-alt"></i> Delete'; this.disabled = false; }
                 });
             });
         }
@@ -287,6 +434,12 @@
         window.onload = function() {
             fetchPendingSuggestions();
             fetchAllScheduledDatesAdmin();
+            // Close modal if clicked outside
+            window.onclick = function(event) {
+                if (event.target == editModal) {
+                    closeEditModal();
+                }
+            }
         };
     </script>
 </body>
