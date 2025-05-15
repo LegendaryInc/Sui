@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enchanted Dates - Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #9b4d96; --secondary: #f5a9bc; --dark: #2a0a3a;
+            --light: #fce4ec; --accent: #e91e63; --success: #4CAF50; --danger: #f44336;
+            --admin-bg: #f4f6f8; --admin-card-bg: #ffffff; --admin-text: #333;
+        }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--admin-bg); margin: 0; padding: 20px; color: var(--admin-text); }
+        .admin-container { max-width: 1200px; margin: 20px auto; background-color: var(--admin-card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h1, h2 { font-family: 'Pacifico', cursive; color: var(--primary); text-align: center; margin-bottom: 20px; }
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 1.8rem; margin-top: 30px; border-bottom: 2px solid var(--secondary); padding-bottom: 10px; }
+        
+        .section { margin-bottom: 40px; }
+        .item-list { list-style-type: none; padding: 0; }
+        .item-card {
+            background-color: #fdfdfd; border: 1px solid #e0e0e0; border-left: 5px solid var(--primary);
+            padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .item-card h3 { color: var(--accent); margin-top: 0; margin-bottom: 8px; font-size: 1.2em; }
+        .item-card p { margin-bottom: 5px; font-size: 0.9em; line-height: 1.5; }
+        .item-card p strong { color: var(--dark); }
+        .item-card .meta-info { font-size: 0.8em; color: #777; margin-top: 10px; }
+        
+        .actions button {
+            padding: 8px 15px; font-size: 0.9em; border-radius: 5px; cursor: pointer;
+            border: none; color: white; transition: background-color 0.2s ease; margin-right: 10px;
+        }
+        .approve-btn { background-color: var(--success); } .approve-btn:hover { background-color: #388E3C; }
+        .reject-btn { background-color: var(--danger); } .reject-btn:hover { background-color: #D32F2F; }
+        .toggle-approval-btn { background-color: var(--secondary); color: var(--dark); }
+        .toggle-approval-btn.approved { background-color: var(--primary); color: white; }
+        .toggle-approval-btn:hover { opacity: 0.8; }
+
+        .loading-indicator { text-align: center; font-style: italic; color: var(--primary); padding: 20px; }
+        .error-message { text-align: center; color: var(--danger); padding: 10px; background-color: #ffcdd2; border-radius: 5px; }
+        .success-message { text-align: center; color: var(--success); padding: 10px; background-color: #C8E6C9; border-radius: 5px; }
+        .no-items { text-align: center; color: #777; padding: 20px; font-style: italic; }
+
+        /* Simple table for scheduled dates */
+        .scheduled-dates-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .scheduled-dates-table th, .scheduled-dates-table td {
+            border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 0.9em;
+        }
+        .scheduled-dates-table th { background-color: var(--light); color: var(--primary); font-weight: 600; }
+        .scheduled-dates-table tr:nth-child(even) { background-color: #f9f9f9; }
+        .scheduled-dates-table tr:hover { background-color: #f1f1f1; }
+        .scheduled-dates-table .actions { text-align: center; }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .admin-container { padding: 15px; }
+            h1 { font-size: 2rem; } h2 { font-size: 1.5rem; }
+            .item-card { padding: 12px; }
+            .actions button { display: block; width: 100%; margin-bottom: 5px; }
+            .scheduled-dates-table th, .scheduled-dates-table td { font-size: 0.8em; padding: 6px; }
+            .scheduled-dates-table { display: block; overflow-x: auto; /* Make table scrollable */ }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <h1><i class="fas fa-cogs"></i> Enchanted Dates - Admin Panel</h1>
+
+        <!-- Pending Suggestions Section -->
+        <section class="section">
+            <h2><i class="fas fa-lightbulb"></i> Pending Date Suggestions</h2>
+            <div id="pendingSuggestionsList">
+                <p class="loading-indicator">Loading pending suggestions...</p>
+            </div>
+        </section>
+
+        <!-- Scheduled Dates Management Section -->
+        <section class="section">
+            <h2><i class="fas fa-calendar-check"></i> Manage Scheduled Dates</h2>
+            <p style="text-align:center; margin-bottom:15px; font-size:0.9em; color:#555;">
+                Here you can approve which scheduled dates appear on the main "View Our Scheduled Dates" list.
+            </p>
+            <div id="allScheduledDatesList">
+                <p class="loading-indicator">Loading all scheduled dates...</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxj4XBnTOHAREXfQ9SgVlVuwB9D4_mnT4yEWH_18_2TUYpiyJbc9gjm4UCFC0x3AJkkZA/exec"; // YOUR SCRIPT URL
+
+        // --- PENDING SUGGESTIONS ---
+        const pendingSuggestionsListDiv = document.getElementById('pendingSuggestionsList');
+
+        async function fetchPendingSuggestions() {
+            if (!pendingSuggestionsListDiv) return;
+            pendingSuggestionsListDiv.innerHTML = '<p class="loading-indicator">Loading pending suggestions...</p>';
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getPendingSuggestions&cb=${new Date().getTime()}`);
+                if (!response.ok) throw new Error(`Network error: ${response.statusText}`);
+                const suggestions = await response.json();
+
+                if (suggestions.status === "error") throw new Error(suggestions.message);
+
+                pendingSuggestionsListDiv.innerHTML = ''; // Clear loading
+                if (suggestions.length === 0) {
+                    pendingSuggestionsListDiv.innerHTML = '<p class="no-items">No pending suggestions right now. ✨</p>';
+                    return;
+                }
+
+                const ul = document.createElement('ul');
+                ul.className = 'item-list';
+                suggestions.forEach(sugg => {
+                    const li = document.createElement('li');
+                    li.className = 'item-card';
+                    li.innerHTML = `
+                        <h3>${sugg.suggestedTitle}</h3>
+                        <p><strong>Category:</strong> ${sugg.suggestedCategory}</p>
+                        <p><strong>Description:</strong> ${sugg.suggestedDescription}</p>
+                        ${sugg.suggestedSpicyDescription ? `<p><strong>Spicy Details:</strong> <em>${sugg.suggestedSpicyDescription}</em></p>` : ''}
+                        <p class="meta-info">Submitted: ${new Date(sugg.timestamp).toLocaleString()} by ${sugg.submitterInfo}</p>
+                        <div class="actions">
+                            <button class="approve-btn" data-rowindex="${sugg.rowIndex}" data-title="${sugg.suggestedTitle}" data-desc="${sugg.suggestedDescription}" data-cat="${sugg.suggestedCategory}" data-spicy="${sugg.suggestedSpicyDescription || ''}"><i class="fas fa-check"></i> Approve</button>
+                            <button class="reject-btn" data-rowindex="${sugg.rowIndex}"><i class="fas fa-times"></i> Reject</button>
+                        </div>
+                    `;
+                    ul.appendChild(li);
+                });
+                pendingSuggestionsListDiv.appendChild(ul);
+                addSuggestionActionListeners();
+            } catch (error) {
+                console.error("Error fetching pending suggestions:", error);
+                pendingSuggestionsListDiv.innerHTML = `<p class="error-message">Error loading suggestions: ${error.message}</p>`;
+            }
+        }
+
+        function addSuggestionActionListeners() {
+            document.querySelectorAll('.approve-btn').forEach(button => {
+                button.addEventListener('click', async function() {
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Approving...'; this.disabled = true;
+                    const params = new URLSearchParams({
+                        action: "approveSuggestion",
+                        rowIndex: this.dataset.rowindex,
+                        title: this.dataset.title,
+                        description: this.dataset.desc,
+                        category: this.dataset.cat,
+                        spicyDesc: this.dataset.spicy
+                    });
+                    try {
+                        const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+                        const result = await response.json();
+                        if (result.status === "success") {
+                            alert("Suggestion approved and added to Date Ideas!");
+                            fetchPendingSuggestions(); // Refresh list
+                        } else { throw new Error(result.message); }
+                    } catch (error) {
+                        console.error("Error approving suggestion:", error);
+                        alert(`Error: ${error.message}`);
+                        this.innerHTML = '<i class="fas fa-check"></i> Approve'; this.disabled = false;
+                    }
+                });
+            });
+
+            document.querySelectorAll('.reject-btn').forEach(button => {
+                button.addEventListener('click', async function() {
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Rejecting...'; this.disabled = true;
+                    const params = new URLSearchParams({
+                        action: "rejectSuggestion",
+                        rowIndex: this.dataset.rowindex
+                    });
+                    try {
+                        const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+                        const result = await response.json();
+                        if (result.status === "success") {
+                            alert("Suggestion rejected.");
+                            fetchPendingSuggestions(); // Refresh list
+                        } else { throw new Error(result.message); }
+                    } catch (error) {
+                        console.error("Error rejecting suggestion:", error);
+                        alert(`Error: ${error.message}`);
+                        this.innerHTML = '<i class="fas fa-times"></i> Reject'; this.disabled = false;
+                    }
+                });
+            });
+        }
+
+        // --- SCHEDULED DATES MANAGEMENT ---
+        const allScheduledDatesListDiv = document.getElementById('allScheduledDatesList');
+
+        async function fetchAllScheduledDatesAdmin() {
+            if (!allScheduledDatesListDiv) return;
+            allScheduledDatesListDiv.innerHTML = '<p class="loading-indicator">Loading all scheduled dates...</p>';
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getAllScheduledDatesForAdmin&cb=${new Date().getTime()}`);
+                if (!response.ok) throw new Error(`Network error: ${response.statusText}`);
+                const dates = await response.json();
+
+                if (dates.status === "error") throw new Error(dates.message);
+                
+                allScheduledDatesListDiv.innerHTML = ''; // Clear loading
+                if (dates.length === 0) {
+                    allScheduledDatesListDiv.innerHTML = '<p class="no-items">No dates have been scheduled yet.</p>';
+                    return;
+                }
+
+                const table = document.createElement('table');
+                table.className = 'scheduled-dates-table';
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Idea Title</th>
+                            <th>Scheduled For (UTC)</th>
+                            <th>Status</th>
+                            <th>Display on Site?</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                `;
+                const tbody = table.querySelector('tbody');
+                dates.forEach(dateEntry => {
+                    const tr = tbody.insertRow();
+                    const eventDateUTC = new Date(dateEntry.scheduledDate);
+                    const formattedDateTimeUTC = eventDateUTC.toLocaleString('en-US', { 
+                        year: 'numeric', month: 'short', day: 'numeric', 
+                        hour: '2-digit', minute: '2-digit', timeZone: 'UTC' 
+                    });
+
+                    tr.innerHTML = `
+                        <td>${dateEntry.ideaTitle}</td>
+                        <td>${formattedDateTimeUTC}</td>
+                        <td>${dateEntry.status}</td>
+                        <td>${dateEntry.approvedForDisplay ? 'Yes (Visible)' : 'No (Hidden)'}</td>
+                        <td class="actions">
+                            <button class="toggle-approval-btn ${dateEntry.approvedForDisplay ? 'approved' : ''}" data-rowindex="${dateEntry.rowIndex}" data-currentstatus="${dateEntry.approvedForDisplay}">
+                                ${dateEntry.approvedForDisplay ? '<i class="fas fa-eye-slash"></i> Hide' : '<i class="fas fa-eye"></i> Show'}
+                            </button>
+                        </td>
+                    `;
+                });
+                allScheduledDatesListDiv.appendChild(table);
+                addScheduledDateActionListeners();
+
+            } catch (error) {
+                console.error("Error fetching all scheduled dates:", error);
+                allScheduledDatesListDiv.innerHTML = `<p class="error-message">Error loading scheduled dates: ${error.message}</p>`;
+            }
+        }
+
+        function addScheduledDateActionListeners() {
+            document.querySelectorAll('.toggle-approval-btn').forEach(button => {
+                button.addEventListener('click', async function() {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...'; this.disabled = true;
+                    
+                    const rowIndex = this.dataset.rowindex;
+                    const currentStatus = this.dataset.currentstatus === 'true';
+                    const newStatus = !currentStatus;
+
+                    const params = new URLSearchParams({
+                        action: "toggleScheduledDateApproval",
+                        rowIndex: rowIndex,
+                        isApproved: newStatus.toString() // Send as "true" or "false" string
+                    });
+
+                    try {
+                        const response = await fetch(`${SCRIPT_URL}?${params.toString()}`);
+                        const result = await response.json();
+                        if (result.status === "success") {
+                            // alert("Approval status updated!");
+                            fetchPendingSuggestions(); // Refresh suggestions in case status changed something relevant
+                            fetchAllScheduledDatesAdmin(); // Refresh this list
+                        } else { throw new Error(result.message); }
+                    } catch (error) {
+                        console.error("Error toggling approval:", error);
+                        alert(`Error: ${error.message}`);
+                        this.innerHTML = originalText; this.disabled = false;
+                    }
+                });
+            });
+        }
+
+        // --- INITIALIZATION ---
+        window.onload = function() {
+            fetchPendingSuggestions();
+            fetchAllScheduledDatesAdmin();
+        };
+    </script>
+</body>
+</html>
