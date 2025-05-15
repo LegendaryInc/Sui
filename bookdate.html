@@ -108,14 +108,12 @@
         .mood-btn.active { background: linear-gradient(135deg, var(--primary), #7c3c79); font-weight: 600; }
         .main-btn {
             background: linear-gradient(135deg, var(--primary), #7c3c79); color: white; border: none; padding: 14px 32px; font-size: 1.1rem;
-            border-radius: 50px; cursor: pointer; margin: 10px auto; /* Reduced margin for multiple buttons */
+            border-radius: 50px; cursor: pointer; margin: 10px auto; 
             transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-weight: 600; display: block; 
         }
         .main-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
         .button-group { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px; }
 
-
-        /* SPICY TOGGLE, DATE IDEA CARD, FORMS, CONFIRMATION, HEARTS, BOWS ... (styles remain largely the same) */
         .spicy-toggle-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 15px 0; }
         .spicy-toggle { position: relative; display: inline-block; width: 60px; height: 30px; }
         .spicy-toggle input { opacity: 0; width: 0; height: 0; }
@@ -151,16 +149,8 @@
         .container-bow-bl { bottom: -15px; left: -15px; } .container-bow-br { bottom: -15px; right: -15px; }
         .card-bow-tl { top: -10px; left: -10px; width: 30px; height: 30px; } .card-bow-tr { top: -10px; right: -10px; width: 30px; height: 30px; }
         .card-bow-bl { bottom: -10px; left: -10px; width: 30px; height: 30px; } .card-bow-br { bottom: -10px; right: -10px; width: 30px; height: 30px; }
-        
-        .loading-indicator {
-            text-align: center;
-            font-style: italic;
-            color: var(--primary);
-            margin: 20px;
-            display: none; /* Hidden by default */
-        }
+        .loading-indicator { text-align: center; font-style: italic; color: var(--primary); margin: 20px; display: none; }
 
-        /* ===== RESPONSIVE STYLES (largely same) ===== */
         @media (max-width: 768px) {
             body { padding-left: 0; padding-right: 0; padding-bottom: 80px; }
             .nav-container-left, .nav-container-right { width: 100%; height: 80px; flex-direction: row; padding-top: 0; bottom: 0; top: auto; border-right: none; border-left: none; border-top: 3px solid var(--secondary); justify-content: space-around; }
@@ -182,7 +172,6 @@
             h1 { font-size: 1.8rem; } label { font-size: 0.9rem; }
             input, select, textarea { padding: 12px 15px; font-size: 0.9rem;}
         }
-
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -210,13 +199,13 @@
                 <button class="mood-btn" onclick="selectMood(this, 'virtual')"> <i class="fas fa-globe"></i> Virtual </button>
                 <button class="mood-btn" onclick="selectMood(this, 'creative')"> <i class="fas fa-paint-brush"></i> Creative </button>
                 <button class="mood-btn" onclick="selectMood(this, 'gaming')"> <i class="fas fa-gamepad"></i> Gaming </button>
-                <button class="mood-btn" onclick="selectMood(this, 'spicy')"> <i class="fas fa-fire"></i> Spicy </button>
+                <button class="mood-btn" onclick="selectMood(this, 'spicy')"> <i class="fas fa-fire"></i> Spicy </button> <!-- SPICY BUTTON ADDED BACK -->
                 <button class="mood-btn" onclick="selectMood(this, 'surprise')"> <i class="fas fa-gift"></i> Surprise Me </button>
             </div>
             
             <div class="loading-indicator" id="loadingIndicator">Fetching date ideas... ✨</div>
 
-            <div class="button-group"> <!-- Grouping buttons for better layout -->
+            <div class="button-group">
                 <button class="main-btn" id="generateDateBtn" onclick="generateDate()"> <i class="fas fa-magic"></i> Create Our Date </button>
                 <button class="main-btn" id="suggestDateBtn" onclick="showSuggestionForm()" style="background: linear-gradient(135deg, #6a4d9b, #4d7c9b);"> <i class="fas fa-lightbulb"></i> Suggest a Custom Date </button>
             </div>
@@ -234,7 +223,6 @@
             </div>
             
             <div class="form-container" id="bookingForm">
-                <!-- Booking Form HTML (same as before) -->
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tr">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-bl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-br">
                 <h2 class="form-title">Schedule Your Enchanted Date</h2>
@@ -243,14 +231,13 @@
                     <div class="form-group"> <label for="time"><i class="far fa-clock"></i> Time:</label> <input type="time" id="time" required> </div>
                     <div class="form-group"> <label for="duration"><i class="fas fa-hourglass-half"></i> Duration:</label> <select id="duration" required> <option value="1 hour">1 hour</option> <option value="2 hours" selected>2 hours</option> <option value="3 hours">3 hours</option> <option value="4+ hours">4+ hours</option> </select> </div>
                     <div class="form-group"> <label for="platform"><i class="fas fa-video"></i> Platform:</label> <select id="platform" required> <option value="">Select...</option> <option>Zoom</option> <option>FaceTime</option> <option>Discord</option> <option>Google Meet</option> <option>Skype</option> <option>Other</option> </select> </div>
-                    <div class="form-group"> <label for="email"><i class="fas fa-envelope"></i> Email (to send details):</label> <input type="email" id="email" value="kristinakraicova@gmail.com" required> </div>
+                    <div class="form-group"> <label for="email"><i class="fas fa-envelope"></i> Email (to send details):</label> <input type="email" id="email" required> </div> <!-- REMOVED PRE-FILLED VALUE -->
                     <div class="form-group"> <label for="prep"><i class="fas fa-clipboard-list"></i> Prep Notes:</label> <textarea id="prep" placeholder="What should we both prepare?"></textarea> </div>
                     <button type="submit" class="main-btn"> <i class="fas fa-heart"></i> Confirm Our Date </button>
                 </form>
             </div>
             
             <div class="suggestion-form" id="suggestionForm">
-                <!-- Suggestion Form HTML (same as before) -->
                  <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tr">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-bl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-br">
                 <h2>Suggest a Custom Date Idea</h2>
@@ -265,7 +252,6 @@
             </div>
             
             <div class="confirmation-card" id="suggestionConfirmation" style="display: none;">
-                <!-- Suggestion Confirmation HTML (same as before) -->
                  <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tr">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-bl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-br">
                 <h2 class="confirmation-title">Suggestion Sent! 💖</h2>
@@ -274,7 +260,6 @@
             </div>
             
             <div class="confirmation-card" id="confirmation">
-                <!-- Booking Confirmation HTML (same as before) -->
                  <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tr">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-bl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-br">
                 <h2 class="confirmation-title">Date Scheduled! ✨</h2>
@@ -301,15 +286,11 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAi2kuzS-fAYPGnEm3jcYprPNr1neJBD4qRhewUKYCoR93bW6YOhUTj-icqoKX8zcuBg/exec";
         
-        // Global variable to store fetched date ideas, categorized
-        let fetchedDateIdeas = {
-            virtual: [], creative: [], gaming: [], spicy: []
-        };
-        let allFetchedIdeas = []; // Flat array of all ideas for "Surprise Me"
+        let fetchedDateIdeas = { virtual: [], creative: [], gaming: [], spicy: [] };
+        let allFetchedIdeas = []; 
 
         let selectedMood = '', currentIdea = '', currentDescription = '', currentSpicyDesc = '';
         
-        // Function to fetch date ideas from Google Sheet
         async function loadDateIdeas() {
             const loadingIndicator = document.getElementById('loadingIndicator');
             const generateDateBtn = document.getElementById('generateDateBtn');
@@ -317,30 +298,33 @@
             generateDateBtn.disabled = true;
 
             try {
-                const response = await fetch(`${SCRIPT_URL}?action=getDateIdeas`);
+                const response = await fetch(`${SCRIPT_URL}?action=getDateIdeas&cb=${new Date().getTime()}`); // Added cache buster
                 if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                    throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
                 }
                 const data = await response.json();
 
-                if (data.status === "error") {
-                    throw new Error(`Error from script: ${data.message}`);
+                if (data.status === "error") { // Check for errors reported by Apps Script
+                    throw new Error(`Error from Google Script: ${data.message}`);
                 }
                 
-                // Clear previous ideas
-                fetchedDateIdeas = { virtual: [], creative: [], gaming: [], spicy: [] };
+                fetchedDateIdeas = { virtual: [], creative: [], gaming: [], spicy: [] }; // Clear previous
                 allFetchedIdeas = [];
 
+                // Assuming 'data' is the array of ideas from Apps Script
                 data.forEach(item => {
                     const ideaObject = {
-                        idea: item.ideaTitle, // Match your sheet's 'IdeaTitle' to JS 'idea'
+                        // Match property names from your Apps Script's getDateIdeasFromSheet function
+                        idea: item.ideaTitle || item.idea, // Handle both possible property names from sheet/script
                         description: item.description,
-                        spicyDesc: item.spicyDescription || ""
+                        spicyDesc: item.spicyDesc || "" // Ensure spicyDesc is always a string
                     };
-                    if (fetchedDateIdeas[item.category]) {
-                        fetchedDateIdeas[item.category].push(ideaObject);
+                    const category = item.category ? item.category.toLowerCase() : null; // Ensure category exists and is lowercase
+
+                    if (category && fetchedDateIdeas[category]) {
+                        fetchedDateIdeas[category].push(ideaObject);
                     }
-                    allFetchedIdeas.push(ideaObject); // For surprise me
+                    allFetchedIdeas.push(ideaObject);
                 });
                 console.log("Date ideas loaded and categorized:", fetchedDateIdeas);
                 loadingIndicator.style.display = 'none';
@@ -348,14 +332,15 @@
 
             } catch (error) {
                 console.error('Failed to load date ideas:', error);
-                loadingIndicator.textContent = 'Error loading ideas. Using fallback.';
-                // Keep generateDateBtn disabled or enable it to use hardcoded if you add a fallback
-                // For now, we'll keep it disabled if fetch fails.
-                // You could re-enable the hardcoded `dateIdeas` object here as a fallback.
+                loadingIndicator.textContent = 'Error loading ideas. Using fallback might be an option here.';
+                // Keep generateDateBtn disabled or handle fallback to hardcoded ideas
+                 // Fallback to hardcoded ideas if fetch fails (OPTIONAL)
+                // initializeHardcodedIdeas(); 
+                // loadingIndicator.style.display = 'none';
+                // generateDateBtn.disabled = false;
             }
         }
-
-
+        
         function selectMood(button, mood) { 
             document.querySelectorAll('.mood-btn').forEach(btn=>btn.classList.remove('active')); 
             button.classList.add('active'); 
@@ -363,18 +348,25 @@
         }
         
         function generateDate() {
-            if (Object.values(fetchedDateIdeas).every(arr => arr.length === 0) && allFetchedIdeas.length === 0) {
-                alert("Date ideas are still loading or failed to load. Please wait or try refreshing.");
+             // Check if ideas are loaded
+            let ideasAvailable = false;
+            for (const category in fetchedDateIdeas) {
+                if (fetchedDateIdeas[category].length > 0) {
+                    ideasAvailable = true;
+                    break;
+                }
+            }
+            if (!ideasAvailable && allFetchedIdeas.length === 0) {
+                 alert("Date ideas are still loading or failed to load. Please wait a moment or try refreshing the page.");
                 return;
             }
+
             if (!selectedMood && selectedMood !== 'surprise') {
                 alert("Please select a mood first!");
                 return;
             }
             
-            let moodForSelection;
             let ideasPool;
-
             if (selectedMood === 'surprise') {
                 if (allFetchedIdeas.length === 0) {
                     alert("No ideas available for 'Surprise Me' yet!"); return;
@@ -382,11 +374,16 @@
                 ideasPool = allFetchedIdeas;
             } else {
                 if (!fetchedDateIdeas[selectedMood] || fetchedDateIdeas[selectedMood].length === 0) {
-                    alert(`No ideas available for the '${selectedMood}' mood yet!`); return;
+                    alert(`No ideas available for the '${selectedMood}' mood yet! Try 'Surprise Me' or suggest one.`); return;
                 }
                 ideasPool = fetchedDateIdeas[selectedMood];
             }
             
+            if (ideasPool.length === 0) { // Double check after selection
+                 alert("No ideas found for the selected criteria.");
+                 return;
+            }
+
             const randomIdea = ideasPool[Math.floor(Math.random() * ideasPool.length)];
             
             document.getElementById('dateIdea').textContent = randomIdea.idea; 
@@ -412,7 +409,6 @@
             currentIdea = randomIdea.idea; 
             currentDescription = randomIdea.description; 
             currentSpicyDesc = randomIdea.spicyDesc || '';
-            
             createHearts();
         }
         
@@ -445,10 +441,9 @@
             submitButton.disabled = true;
             submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Confirming...';
 
-
             const date = document.getElementById('date').value;
             const time = document.getElementById('time').value;
-            const duration = document.getElementById('duration').value; // This is now text like "1 hour"
+            const duration = document.getElementById('duration').value;
             const platform = document.getElementById('platform').value;
             const email = document.getElementById('email').value;
             const prep = document.getElementById('prep').value || "None needed";
@@ -458,54 +453,33 @@
             const formattedDate = startDateTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
             const formattedTime = startDateTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
             
-            // Update confirmation display elements
             document.getElementById('confirmedIdea').textContent=currentIdea; 
             document.getElementById('confirmedDate').textContent=formattedDate; 
             document.getElementById('confirmedTime').textContent=formattedTime;
-            document.getElementById('confirmedDuration').textContent=duration; // Use the text value
+            document.getElementById('confirmedDuration').textContent=duration; 
             document.getElementById('confirmedPlatform').textContent=platform; 
             document.getElementById('confirmedEmail').textContent=email; 
             document.getElementById('confirmedPrep').textContent=prep;
 
-            // Data to send to Google Sheet for logging
             const sheetData = {
-                action: "scheduleDate",
-                ideaTitle: currentIdea,
-                scheduledDate: date, // YYYY-MM-DD
-                scheduledTime: time, // HH:MM
-                duration: duration,
-                platform: platform,
-                userEmail: email,
-                prepNotes: prep,
-                showedSpicy: showSpicy.toString() // "true" or "false"
+                action: "scheduleDate", ideaTitle: currentIdea, scheduledDate: date, 
+                scheduledTime: time, duration: duration, platform: platform,
+                userEmail: email, prepNotes: prep, showedSpicy: showSpicy.toString()
             };
 
             try {
-                // Log to Google Sheet
                 const response = await fetch(`${SCRIPT_URL}?${new URLSearchParams(sheetData).toString()}`);
                 const result = await response.json();
-
-                if (result.status !== "success") {
-                    console.error('Failed to log scheduled date to sheet:', result.message);
-                    alert(`Error logging date: ${result.message}. Please try again.`);
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = '<i class="fas fa-heart"></i> Confirm Our Date';
-                    return;
-                }
+                if (result.status !== "success") { throw new Error(result.message || 'Failed to log to sheet'); }
                 console.log('Date successfully logged to sheet.');
-
-                // If you still want to send an email (optional, can be removed if sheet is primary)
-                // emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailParams)
-                // .then(()=>console.log('Email sent!'), (error)=>console.error('Failed to send email:', error));
 
                 document.getElementById('bookingForm').style.display = 'none'; 
                 document.getElementById('confirmation').style.display = 'block';
                 document.getElementById('confirmation').scrollIntoView({ behavior: 'smooth' });
                 for (let i=0; i<25; i++) { setTimeout(()=>createHearts(), i*150); }
-
             } catch (error) {
                 console.error('Error submitting booking:', error);
-                alert('There was an error scheduling your date. Please try again.');
+                alert(`There was an error scheduling your date: ${error.message}. Please try again.`);
             } finally {
                 submitButton.disabled = false;
                 submitButton.innerHTML = '<i class="fas fa-heart"></i> Confirm Our Date';
@@ -524,18 +498,13 @@
             const spicy = document.getElementById('suggestionSpicy').value;
 
             const sheetData = {
-                action: "addSuggestion",
-                title: title,
-                description: description,
-                category: category,
-                spicy: spicy || "",
-                submitter: "Kristina/Tyler" // Or some identifier
+                action: "addSuggestion", title: title, description: description,
+                category: category, spicy: spicy || "", submitterInfo: "Website User" // Updated submitter
             };
             
             try {
                 const response = await fetch(`${SCRIPT_URL}?${new URLSearchParams(sheetData).toString()}`);
                 const result = await response.json();
-
                 if (result.status === "success") {
                     console.log('Suggestion sent to sheet!'); 
                     document.getElementById('suggestionForm').style.display = 'none'; 
@@ -543,15 +512,11 @@
                     document.getElementById('suggestionConfirmation').scrollIntoView({ behavior: 'smooth' }); 
                     document.getElementById('customDateForm').reset();
                     for (let i=0; i<15; i++) { setTimeout(()=>createHearts(), i*150); }
-                     // Optionally, reload date ideas if you want new suggestions to appear immediately
-                    // await loadDateIdeas(); 
-                } else {
-                    console.error('Failed to send suggestion to sheet:', result.message);
-                    alert(`Error submitting suggestion: ${result.message}`);
-                }
+                    // No need to reload all ideas here unless you have an immediate approval process
+                } else { throw new Error(result.message || 'Failed to send suggestion to sheet'); }
             } catch (error) {
                 console.error('Error submitting suggestion:', error);
-                alert('There was an error submitting your suggestion. Please try again.');
+                alert(`There was an error submitting your suggestion: ${error.message}. Please try again.`);
             } finally {
                 submitButton.disabled = false;
                 submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Suggestion';
@@ -597,7 +562,7 @@
             document.getElementById('date').min = new Date().toISOString().split('T')[0];
             for (let i = 0; i < 15; i++) { setTimeout(()=>createHearts(), i * 300); }
             setActiveNav(); 
-            loadDateIdeas(); // Load ideas from Google Sheet on page load
+            loadDateIdeas(); 
         };
     </script>
 </body>
