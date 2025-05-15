@@ -76,102 +76,46 @@
             font-size: 0.85rem;
             text-decoration: none;
             transition: all 0.3s ease;
-            border-radius: 0 8px 8px 0; /* For left nav items, right nav might need adjustment if text direction changes */
+            border-radius: 0 8px 8px 0; 
         }
-        /* Specific adjustment for right nav if needed, or keep it consistent */
         .nav-container-right .nav-item {
-             border-radius: 8px 0 0 8px; /* Rounded corners on the left for right nav */
+             border-radius: 8px 0 0 8px; 
         }
-
-
-        .nav-item:hover {
-            background: var(--primary);
-            /* transform: translateX(5px); For left nav */
-        }
-        .nav-container-left .nav-item:hover {
-            transform: translateX(5px);
-        }
-        .nav-container-right .nav-item:hover {
-            transform: translateX(-5px); /* Shift left on hover for right nav */
-        }
-
-
-        .nav-item img {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            margin-bottom: 5px;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
-        }
-
-        .active {
-            background: var(--accent);
-            font-weight: 600;
-        }
+        .nav-item:hover { background: var(--primary); }
+        .nav-container-left .nav-item:hover { transform: translateX(5px); }
+        .nav-container-right .nav-item:hover { transform: translateX(-5px); }
+        .nav-item img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 5px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
+        .active { background: var(--accent); font-weight: 600; }
 
         /* ===== MAIN CONTENT ===== */
-        .page-wrapper {
-            max-width: 900px; /* This can be adjusted */
-            margin: 0 auto; /* Center between the nav bars */
-            padding: 30px;
-        }
-
+        .page-wrapper { max-width: 900px; margin: 0 auto; padding: 30px; }
         .container {
-            background: rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.3);
-            position: relative;
+            background: rgba(255,255,255,0.9); border-radius: 20px; padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3); position: relative;
         }
+        h1 { color: var(--primary); font-family: 'Pacifico', cursive; margin-bottom: 25px; font-size: 2.8rem; text-align: center; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+        .intro-text { text-align: center; margin-bottom: 30px; color: #555; font-size: 1.1rem; }
 
-        h1 {
-            color: var(--primary);
-            font-family: 'Pacifico', cursive;
-            margin-bottom: 25px;
-            font-size: 2.8rem;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .intro-text {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #555;
-            font-size: 1.1rem;
-        }
-
-        /* ===== MOOD SELECTOR ===== */
-        .mood-selector {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin: 25px 0;
-        }
-
+        /* ===== MOOD SELECTOR & BUTTONS ===== */
+        .mood-selector { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 25px 0; }
         .mood-btn {
-            background: linear-gradient(135deg, var(--secondary), #e67fa1);
-            color: white; border: none; padding: 12px 25px; font-size: 1rem;
-            border-radius: 50px; cursor: pointer; transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); min-width: 140px; font-weight: 500;
-            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--secondary), #e67fa1); color: white; border: none; padding: 12px 25px; font-size: 1rem;
+            border-radius: 50px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            min-width: 140px; font-weight: 500; display: flex; align-items: center; justify-content: center;
         }
         .mood-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
         .mood-btn.active { background: linear-gradient(135deg, var(--primary), #7c3c79); font-weight: 600; }
-
-        /* ===== MAIN BUTTONS ===== */
         .main-btn {
-            background: linear-gradient(135deg, var(--primary), #7c3c79);
-            color: white; border: none; padding: 14px 32px; font-size: 1.1rem;
-            border-radius: 50px; cursor: pointer; margin: 20px auto; 
-            transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            font-weight: 600; display: block; 
+            background: linear-gradient(135deg, var(--primary), #7c3c79); color: white; border: none; padding: 14px 32px; font-size: 1.1rem;
+            border-radius: 50px; cursor: pointer; margin: 10px auto; /* Reduced margin for multiple buttons */
+            transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-weight: 600; display: block; 
         }
         .main-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.2); }
+        .button-group { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 20px; }
 
-        /* ===== SPICY TOGGLE ===== */
+
+        /* SPICY TOGGLE, DATE IDEA CARD, FORMS, CONFIRMATION, HEARTS, BOWS ... (styles remain largely the same) */
         .spicy-toggle-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 15px 0; }
         .spicy-toggle { position: relative; display: inline-block; width: 60px; height: 30px; }
         .spicy-toggle input { opacity: 0; width: 0; height: 0; }
@@ -180,20 +124,12 @@
         input:checked + .spicy-slider { background-color: var(--accent); }
         input:checked + .spicy-slider:before { transform: translateX(30px); }
         .spicy-label { font-weight: 600; color: var(--dark); }
-
-        /* ===== DATE IDEA CARD ===== */
-        .result-card {
-            background: white; border-radius: 15px; padding: 30px; margin: 30px 0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05);
-            display: none; animation: fadeIn 0.6s ease-out; position: relative;
-        }
+        .result-card { background: white; border-radius: 15px; padding: 30px; margin: 30px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); display: none; animation: fadeIn 0.6s ease-out; position: relative; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .date-idea { color: var(--accent); font-family: 'Pacifico', cursive; font-size: 2rem; margin-bottom: 15px; text-align: center; }
         .description { background: var(--light); padding: 20px; border-radius: 10px; margin: 20px 0; font-size: 1.05rem; position: relative; }
         .description:before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(to bottom, var(--accent), var(--primary)); border-radius: 4px 0 0 4px; }
         .spicy-description { background: #ffebee; border-left: 4px solid var(--accent); font-style: italic; margin-top: 15px; padding: 15px; border-radius: 8px; display: none; }
-
-        /* ===== FORM STYLES ===== */
         .form-container { display: none; background: white; border-radius: 15px; padding: 30px; margin: 30px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.08); animation: fadeIn 0.6s ease-out; position: relative; }
         .form-title { color: var(--primary); font-family: 'Pacifico', cursive; font-size: 1.8rem; margin-bottom: 20px; text-align: center; }
         .form-group { margin-bottom: 20px; }
@@ -201,62 +137,49 @@
         input, select, textarea { width: 100%; padding: 14px 18px; border: 2px solid var(--secondary); border-radius: 10px; font-size: 1rem; transition: all 0.3s; }
         input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(155,77,150,0.2); }
         textarea { min-height: 120px; resize: vertical; }
-
-        /* ===== CONFIRMATION ===== */
         .confirmation-card { display: none; background: #e8f5e9; border-radius: 15px; padding: 30px; margin: 30px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.05); animation: fadeIn 0.6s ease-out; text-align: center; position: relative; }
         .confirmation-title { color: #2e7d32; font-family: 'Pacifico', cursive; font-size: 2rem; margin-bottom: 15px; }
         .confirmation-details { margin: 15px 0; line-height: 1.8; }
         .confirmation-details span { font-weight: 600; color: var(--dark); }
-
-        /* ===== SUGGESTION FORM ===== */
         .suggestion-form { display: none; background: white; border-radius: 15px; padding: 30px; margin: 30px 0; box-shadow: 0 5px 20px rgba(0,0,0,0.08); animation: fadeIn 0.6s ease-out; position: relative; }
         .suggestion-form h2 { color: var(--primary); font-family: 'Pacifico', cursive; font-size: 1.8rem; margin-bottom: 20px; text-align: center; }
-
-        /* ===== HEARTS ANIMATION ===== */
         .hearts-container { position: fixed; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: -1; overflow: hidden; }
-        .heart { position: absolute; color: var(--secondary); font-size: 24px; opacity: 0; bottom: -50px; animation: floatUpDatePage 8s linear infinite; } /* Different animation name */
+        .heart { position: absolute; color: var(--secondary); font-size: 24px; opacity: 0; bottom: -50px; animation: floatUpDatePage 8s linear infinite; }
         @keyframes floatUpDatePage { 0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-120vh) scale(1.2) rotate(360deg); opacity: 0; } }
-
-        /* ===== BOW DECORATIONS ===== */
         .bow { position: absolute; width: 40px; height: 40px; background: url('https://i.imgur.com/tA7aPg4.png') center/contain no-repeat; z-index: 10; }
         .container-bow-tl { top: -15px; left: -15px; } .container-bow-tr { top: -15px; right: -15px; }
         .container-bow-bl { bottom: -15px; left: -15px; } .container-bow-br { bottom: -15px; right: -15px; }
         .card-bow-tl { top: -10px; left: -10px; width: 30px; height: 30px; } .card-bow-tr { top: -10px; right: -10px; width: 30px; height: 30px; }
         .card-bow-bl { bottom: -10px; left: -10px; width: 30px; height: 30px; } .card-bow-br { bottom: -10px; right: -10px; width: 30px; height: 30px; }
+        
+        .loading-indicator {
+            text-align: center;
+            font-style: italic;
+            color: var(--primary);
+            margin: 20px;
+            display: none; /* Hidden by default */
+        }
 
-        /* ===== RESPONSIVE STYLES ===== */
+        /* ===== RESPONSIVE STYLES (largely same) ===== */
         @media (max-width: 768px) {
-            body { padding-left: 0; padding-right: 0; padding-bottom: 80px; /* Space for bottom nav */ }
-            .nav-container-left, .nav-container-right {
-                width: 100%; height: 80px; flex-direction: row;
-                padding-top: 0; bottom: 0; top: auto;
-                border-right: none; border-left: none; 
-                border-top: 3px solid var(--secondary);
-                justify-content: space-around; /* Distribute items */
-            }
-            .nav-container-right { display: none; } /* Hide right nav on mobile or merge if desired */
-            .nav-container-left .nav-item { /* Adjust if both navs are visible and merged */
-                 flex-grow: 1; /* Make items take equal space if merged */
-                 border-radius: 0; /* Remove specific border radius for bottom nav items */
-                 margin: 0;
-            }
-            .nav-container-left .nav-item:hover { transform: none; } /* No translateX on bottom nav hover */
-
+            body { padding-left: 0; padding-right: 0; padding-bottom: 80px; }
+            .nav-container-left, .nav-container-right { width: 100%; height: 80px; flex-direction: row; padding-top: 0; bottom: 0; top: auto; border-right: none; border-left: none; border-top: 3px solid var(--secondary); justify-content: space-around; }
+            .nav-container-right { display: none; }
+            .nav-container-left .nav-item { flex-grow: 1; border-radius: 0; margin: 0; }
+            .nav-container-left .nav-item:hover { transform: none; }
             .nav-item { padding: 10px 0; font-size: 0; margin: 0; }
             .nav-item img { width: 30px; height: 30px; margin-bottom: 0; }
-            .page-wrapper { padding: 15px; }
-            .container { padding: 25px; }
-            h1 { font-size: 2rem; }
-            .mood-selector { flex-direction: column; align-items: center; }
-            .mood-btn { width: 100%; max-width: 300px; /* Limit width on mobile */ }
-            .bow { display: none; }
+            .page-wrapper { padding: 15px; } .container { padding: 25px; }
+            h1 { font-size: 2rem; } .mood-selector { flex-direction: column; align-items: center; }
+            .mood-btn { width: 100%; max-width: 300px; } .bow { display: none; }
+            .button-group { width: 100%; }
+            .main-btn { width: 90%; max-width: 350px; }
         }
         @media (max-width: 480px) {
             .mood-btn { padding: 10px 20px; font-size: 0.9rem; }
             .main-btn { padding: 12px 28px; font-size: 1rem; }
             .form-container, .result-card, .suggestion-form, .confirmation-card { padding: 20px; }
-            h1 { font-size: 1.8rem; }
-            label { font-size: 0.9rem; }
+            h1 { font-size: 1.8rem; } label { font-size: 0.9rem; }
             input, select, textarea { padding: 12px 15px; font-size: 0.9rem;}
         }
 
@@ -266,33 +189,19 @@
 <body>
  <!-- Left Navigation -->
     <div class="nav-container-left">
-        <a href="index.html" class="nav-item home">
-            <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home"> Home
-        </a>
-        <a href="loveletters.html" class="nav-item letters">
-            <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters"> Love Letters
-        </a>
-        <a href="lovecalculator.html" class="nav-item calculator">
-            <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator"> Love Calculator
-        </a>
-        <a href="movies.html" class="nav-item movies">
-            <img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker"> Movie Picker
-        </a>
-        <a href="bookdate.html" class="nav-item bookdate active"> <!-- Active for this page -->
-            <img src="https://i.imgur.com/megzmKr.png" alt="Book a Date"> Book a Date
-        </a>
-        <a href="timezone.html" class="nav-item timezone">
-            <img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge"> Time Bridge
-        </a>
+        <a href="index.html" class="nav-item home"> <img src="https://i.imgur.com/ZAl2gbp.png" alt="Home"> Home </a>
+        <a href="loveletters.html" class="nav-item letters"> <img src="https://i.imgur.com/ZVhcvD8.png" alt="Love Letters"> Love Letters </a>
+        <a href="lovecalculator.html" class="nav-item calculator"> <img src="https://i.imgur.com/megzmKr.png" alt="Love Calculator"> Love Calculator </a>
+        <a href="movies.html" class="nav-item movies"> <img src="https://i.imgur.com/gzW8uSH.png" alt="Movie Picker"> Movie Picker </a>
+        <a href="bookdate.html" class="nav-item bookdate active"> <img src="https://i.imgur.com/megzmKr.png" alt="Book a Date"> Book a Date </a>
+        <a href="timezone.html" class="nav-item timezone"> <img src="https://i.imgur.com/ZwOw9QN.png" alt="Time Bridge"> Time Bridge </a>
     </div>
 
     <!-- Main Content -->
     <div class="page-wrapper">
         <div class="container">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow container-bow-tl">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow container-bow-tr">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow container-bow-bl">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow container-bow-br">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow container-bow-tl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow container-bow-tr">
+            <img src="https://i.imgur.com/tA7aPg4.png" class="bow container-bow-bl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow container-bow-br">
             
             <h1>Enchanted Date Picker</h1>
             <p class="intro-text">Discover magical date ideas to keep our long-distance connection strong and passionate!</p>
@@ -305,9 +214,11 @@
                 <button class="mood-btn" onclick="selectMood(this, 'surprise')"> <i class="fas fa-gift"></i> Surprise Me </button>
             </div>
             
-            <div style="text-align: center;">
-                <button class="main-btn" onclick="generateDate()"> <i class="fas fa-magic"></i> Create Our Date </button>
-                <button class="main-btn" onclick="showSuggestionForm()" style="background: linear-gradient(135deg, #6a4d9b, #4d7c9b);"> <i class="fas fa-lightbulb"></i> Suggest a Custom Date </button>
+            <div class="loading-indicator" id="loadingIndicator">Fetching date ideas... ✨</div>
+
+            <div class="button-group"> <!-- Grouping buttons for better layout -->
+                <button class="main-btn" id="generateDateBtn" onclick="generateDate()"> <i class="fas fa-magic"></i> Create Our Date </button>
+                <button class="main-btn" id="suggestDateBtn" onclick="showSuggestionForm()" style="background: linear-gradient(135deg, #6a4d9b, #4d7c9b);"> <i class="fas fa-lightbulb"></i> Suggest a Custom Date </button>
             </div>
             
             <div class="result-card" id="result">
@@ -323,21 +234,23 @@
             </div>
             
             <div class="form-container" id="bookingForm">
+                <!-- Booking Form HTML (same as before) -->
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tr">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-bl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-br">
                 <h2 class="form-title">Schedule Your Enchanted Date</h2>
                 <form id="dateForm" onsubmit="submitBooking(event)">
                     <div class="form-group"> <label for="date"><i class="far fa-calendar-alt"></i> Date:</label> <input type="date" id="date" required> </div>
                     <div class="form-group"> <label for="time"><i class="far fa-clock"></i> Time:</label> <input type="time" id="time" required> </div>
-                    <div class="form-group"> <label for="duration"><i class="fas fa-hourglass-half"></i> Duration:</label> <select id="duration" required> <option value="1">1 hour</option> <option value="2" selected>2 hours</option> <option value="3">3 hours</option> <option value="4">4+ hours</option> </select> </div>
+                    <div class="form-group"> <label for="duration"><i class="fas fa-hourglass-half"></i> Duration:</label> <select id="duration" required> <option value="1 hour">1 hour</option> <option value="2 hours" selected>2 hours</option> <option value="3 hours">3 hours</option> <option value="4+ hours">4+ hours</option> </select> </div>
                     <div class="form-group"> <label for="platform"><i class="fas fa-video"></i> Platform:</label> <select id="platform" required> <option value="">Select...</option> <option>Zoom</option> <option>FaceTime</option> <option>Discord</option> <option>Google Meet</option> <option>Skype</option> <option>Other</option> </select> </div>
-                    <div class="form-group"> <label for="email"><i class="fas fa-envelope"></i> Email (to send details):</label> <input type="email" id="email" required> </div>
+                    <div class="form-group"> <label for="email"><i class="fas fa-envelope"></i> Email (to send details):</label> <input type="email" id="email" value="kristinakraicova@gmail.com" required> </div>
                     <div class="form-group"> <label for="prep"><i class="fas fa-clipboard-list"></i> Prep Notes:</label> <textarea id="prep" placeholder="What should we both prepare?"></textarea> </div>
                     <button type="submit" class="main-btn"> <i class="fas fa-heart"></i> Confirm Our Date </button>
                 </form>
             </div>
             
             <div class="suggestion-form" id="suggestionForm">
+                <!-- Suggestion Form HTML (same as before) -->
                  <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tr">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-bl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-br">
                 <h2>Suggest a Custom Date Idea</h2>
@@ -352,6 +265,7 @@
             </div>
             
             <div class="confirmation-card" id="suggestionConfirmation" style="display: none;">
+                <!-- Suggestion Confirmation HTML (same as before) -->
                  <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tr">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-bl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-br">
                 <h2 class="confirmation-title">Suggestion Sent! 💖</h2>
@@ -360,6 +274,7 @@
             </div>
             
             <div class="confirmation-card" id="confirmation">
+                <!-- Booking Confirmation HTML (same as before) -->
                  <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-tr">
                 <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-bl"> <img src="https://i.imgur.com/tA7aPg4.png" class="bow card-bow-br">
                 <h2 class="confirmation-title">Date Scheduled! ✨</h2>
@@ -377,127 +292,312 @@
     <!-- Right Navigation Bar -->
     <div class="nav-container-right">
         <a href="slimegame.html" class="nav-item slimegame">
-            <img src="https://i.imgur.com/yFzLbfM.png" alt="Slime Game Icon">
-            Slime Game
+            <img src="https://i.imgur.com/yFzLbfM.png" alt="Slime Game Icon"> Slime Game
         </a>
-        <!-- Add other links if desired -->
     </div>
 
     <div class="hearts-container" id="hearts-container"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script>
-        emailjs.init('ud8wjFQAn3Jn9rz7k').then(()=>console.log('EmailJS ready'),err=>console.error('EmailJS init failed',err));
-
-        const dateIdeas = { /* ... (same dateIdeas object as before) ... */ 
-            virtual: [ { idea: "Midnight Horror Movie Roulette", description: "Take turns picking random horror films (2015-2025) with only 2 vetos allowed. Sync your streaming and watch together in the dark.", spicyDesc: "First person to get scared has to send the other a spicy picture" }, { idea: "Bath & Bubbles Date", description: "Draw a hot bath with candles and video call while soaking. Share your day as the steam rises around you.", spicyDesc: "Add bath bombs simultaneously and describe how they feel on your skin." }, { idea: "Virtual Museum Adventure", description: "Explore online tours of the Louvre or MET while discussing which artworks speak to you most.", spicyDesc: "Take screenshots of artworks that inspire romantic fantasies." }, { idea: "Digital Scavenger Hunt", description: "Create lists of items to find in your homes. Race to complete them first!", spicyDesc: "Include one item that requires undressing to find." } ],
-            creative: [ { idea: "Collaborative Art Canvas", description: "Use Aggie.io to create digital art together. No skills needed!", spicyDesc: "Take turns drawing parts of each other's portraits." }, { idea: "Photo Challenge", description: "Pick a theme ('shadows', 'reflections') and take artistic photos to exchange.", spicyDesc: "One photo must only show lips or hands." }, { idea: "Storytelling Night", description: "Build a story together - each adds one sentence. Save your masterpiece!", spicyDesc: "Write an erotic story using only emojis." }, { idea: "Virtual Book Club", description: "Read the same book and schedule cozy discussion sessions.", spicyDesc: "Choose a romance novel and read steamy passages aloud." } ],
-            gaming: [ { idea: "Horror Game Night", description: "Play Dark Pictures Anthology together. Comfort each other!", spicyDesc: "Each jump scare means removing an article of clothing." }, { idea: "Virtual Escape Room", description: "Solve online escape rooms together. Celebrate each puzzle!", spicyDesc: "Create real-life rewards for each completed room." }, { idea: "Game Swap Challenge", description: "Pick games from each other's libraries and share experiences.", spicyDesc: "For every death, answer an intimate question." }, { idea: "Virtual Board Games", description: "Play classic board games online with video chat.", spicyDesc: "Turn it into strip board games - lose a piece, lose an item." } ],
-            spicy: [ { idea: "Truth or Dare (Digital)", description: "The classic game with a long-distance twist. Use a random generator.", spicyDesc: "All dares must be on camera." }, { idea: "Fantasy Menu", description: "Create 'menus' of sensual activities you'd like to try.", spicyDesc: "Take turns 'ordering' from each other's menus." }, { idea: "Sensual Story Building", description: "Collaboratively write an erotic story, taking turns.", spicyDesc: "Incorporate elements from your last in-person meeting." }, { idea: "Virtual Strip Games", description: "Play any game where losses have clothing consequences.", spicyDesc: "Use a random number generator for what comes off." } ]
-        };
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAi2kuzS-fAYPGnEm3jcYprPNr1neJBD4qRhewUKYCoR93bW6YOhUTj-icqoKX8zcuBg/exec";
         
+        // Global variable to store fetched date ideas, categorized
+        let fetchedDateIdeas = {
+            virtual: [], creative: [], gaming: [], spicy: []
+        };
+        let allFetchedIdeas = []; // Flat array of all ideas for "Surprise Me"
+
         let selectedMood = '', currentIdea = '', currentDescription = '', currentSpicyDesc = '';
         
-        function selectMood(button, mood) { /* ... (same as before) ... */ 
-            document.querySelectorAll('.mood-btn').forEach(btn=>btn.classList.remove('active')); button.classList.add('active'); selectedMood=mood;
+        // Function to fetch date ideas from Google Sheet
+        async function loadDateIdeas() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const generateDateBtn = document.getElementById('generateDateBtn');
+            loadingIndicator.style.display = 'block';
+            generateDateBtn.disabled = true;
+
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=getDateIdeas`);
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                }
+                const data = await response.json();
+
+                if (data.status === "error") {
+                    throw new Error(`Error from script: ${data.message}`);
+                }
+                
+                // Clear previous ideas
+                fetchedDateIdeas = { virtual: [], creative: [], gaming: [], spicy: [] };
+                allFetchedIdeas = [];
+
+                data.forEach(item => {
+                    const ideaObject = {
+                        idea: item.ideaTitle, // Match your sheet's 'IdeaTitle' to JS 'idea'
+                        description: item.description,
+                        spicyDesc: item.spicyDescription || ""
+                    };
+                    if (fetchedDateIdeas[item.category]) {
+                        fetchedDateIdeas[item.category].push(ideaObject);
+                    }
+                    allFetchedIdeas.push(ideaObject); // For surprise me
+                });
+                console.log("Date ideas loaded and categorized:", fetchedDateIdeas);
+                loadingIndicator.style.display = 'none';
+                generateDateBtn.disabled = false;
+
+            } catch (error) {
+                console.error('Failed to load date ideas:', error);
+                loadingIndicator.textContent = 'Error loading ideas. Using fallback.';
+                // Keep generateDateBtn disabled or enable it to use hardcoded if you add a fallback
+                // For now, we'll keep it disabled if fetch fails.
+                // You could re-enable the hardcoded `dateIdeas` object here as a fallback.
+            }
+        }
+
+
+        function selectMood(button, mood) { 
+            document.querySelectorAll('.mood-btn').forEach(btn=>btn.classList.remove('active')); 
+            button.classList.add('active'); 
+            selectedMood=mood;
         }
         
-        function generateDate() { /* ... (same as before) ... */ 
-            if (!selectedMood && selectedMood !== 'surprise') { alert("Please select a mood first!"); return; }
-            let mood = (selectedMood === 'surprise') ? ['virtual','creative','gaming','spicy'][Math.floor(Math.random()*4)] : selectedMood;
-            const ideas = dateIdeas[mood]; const randomIdea = ideas[Math.floor(Math.random()*ideas.length)];
-            document.getElementById('dateIdea').textContent = randomIdea.idea; document.getElementById('dateDescription').textContent = randomIdea.description;
+        function generateDate() {
+            if (Object.values(fetchedDateIdeas).every(arr => arr.length === 0) && allFetchedIdeas.length === 0) {
+                alert("Date ideas are still loading or failed to load. Please wait or try refreshing.");
+                return;
+            }
+            if (!selectedMood && selectedMood !== 'surprise') {
+                alert("Please select a mood first!");
+                return;
+            }
+            
+            let moodForSelection;
+            let ideasPool;
+
+            if (selectedMood === 'surprise') {
+                if (allFetchedIdeas.length === 0) {
+                    alert("No ideas available for 'Surprise Me' yet!"); return;
+                }
+                ideasPool = allFetchedIdeas;
+            } else {
+                if (!fetchedDateIdeas[selectedMood] || fetchedDateIdeas[selectedMood].length === 0) {
+                    alert(`No ideas available for the '${selectedMood}' mood yet!`); return;
+                }
+                ideasPool = fetchedDateIdeas[selectedMood];
+            }
+            
+            const randomIdea = ideasPool[Math.floor(Math.random() * ideasPool.length)];
+            
+            document.getElementById('dateIdea').textContent = randomIdea.idea; 
+            document.getElementById('dateDescription').textContent = randomIdea.description;
+            
             const spicyToggleContainer = document.getElementById('spicyToggleContainer');
-            if (randomIdea.spicyDesc) { document.getElementById('spicyDescription').textContent = randomIdea.spicyDesc; spicyToggleContainer.style.display = 'flex'; document.getElementById('spicyToggle').checked = false; document.getElementById('spicyDescription').style.display = 'none';
-            } else { spicyToggleContainer.style.display = 'none'; document.getElementById('spicyDescription').style.display = 'none'; }
-            document.getElementById('result').style.display = 'block'; document.getElementById('bookingForm').style.display = 'none'; document.getElementById('confirmation').style.display = 'none';
-            document.getElementById('suggestionForm').style.display = 'none'; document.getElementById('suggestionConfirmation').style.display = 'none';
-            currentIdea = randomIdea.idea; currentDescription = randomIdea.description; currentSpicyDesc = randomIdea.spicyDesc || '';
+            if (randomIdea.spicyDesc) { 
+                document.getElementById('spicyDescription').textContent = randomIdea.spicyDesc; 
+                spicyToggleContainer.style.display = 'flex'; 
+                document.getElementById('spicyToggle').checked = false; 
+                document.getElementById('spicyDescription').style.display = 'none';
+            } else { 
+                spicyToggleContainer.style.display = 'none'; 
+                document.getElementById('spicyDescription').style.display = 'none'; 
+            }
+            
+            document.getElementById('result').style.display = 'block'; 
+            document.getElementById('bookingForm').style.display = 'none'; 
+            document.getElementById('confirmation').style.display = 'none';
+            document.getElementById('suggestionForm').style.display = 'none'; 
+            document.getElementById('suggestionConfirmation').style.display = 'none';
+            
+            currentIdea = randomIdea.idea; 
+            currentDescription = randomIdea.description; 
+            currentSpicyDesc = randomIdea.spicyDesc || '';
+            
             createHearts();
         }
         
-        document.getElementById('spicyToggle').addEventListener('change', function() { /* ... (same as before) ... */ 
+        document.getElementById('spicyToggle').addEventListener('change', function() { 
             document.getElementById('spicyDescription').style.display = this.checked ? 'block' : 'none';
         });
         
-        function showBookingForm() { /* ... (same as before) ... */ 
-            document.getElementById('bookingForm').style.display = 'block'; document.getElementById('date').min = new Date().toISOString().split("T")[0];
+        function showBookingForm() { 
+            document.getElementById('bookingForm').style.display = 'block'; 
+            document.getElementById('date').min = new Date().toISOString().split("T")[0];
             document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth' });
         }
         
-        function showSuggestionForm() { /* ... (same as before) ... */ 
-            document.getElementById('suggestionForm').style.display = 'block'; document.getElementById('result').style.display = 'none';
-            document.getElementById('bookingForm').style.display = 'none'; document.getElementById('confirmation').style.display = 'none';
-            document.getElementById('suggestionConfirmation').style.display = 'none'; document.getElementById('suggestionForm').scrollIntoView({ behavior: 'smooth' });
+        function showSuggestionForm() { 
+            document.getElementById('suggestionForm').style.display = 'block'; 
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('bookingForm').style.display = 'none'; 
+            document.getElementById('confirmation').style.display = 'none';
+            document.getElementById('suggestionConfirmation').style.display = 'none'; 
+            document.getElementById('suggestionForm').scrollIntoView({ behavior: 'smooth' });
         }
-        function hideSuggestionForm() { /* ... (same as before) ... */ 
-            document.getElementById('suggestionForm').style.display = 'none'; document.getElementById('customDateForm').reset();
+        function hideSuggestionForm() { 
+            document.getElementById('suggestionForm').style.display = 'none'; 
+            document.getElementById('customDateForm').reset();
         }
         
-        function submitBooking(event) { /* ... (same as before) ... */ 
+        async function submitBooking(event) { 
             event.preventDefault();
-            const date = document.getElementById('date').value, time = document.getElementById('time').value, duration = document.getElementById('duration').value;
-            const platform = document.getElementById('platform').value, email = document.getElementById('email').value, prep = document.getElementById('prep').value || "None needed";
+            const submitButton = event.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Confirming...';
+
+
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const duration = document.getElementById('duration').value; // This is now text like "1 hour"
+            const platform = document.getElementById('platform').value;
+            const email = document.getElementById('email').value;
+            const prep = document.getElementById('prep').value || "None needed";
             const showSpicy = document.getElementById('spicyToggle').checked;
+            
             const startDateTime = new Date(`${date}T${time}`);
             const formattedDate = startDateTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
             const formattedTime = startDateTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('confirmedIdea').textContent=currentIdea; document.getElementById('confirmedDate').textContent=formattedDate; document.getElementById('confirmedTime').textContent=formattedTime;
-            document.getElementById('confirmedDuration').textContent=duration + " hours"; document.getElementById('confirmedPlatform').textContent=platform; document.getElementById('confirmedEmail').textContent=email; document.getElementById('confirmedPrep').textContent=prep;
-            emailjs.send('service_8g1irfh', 'template_fat5etc', { idea: currentIdea, date: formattedDate, time: formattedTime, duration: duration + " hours", platform: platform, prep: prep, email: email, spicy: showSpicy ? currentSpicyDesc : "Not shown" })
-            .then(()=>console.log('Email sent!'), (error)=>console.error('Failed to send email:', error));
-            document.getElementById('bookingForm').style.display = 'none'; document.getElementById('confirmation').style.display = 'block';
-            document.getElementById('confirmation').scrollIntoView({ behavior: 'smooth' });
-            for (let i=0; i<25; i++) { setTimeout(()=>createHearts(), i*150); }
+            
+            // Update confirmation display elements
+            document.getElementById('confirmedIdea').textContent=currentIdea; 
+            document.getElementById('confirmedDate').textContent=formattedDate; 
+            document.getElementById('confirmedTime').textContent=formattedTime;
+            document.getElementById('confirmedDuration').textContent=duration; // Use the text value
+            document.getElementById('confirmedPlatform').textContent=platform; 
+            document.getElementById('confirmedEmail').textContent=email; 
+            document.getElementById('confirmedPrep').textContent=prep;
+
+            // Data to send to Google Sheet for logging
+            const sheetData = {
+                action: "scheduleDate",
+                ideaTitle: currentIdea,
+                scheduledDate: date, // YYYY-MM-DD
+                scheduledTime: time, // HH:MM
+                duration: duration,
+                platform: platform,
+                userEmail: email,
+                prepNotes: prep,
+                showedSpicy: showSpicy.toString() // "true" or "false"
+            };
+
+            try {
+                // Log to Google Sheet
+                const response = await fetch(`${SCRIPT_URL}?${new URLSearchParams(sheetData).toString()}`);
+                const result = await response.json();
+
+                if (result.status !== "success") {
+                    console.error('Failed to log scheduled date to sheet:', result.message);
+                    alert(`Error logging date: ${result.message}. Please try again.`);
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '<i class="fas fa-heart"></i> Confirm Our Date';
+                    return;
+                }
+                console.log('Date successfully logged to sheet.');
+
+                // If you still want to send an email (optional, can be removed if sheet is primary)
+                // emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailParams)
+                // .then(()=>console.log('Email sent!'), (error)=>console.error('Failed to send email:', error));
+
+                document.getElementById('bookingForm').style.display = 'none'; 
+                document.getElementById('confirmation').style.display = 'block';
+                document.getElementById('confirmation').scrollIntoView({ behavior: 'smooth' });
+                for (let i=0; i<25; i++) { setTimeout(()=>createHearts(), i*150); }
+
+            } catch (error) {
+                console.error('Error submitting booking:', error);
+                alert('There was an error scheduling your date. Please try again.');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="fas fa-heart"></i> Confirm Our Date';
+            }
         }
         
-        function submitSuggestion(event) { /* ... (same as before) ... */ 
+        async function submitSuggestion(event) { 
             event.preventDefault();
-            const title = document.getElementById('suggestionTitle').value, description = document.getElementById('suggestionDescription').value;
-            const category = document.getElementById('suggestionCategory').value, spicy = document.getElementById('suggestionSpicy').value;
-            emailjs.send('service_8g1irfh', 'template_fat5etc', { title: title, description: description, category: category, spicy: spicy || "None", _subject: "New Date Suggestion" })
-            .then(() => {
-                console.log('Suggestion sent!'); document.getElementById('suggestionForm').style.display = 'none'; document.getElementById('suggestionConfirmation').style.display = 'block';
-                document.getElementById('suggestionConfirmation').scrollIntoView({ behavior: 'smooth' }); document.getElementById('customDateForm').reset();
-                for (let i=0; i<15; i++) { setTimeout(()=>createHearts(), i*150); }
-            }, (error) => console.error('Failed to send suggestion:', error));
+            const submitButton = event.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+            const title = document.getElementById('suggestionTitle').value;
+            const description = document.getElementById('suggestionDescription').value;
+            const category = document.getElementById('suggestionCategory').value;
+            const spicy = document.getElementById('suggestionSpicy').value;
+
+            const sheetData = {
+                action: "addSuggestion",
+                title: title,
+                description: description,
+                category: category,
+                spicy: spicy || "",
+                submitter: "Kristina/Tyler" // Or some identifier
+            };
+            
+            try {
+                const response = await fetch(`${SCRIPT_URL}?${new URLSearchParams(sheetData).toString()}`);
+                const result = await response.json();
+
+                if (result.status === "success") {
+                    console.log('Suggestion sent to sheet!'); 
+                    document.getElementById('suggestionForm').style.display = 'none'; 
+                    document.getElementById('suggestionConfirmation').style.display = 'block';
+                    document.getElementById('suggestionConfirmation').scrollIntoView({ behavior: 'smooth' }); 
+                    document.getElementById('customDateForm').reset();
+                    for (let i=0; i<15; i++) { setTimeout(()=>createHearts(), i*150); }
+                     // Optionally, reload date ideas if you want new suggestions to appear immediately
+                    // await loadDateIdeas(); 
+                } else {
+                    console.error('Failed to send suggestion to sheet:', result.message);
+                    alert(`Error submitting suggestion: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Error submitting suggestion:', error);
+                alert('There was an error submitting your suggestion. Please try again.');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Suggestion';
+            }
         }
         
-        function resetForm() { /* ... (same as before) ... */ 
-            document.getElementById('dateForm').reset(); document.getElementById('customDateForm').reset();
-            document.getElementById('result').style.display = 'none'; document.getElementById('confirmation').style.display = 'none';
-            document.getElementById('suggestionForm').style.display = 'none'; document.getElementById('suggestionConfirmation').style.display = 'none';
-            document.querySelectorAll('.mood-btn').forEach(btn=>btn.classList.remove('active')); selectedMood = '';
+        function resetForm() { 
+            document.getElementById('dateForm').reset(); 
+            document.getElementById('customDateForm').reset();
+            document.getElementById('result').style.display = 'none'; 
+            document.getElementById('confirmation').style.display = 'none';
+            document.getElementById('suggestionForm').style.display = 'none'; 
+            document.getElementById('suggestionConfirmation').style.display = 'none';
+            document.querySelectorAll('.mood-btn').forEach(btn=>btn.classList.remove('active')); 
+            selectedMood = '';
         }
         
-        function createHearts() { /* ... (same as before) ... */ 
-            const heart = document.createElement('div'); heart.className = 'heart'; heart.innerHTML = ['❤️','💖','💘','💝','💓','💗'][Math.floor(Math.random()*6)];
-            heart.style.left = Math.random()*100+'vw'; heart.style.animationDuration = 5+Math.random()*5+'s';
-            heart.style.animationDelay = Math.random()*2+'s'; heart.style.fontSize = (20+Math.random()*30)+'px';
+        function createHearts() { 
+            const heart = document.createElement('div'); 
+            heart.className = 'heart'; 
+            heart.innerHTML = ['❤️','💖','💘','💝','💓','💗'][Math.floor(Math.random()*6)];
+            heart.style.left = Math.random()*100+'vw'; 
+            heart.style.animationDuration = 5+Math.random()*5+'s';
+            heart.style.animationDelay = Math.random()*2+'s'; 
+            heart.style.fontSize = (20+Math.random()*30)+'px';
             document.getElementById('hearts-container').appendChild(heart);
             setTimeout(()=>heart.remove(), 8000);
         }
         
-        function setActiveNav() { /* Handles both navs */
+        function setActiveNav() { 
             const leftNavItems = document.querySelectorAll('.nav-container-left .nav-item');
             const rightNavItems = document.querySelectorAll('.nav-container-right .nav-item');
             const allNavItems = [...leftNavItems, ...rightNavItems];
-
             let path = window.location.pathname.split('/').pop();
             if (path === "" || path === "index.html") { path = "index.html"; }
-            
             allNavItems.forEach(item => {
                 item.classList.remove('active');
-                if (item.getAttribute('href') === path) {
-                    item.classList.add('active');
-                }
+                if (item.getAttribute('href') === path) { item.classList.add('active'); }
             });
         }
 
         window.onload = function() {
             document.getElementById('date').min = new Date().toISOString().split('T')[0];
             for (let i = 0; i < 15; i++) { setTimeout(()=>createHearts(), i * 300); }
-            setActiveNav(); // Set active nav on load
+            setActiveNav(); 
+            loadDateIdeas(); // Load ideas from Google Sheet on page load
         };
     </script>
 </body>
