@@ -151,7 +151,7 @@
         .card-bow-bl { bottom: -10px; left: -10px; width: 30px; height: 30px; } .card-bow-br { bottom: -10px; right: -10px; width: 30px; height: 30px; }
         .loading-indicator { text-align: center; font-style: italic; color: var(--primary); margin: 20px; display: none; }
 
-        /* ===== Scheduled Dates List Styles ===== */
+        /* Scheduled Dates List Styles */
         #scheduledDatesDisplay { 
             margin-top: 30px;
             background-color: #e6e6fa; 
@@ -229,7 +229,6 @@
             border-radius: 8px;
         }
 
-
         @media (max-width: 768px) {
             body { padding-left: 0; padding-right: 0; padding-bottom: 80px; }
             .nav-container-left, .nav-container-right { width: 100%; height: 80px; flex-direction: row; padding-top: 0; bottom: 0; top: auto; border-right: none; border-left: none; border-top: 3px solid var(--secondary); justify-content: space-around; }
@@ -243,7 +242,7 @@
             .mood-btn { width: 100%; max-width: 300px; } .bow { display: none; }
             .button-group { width: 100%; }
             .main-btn { width: 90%; max-width: 350px; }
-             #scheduledDatesList li.scheduled-date-item .date-details-grid { grid-template-columns: 1fr; /* Stack details on mobile */ }
+             #scheduledDatesList li.scheduled-date-item .date-details-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 480px) {
             .mood-btn { padding: 10px 20px; font-size: 0.9rem; }
@@ -251,7 +250,7 @@
             .form-container, .result-card, .suggestion-form, .confirmation-card, #scheduledDatesDisplay { padding: 20px; }
             h1 { font-size: 1.8rem; } label { font-size: 0.9rem; }
             input, select, textarea { padding: 12px 15px; font-size: 0.9rem;}
-             #scheduledDatesList li h4 { font-size: 1.3em;} /* Adjusted for mobile */
+             #scheduledDatesList li h4 { font-size: 1.3em;} 
              #scheduledDatesList li p { font-size: 0.9em; }
         }
     </style>
@@ -534,17 +533,25 @@
             submitButton.disabled = true;
             submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Confirming...';
 
-            const date = document.getElementById('date').value;
-            const time = document.getElementById('time').value;
+            const dateValue = document.getElementById('date').value; // YYYY-MM-DD
+            const timeValue = document.getElementById('time').value; // HH:MM
             const duration = document.getElementById('duration').value;
             const platform = document.getElementById('platform').value;
             const email = document.getElementById('email').value;
             const prep = document.getElementById('prep').value || "None needed";
             const showSpicy = document.getElementById('spicyToggle').checked;
             
-            const startDateTime = new Date(`${date}T${time}`);
-            const formattedDate = startDateTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-            const formattedTime = startDateTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            // Create a local Date object from form inputs
+            const localDateObject = new Date(`${dateValue}T${timeValue}:00`);
+            // Convert this local Date object to a UTC ISO string
+            const scheduledDateTimeUTC = localDateObject.toISOString();
+            const originalLocalTime = localDateObject.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+
+            // Update confirmation display elements (uses local formatting for user readability)
+            const displayDateTime = new Date(localDateObject); // Use a copy for display formatting
+            const formattedDate = displayDateTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+            const formattedTime = displayDateTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
             
             document.getElementById('confirmedIdea').textContent=currentIdea; 
             document.getElementById('confirmedDate').textContent=formattedDate; 
@@ -555,9 +562,15 @@
             document.getElementById('confirmedPrep').textContent=prep;
 
             const sheetData = {
-                action: "scheduleDate", ideaTitle: currentIdea, scheduledDate: date, 
-                scheduledTime: time, duration: duration, platform: platform,
-                userEmail: email, prepNotes: prep, showedSpicy: showSpicy.toString()
+                action: "scheduleDate", 
+                ideaTitle: currentIdea, 
+                scheduledDateTimeUTC: scheduledDateTimeUTC, // Send the UTC ISO string
+                originalLocalTime: originalLocalTime, // Send original local time for reference if needed
+                duration: duration, 
+                platform: platform,
+                userEmail: email, 
+                prepNotes: prep, 
+                showedSpicy: showSpicy.toString()
             };
 
             try {
@@ -702,7 +715,9 @@
                 return;
             }
 
-            dates.sort((a, b) => new Date(a.scheduledDate) - new Date(b.scheduledDate)); 
+            // The dates coming from Apps Script are already sorted (upcoming first)
+            // And 'scheduledDate' is already a UTC ISO string
+            // dates.sort((a, b) => new Date(a.scheduledDate) - new Date(b.scheduledDate)); 
 
             const ul = document.createElement('ul');
             // ul.style.listStyleType = 'none'; // Handled by CSS
@@ -712,43 +727,40 @@
                 const li = document.createElement('li');
                 li.className = 'scheduled-date-item';
 
-                let scheduledDateTime;
-                if (dateEntry.scheduledDate && dateEntry.scheduledDate.includes('T')) { 
-                    scheduledDateTime = new Date(dateEntry.scheduledDate);
-                } else if (dateEntry.scheduledDate && dateEntry.scheduledTime) { 
-                    const timeParts = dateEntry.scheduledTime.split(':');
-                    scheduledDateTime = new Date(dateEntry.scheduledDate); 
-                    scheduledDateTime.setHours(parseInt(timeParts[0]));
-                    scheduledDateTime.setMinutes(parseInt(timeParts[1]));
-                    scheduledDateTime.setSeconds(0); 
-                } else if (dateEntry.scheduledDate) { 
-                    scheduledDateTime = new Date(dateEntry.scheduledDate);
-                    scheduledDateTime = new Date(Date.UTC(scheduledDateTime.getFullYear(), scheduledDateTime.getMonth(), scheduledDateTime.getDate()));
-                } else {
-                    li.innerHTML = '<h4>Invalid Date Entry</h4><p>Could not display this scheduled date.</p>';
-                    ul.appendChild(li);
-                    return; 
-                }
+                // The scheduledDate from Apps Script is a UTC ISO string
+                const eventDateUTC = new Date(dateEntry.scheduledDate); 
                 
-                const formattedDate = scheduledDateTime.toLocaleDateString('en-US', {
-                    timeZone: 'UTC', 
+                // Display for Miláčik (America/Los_Angeles)
+                const milacikTime = eventDateUTC.toLocaleTimeString('en-US', {
+                    timeZone: 'America/Los_Angeles', // Milacik's timezone
+                    hour: '2-digit', minute: '2-digit', hour12: true 
+                });
+                const milacikDate = eventDateUTC.toLocaleDateString('en-US', {
+                    timeZone: 'America/Los_Angeles',
                     weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
                 });
-                const formattedTime = scheduledDateTime.toLocaleTimeString('en-US', {
-                    timeZone: 'UTC',
-                    hour: '2-digit', minute: '2-digit', hour12: true
+
+                // Display for Sui (Europe/Bratislava)
+                const suiTime = eventDateUTC.toLocaleTimeString('en-US', {
+                    timeZone: 'Europe/Bratislava', // Sui's timezone
+                    hour: '2-digit', minute: '2-digit', hour12: false // 24-hour for Europe often preferred
                 });
+                 const suiDate = eventDateUTC.toLocaleDateString('en-US', {
+                    timeZone: 'Europe/Bratislava',
+                    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
+                });
+
 
                 let detailsHTML = `<h4>${dateEntry.ideaTitle}</h4>`;
                 detailsHTML += `<div class="date-details-grid">`;
-                detailsHTML += `<div class="date-detail"><p><strong>When:</strong> ${formattedDate} at ${formattedTime}</p></div>`;
+                detailsHTML += `<div class="date-detail"><p><strong>Miláčik's Time:</strong> ${milacikDate} at ${milacikTime}</p></div>`;
+                detailsHTML += `<div class="date-detail"><p><strong>Sui's Time:</strong> ${suiDate} at ${suiTime} (CET/CEST)</p></div>`;
                 detailsHTML += `<div class="date-detail"><p><strong>Duration:</strong> ${dateEntry.duration || 'Not specified'}</p></div>`;
                 detailsHTML += `<div class="date-detail"><p><strong>Platform:</strong> ${dateEntry.platform || 'Not specified'}</p></div>`;
                 if (dateEntry.prepNotes) {
                     detailsHTML += `<div class="date-detail" style="grid-column: 1 / -1;"><p><strong>Prep:</strong> ${dateEntry.prepNotes}</p></div>`;
                 }
                 detailsHTML += `</div>`; 
-
 
                 if (dateEntry.showedSpicyInfo) {
                     detailsHTML += `<p style="color: var(--accent); font-style: italic; margin-top: 10px;">(Spicy version was viewed! 🔥)</p>`;
