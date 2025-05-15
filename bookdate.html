@@ -251,7 +251,11 @@
             <div class="button-group">
                 <button class="main-btn" id="generateDateBtn" onclick="generateDate()"> <i class="fas fa-magic"></i> Create Our Date </button>
                 <button class="main-btn" id="suggestDateBtn" onclick="showSuggestionForm()" style="background: linear-gradient(135deg, #6a4d9b, #4d7c9b);"> <i class="fas fa-lightbulb"></i> Suggest a Custom Date </button>
-                <button class="main-btn" id="viewScheduledDatesBtn" style="background: linear-gradient(135deg, #4CAF50, #2E7D32);"> <i class="fas fa-calendar-alt"></i> View Our Scheduled Dates </button>
+                <!-- ****** THIS IS THE BUTTON THAT WAS MISSING ****** -->
+                <button class="main-btn" id="viewScheduledDatesBtn" style="background: linear-gradient(135deg, #4CAF50, #2E7D32);"> 
+                    <i class="fas fa-calendar-alt"></i> View Our Scheduled Dates 
+                </button>
+                <!-- ****** END OF MISSING BUTTON ****** -->
             </div>
             
             <div class="result-card" id="result">
@@ -701,7 +705,34 @@
                     <p><strong>Duration:</strong> ${dateEntry.duration || 'Not specified'}</p>
                     <p><strong>Platform:</strong> ${dateEntry.platform || 'Not specified'}</p>
                 `;
-                if (dateEntry.prepNotes) {
+                if (dateEntry.prepNotes) {            <!-- Inside the <div class="container"> -->
+            <!-- ... (h1, intro-text, mood-selector) ... -->
+            
+            <div class="loading-indicator" id="loadingIndicator">Fetching date ideas... ✨</div>
+
+            <div class="button-group">
+                <button class="main-btn" id="generateDateBtn" onclick="generateDate()"> <i class="fas fa-magic"></i> Create Our Date </button>
+                <button class="main-btn" id="suggestDateBtn" onclick="showSuggestionForm()" style="background: linear-gradient(135deg, #6a4d9b, #4d7c9b);"> <i class="fas fa-lightbulb"></i> Suggest a Custom Date </button>
+                <!-- ****** THIS IS THE BUTTON THAT WAS MISSING ****** -->
+                <button class="main-btn" id="viewScheduledDatesBtn" style="background: linear-gradient(135deg, #4CAF50, #2E7D32);"> 
+                    <i class="fas fa-calendar-alt"></i> View Our Scheduled Dates 
+                </button>
+                <!-- ****** END OF MISSING BUTTON ****** -->
+            </div>
+            
+            <div class="result-card" id="result">
+                <!-- ... rest of your result card ... -->
+            </div>
+            
+            <!-- Div to display scheduled dates -->
+            <div id="scheduledDatesDisplay" class="result-card" style="display: none;"> <!-- Used result-card for base styling -->
+                <h2 class="date-idea" style="color: #4CAF50;">Our Upcoming Adventures!</h2> <!-- Re-used date-idea for title styling -->
+                <div id="scheduledDatesList">
+                    <p class="loading-indicator" style="display:block;">Loading scheduled dates...</p> <!-- Initial loading message -->
+                </div>
+            </div>
+
+            <!-- ... rest of your forms and confirmation cards ... -->
                     detailsHTML += `<p><strong>Prep:</strong> ${dateEntry.prepNotes}</p>`;
                 }
                 if (dateEntry.showedSpicyInfo) {
