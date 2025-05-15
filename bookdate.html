@@ -152,12 +152,12 @@
         .loading-indicator { text-align: center; font-style: italic; color: var(--primary); margin: 20px; display: none; }
 
         /* Scheduled Dates List Styles */
-        #scheduledDatesDisplay { /* Using result-card styling as a base */
+        #scheduledDatesDisplay { 
             margin-top: 30px;
-            background-color: #e6e6fa; /* Lavender background for distinction */
+            background-color: #e6e6fa; 
             border-left: 4px solid var(--primary);
         }
-        #scheduledDatesDisplay .date-idea { /* Override for the title of this section */
+        #scheduledDatesDisplay .date-idea { 
             color: var(--primary);
         }
         #scheduledDatesList ul {
@@ -165,7 +165,7 @@
             padding: 0;
         }
         #scheduledDatesList li {
-            background-color: #fff8fa; /* Light pinkish for each item */
+            background-color: #fff8fa; 
             border: 1px solid var(--secondary);
             border-radius: 8px;
             padding: 15px;
@@ -175,7 +175,7 @@
         #scheduledDatesList li h4 {
             color: var(--accent);
             margin-bottom: 8px;
-            font-family: 'Poppins', sans-serif; /* More readable for list items */
+            font-family: 'Poppins', sans-serif; 
             font-size: 1.2em;
         }
         #scheduledDatesList li p {
@@ -190,7 +190,6 @@
             color: #777;
             font-size: 0.8em;
         }
-
 
         @media (max-width: 768px) {
             body { padding-left: 0; padding-right: 0; padding-bottom: 80px; }
@@ -251,11 +250,9 @@
             <div class="button-group">
                 <button class="main-btn" id="generateDateBtn" onclick="generateDate()"> <i class="fas fa-magic"></i> Create Our Date </button>
                 <button class="main-btn" id="suggestDateBtn" onclick="showSuggestionForm()" style="background: linear-gradient(135deg, #6a4d9b, #4d7c9b);"> <i class="fas fa-lightbulb"></i> Suggest a Custom Date </button>
-                <!-- ****** THIS IS THE BUTTON THAT WAS MISSING ****** -->
                 <button class="main-btn" id="viewScheduledDatesBtn" style="background: linear-gradient(135deg, #4CAF50, #2E7D32);"> 
                     <i class="fas fa-calendar-alt"></i> View Our Scheduled Dates 
                 </button>
-                <!-- ****** END OF MISSING BUTTON ****** -->
             </div>
             
             <div class="result-card" id="result">
@@ -271,10 +268,10 @@
             </div>
             
             <!-- Div to display scheduled dates -->
-            <div id="scheduledDatesDisplay" class="result-card" style="display: none;"> <!-- Used result-card for base styling -->
-                <h2 class="date-idea" style="color: #4CAF50;">Our Upcoming Adventures!</h2> <!-- Re-used date-idea for title styling -->
+            <div id="scheduledDatesDisplay" class="result-card" style="display: none;"> 
+                <h2 class="date-idea" style="color: #4CAF50;">Our Upcoming Adventures!</h2> 
                 <div id="scheduledDatesList">
-                    <p class="loading-indicator" style="display:block;">Loading scheduled dates...</p> <!-- Initial loading message -->
+                    <p class="loading-indicator" style="display:block;">Loading scheduled dates...</p> 
                 </div>
             </div>
 
@@ -340,7 +337,7 @@
     <div class="hearts-container" id="hearts-container"></div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7ZJD95q3L0nWY1zVdGsIgKkqmc8DPOvTYoZhpctCWRhkJT0Wh9fCzz0KpAp8qovhHBw/exec"; // UPDATED SCRIPT URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7ZJD95q3L0nWY1zVdGsIgKkqmc8DPOvTYoZhpctCWRhkJT0Wh9fCzz0KpAp8qovhHBw/exec"; 
         
         let fetchedDateIdeas = { virtual: [], creative: [], gaming: [], spicy: [] };
         let allFetchedIdeas = []; 
@@ -678,17 +675,16 @@
                 li.style.border = '1px solid var(--secondary)'; li.style.borderRadius = '8px';
                 li.style.backgroundColor = '#fff0f7'; 
 
-                // Date object construction from ISO string or parts
                 let scheduledDateTime;
-                if (dateEntry.scheduledDate.includes('T')) { // If it's already an ISO string with time
+                if (dateEntry.scheduledDate.includes('T')) { 
                     scheduledDateTime = new Date(dateEntry.scheduledDate);
-                } else if (dateEntry.scheduledTime) { // If date and time are separate
+                } else if (dateEntry.scheduledTime) { 
                     const timeParts = dateEntry.scheduledTime.split(':');
-                    scheduledDateTime = new Date(dateEntry.scheduledDate); // Assuming dateEntry.scheduledDate is YYYY-MM-DD
+                    scheduledDateTime = new Date(dateEntry.scheduledDate); 
                     scheduledDateTime.setHours(parseInt(timeParts[0]));
                     scheduledDateTime.setMinutes(parseInt(timeParts[1]));
-                    scheduledDateTime.setSeconds(0); // or parseInt(timeParts[2] || 0) if seconds are present
-                } else { // Fallback if only date part is there
+                    scheduledDateTime.setSeconds(0); 
+                } else { 
                     scheduledDateTime = new Date(dateEntry.scheduledDate);
                 }
                 
@@ -705,34 +701,7 @@
                     <p><strong>Duration:</strong> ${dateEntry.duration || 'Not specified'}</p>
                     <p><strong>Platform:</strong> ${dateEntry.platform || 'Not specified'}</p>
                 `;
-                if (dateEntry.prepNotes) {            <!-- Inside the <div class="container"> -->
-            <!-- ... (h1, intro-text, mood-selector) ... -->
-            
-            <div class="loading-indicator" id="loadingIndicator">Fetching date ideas... ✨</div>
-
-            <div class="button-group">
-                <button class="main-btn" id="generateDateBtn" onclick="generateDate()"> <i class="fas fa-magic"></i> Create Our Date </button>
-                <button class="main-btn" id="suggestDateBtn" onclick="showSuggestionForm()" style="background: linear-gradient(135deg, #6a4d9b, #4d7c9b);"> <i class="fas fa-lightbulb"></i> Suggest a Custom Date </button>
-                <!-- ****** THIS IS THE BUTTON THAT WAS MISSING ****** -->
-                <button class="main-btn" id="viewScheduledDatesBtn" style="background: linear-gradient(135deg, #4CAF50, #2E7D32);"> 
-                    <i class="fas fa-calendar-alt"></i> View Our Scheduled Dates 
-                </button>
-                <!-- ****** END OF MISSING BUTTON ****** -->
-            </div>
-            
-            <div class="result-card" id="result">
-                <!-- ... rest of your result card ... -->
-            </div>
-            
-            <!-- Div to display scheduled dates -->
-            <div id="scheduledDatesDisplay" class="result-card" style="display: none;"> <!-- Used result-card for base styling -->
-                <h2 class="date-idea" style="color: #4CAF50;">Our Upcoming Adventures!</h2> <!-- Re-used date-idea for title styling -->
-                <div id="scheduledDatesList">
-                    <p class="loading-indicator" style="display:block;">Loading scheduled dates...</p> <!-- Initial loading message -->
-                </div>
-            </div>
-
-            <!-- ... rest of your forms and confirmation cards ... -->
+                if (dateEntry.prepNotes) {
                     detailsHTML += `<p><strong>Prep:</strong> ${dateEntry.prepNotes}</p>`;
                 }
                 if (dateEntry.showedSpicyInfo) {
