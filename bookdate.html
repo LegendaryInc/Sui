@@ -151,45 +151,84 @@
         .card-bow-bl { bottom: -10px; left: -10px; width: 30px; height: 30px; } .card-bow-br { bottom: -10px; right: -10px; width: 30px; height: 30px; }
         .loading-indicator { text-align: center; font-style: italic; color: var(--primary); margin: 20px; display: none; }
 
-        /* Scheduled Dates List Styles */
+        /* ===== Scheduled Dates List Styles ===== */
         #scheduledDatesDisplay { 
             margin-top: 30px;
             background-color: #e6e6fa; 
             border-left: 4px solid var(--primary);
+            padding: 20px; 
         }
         #scheduledDatesDisplay .date-idea { 
             color: var(--primary);
+            font-size: 1.8em; 
+            margin-bottom: 20px;
         }
         #scheduledDatesList ul {
             list-style-type: none;
             padding: 0;
+            margin: 0;
         }
-        #scheduledDatesList li {
-            background-color: #fff8fa; 
+        #scheduledDatesList li.scheduled-date-item { 
+            background-color: #ffffff; 
             border: 1px solid var(--secondary);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--accent); 
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+            text-align: left; 
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
-        #scheduledDatesList li h4 {
-            color: var(--accent);
-            margin-bottom: 8px;
-            font-family: 'Poppins', sans-serif; 
-            font-size: 1.2em;
+        #scheduledDatesList li.scheduled-date-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.12);
         }
-        #scheduledDatesList li p {
-            margin-bottom: 5px;
+        #scheduledDatesList li.scheduled-date-item h4 { 
+            color: var(--primary); 
+            margin-bottom: 10px;
+            font-family: 'Pacifico', cursive; 
+            font-size: 1.5em; 
+            border-bottom: 1px dashed var(--secondary);
+            padding-bottom: 8px;
+        }
+        #scheduledDatesList li.scheduled-date-item p {
+            margin-bottom: 6px;
             font-size: 0.95em;
-            color: #555;
+            color: #444; 
+            line-height: 1.5;
         }
-         #scheduledDatesList li p strong {
+         #scheduledDatesList li.scheduled-date-item p strong {
             color: var(--dark);
+            margin-right: 5px;
          }
-        #scheduledDatesList li em small {
-            color: #777;
-            font-size: 0.8em;
+        #scheduledDatesList li.scheduled-date-item .date-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 10px;
+            margin-top: 10px;
         }
+         #scheduledDatesList li.scheduled-date-item .date-detail {
+            background-color: var(--light);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+         }
+        #scheduledDatesList li.scheduled-date-item em small { 
+            color: #888;
+            font-size: 0.8em;
+            display: block;
+            text-align: right;
+            margin-top: 10px;
+        }
+        #scheduledDatesList .no-dates-message {
+            text-align: center;
+            font-style: italic;
+            color: var(--dark);
+            padding: 20px;
+            background-color: #fff8fa;
+            border-radius: 8px;
+        }
+
 
         @media (max-width: 768px) {
             body { padding-left: 0; padding-right: 0; padding-bottom: 80px; }
@@ -204,6 +243,7 @@
             .mood-btn { width: 100%; max-width: 300px; } .bow { display: none; }
             .button-group { width: 100%; }
             .main-btn { width: 90%; max-width: 350px; }
+             #scheduledDatesList li.scheduled-date-item .date-details-grid { grid-template-columns: 1fr; /* Stack details on mobile */ }
         }
         @media (max-width: 480px) {
             .mood-btn { padding: 10px 20px; font-size: 0.9rem; }
@@ -211,7 +251,7 @@
             .form-container, .result-card, .suggestion-form, .confirmation-card, #scheduledDatesDisplay { padding: 20px; }
             h1 { font-size: 1.8rem; } label { font-size: 0.9rem; }
             input, select, textarea { padding: 12px 15px; font-size: 0.9rem;}
-             #scheduledDatesList li h4 { font-size: 1.1em;}
+             #scheduledDatesList li h4 { font-size: 1.3em;} /* Adjusted for mobile */
              #scheduledDatesList li p { font-size: 0.9em; }
         }
     </style>
@@ -267,9 +307,8 @@
                 <button class="main-btn" onclick="showBookingForm()"> <i class="far fa-calendar-plus"></i> Schedule This Date </button>
             </div>
             
-            <!-- Div to display scheduled dates -->
             <div id="scheduledDatesDisplay" class="result-card" style="display: none;"> 
-                <h2 class="date-idea" style="color: #4CAF50;">Our Upcoming Adventures!</h2> 
+                <h2 class="date-idea" style="color: var(--primary);">Our Upcoming Adventures!</h2> 
                 <div id="scheduledDatesList">
                     <p class="loading-indicator" style="display:block;">Loading scheduled dates...</p> 
                 </div>
@@ -659,53 +698,60 @@
             scheduledDatesListDiv.innerHTML = ''; 
 
             if (!dates || dates.length === 0) {
-                scheduledDatesListDiv.innerHTML = '<p>No (approved) dates scheduled yet. Time to plan something magical! ✨</p>';
+                scheduledDatesListDiv.innerHTML = '<p class="no-dates-message">No (approved) dates scheduled yet. Time to plan something magical! ✨</p>';
                 return;
             }
 
-            dates.sort((a, b) => new Date(a.scheduledDate) - new Date(b.scheduledDate)); // Upcoming first
+            dates.sort((a, b) => new Date(a.scheduledDate) - new Date(b.scheduledDate)); 
 
             const ul = document.createElement('ul');
-            ul.style.listStyleType = 'none';
-            ul.style.padding = '0';
+            // ul.style.listStyleType = 'none'; // Handled by CSS
+            // ul.style.padding = '0'; // Handled by CSS
 
             dates.forEach(dateEntry => {
                 const li = document.createElement('li');
-                li.style.marginBottom = '15px'; li.style.padding = '10px';
-                li.style.border = '1px solid var(--secondary)'; li.style.borderRadius = '8px';
-                li.style.backgroundColor = '#fff0f7'; 
+                li.className = 'scheduled-date-item';
 
                 let scheduledDateTime;
-                if (dateEntry.scheduledDate.includes('T')) { 
+                if (dateEntry.scheduledDate && dateEntry.scheduledDate.includes('T')) { 
                     scheduledDateTime = new Date(dateEntry.scheduledDate);
-                } else if (dateEntry.scheduledTime) { 
+                } else if (dateEntry.scheduledDate && dateEntry.scheduledTime) { 
                     const timeParts = dateEntry.scheduledTime.split(':');
                     scheduledDateTime = new Date(dateEntry.scheduledDate); 
                     scheduledDateTime.setHours(parseInt(timeParts[0]));
                     scheduledDateTime.setMinutes(parseInt(timeParts[1]));
                     scheduledDateTime.setSeconds(0); 
-                } else { 
+                } else if (dateEntry.scheduledDate) { 
                     scheduledDateTime = new Date(dateEntry.scheduledDate);
+                    scheduledDateTime = new Date(Date.UTC(scheduledDateTime.getFullYear(), scheduledDateTime.getMonth(), scheduledDateTime.getDate()));
+                } else {
+                    li.innerHTML = '<h4>Invalid Date Entry</h4><p>Could not display this scheduled date.</p>';
+                    ul.appendChild(li);
+                    return; 
                 }
                 
                 const formattedDate = scheduledDateTime.toLocaleDateString('en-US', {
+                    timeZone: 'UTC', 
                     weekday: 'long', month: 'long', day: 'numeric', year: 'numeric'
                 });
                 const formattedTime = scheduledDateTime.toLocaleTimeString('en-US', {
+                    timeZone: 'UTC',
                     hour: '2-digit', minute: '2-digit', hour12: true
                 });
 
-                let detailsHTML = `
-                    <h4 style="color: var(--primary); margin-bottom: 5px;">${dateEntry.ideaTitle}</h4>
-                    <p><strong>When:</strong> ${formattedDate} at ${formattedTime}</p>
-                    <p><strong>Duration:</strong> ${dateEntry.duration || 'Not specified'}</p>
-                    <p><strong>Platform:</strong> ${dateEntry.platform || 'Not specified'}</p>
-                `;
+                let detailsHTML = `<h4>${dateEntry.ideaTitle}</h4>`;
+                detailsHTML += `<div class="date-details-grid">`;
+                detailsHTML += `<div class="date-detail"><p><strong>When:</strong> ${formattedDate} at ${formattedTime}</p></div>`;
+                detailsHTML += `<div class="date-detail"><p><strong>Duration:</strong> ${dateEntry.duration || 'Not specified'}</p></div>`;
+                detailsHTML += `<div class="date-detail"><p><strong>Platform:</strong> ${dateEntry.platform || 'Not specified'}</p></div>`;
                 if (dateEntry.prepNotes) {
-                    detailsHTML += `<p><strong>Prep:</strong> ${dateEntry.prepNotes}</p>`;
+                    detailsHTML += `<div class="date-detail" style="grid-column: 1 / -1;"><p><strong>Prep:</strong> ${dateEntry.prepNotes}</p></div>`;
                 }
+                detailsHTML += `</div>`; 
+
+
                 if (dateEntry.showedSpicyInfo) {
-                    detailsHTML += `<p style="color: var(--accent); font-style: italic;">(Spicy version was viewed! 🔥)</p>`;
+                    detailsHTML += `<p style="color: var(--accent); font-style: italic; margin-top: 10px;">(Spicy version was viewed! 🔥)</p>`;
                 }
                 const bookingTimestamp = dateEntry.schedulingTimestamp ? new Date(dateEntry.schedulingTimestamp).toLocaleDateString() : 'N/A';
                 detailsHTML += `<p><em><small>(Booked on: ${bookingTimestamp})</small></em></p>`;
