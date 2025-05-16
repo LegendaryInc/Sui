@@ -4,124 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Anime Journey</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Pacifico&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        :root { /* Using variables from your slimegame for consistency */
-            --primary: #9b4d96; 
-            --secondary: #f5a9bc; 
-            --dark: #2a0a3a;
-            --light: #fce4ec; 
-            --accent: #e91e63; 
-            --success: #4CAF50;
+        :root {
+            --primary: #9b4d96; --secondary: #f5a9bc; --dark: #2a0a3a;
+            --light: #fce4ec; --accent: #e91e63; --success: #4CAF50;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Poppins', sans-serif; background-color: #f1a1c2; color: #333;
-            min-height: 100vh; padding-left: 100px; padding-right: 100px;
-            text-align: center; position: relative; overflow-x: hidden;
+            font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #f5d6e8, #f1a1c2);
+            color: #333; min-height: 100vh; padding-left: 100px; padding-right: 100px;
+            line-height: 1.6; overflow-x: hidden; text-align: center;
         }
 
-        /* ===== NAVIGATION BARS (Copied from slimegame.html structure) ===== */
+        /* --- Navigation (Consistent) --- */
         .nav-container-left, .nav-container-right {
             position: fixed; top: 0; height: 100vh; width: 100px;
-            background-color: var(--dark); display: flex; flex-direction: column;
+            background: var(--dark); display: flex; flex-direction: column;
             align-items: center; padding-top: 30px; z-index: 1000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         .nav-container-left { left: 0; border-right: 3px solid var(--secondary); }
         .nav-container-right { right: 0; border-left: 3px solid var(--secondary); }
-
         .nav-item {
-            width: 100%; text-align: center; padding: 15px 0; margin: 10px 0;
-            color: white; font-size: 0.9em; text-decoration: none; transition: all 0.3s;
+            width: 100%; text-align: center; padding: 15px 0; margin: 8px 0;
+            color: white; font-size: 0.85rem; text-decoration: none;
+            transition: all 0.3s ease;
         }
         .nav-container-left .nav-item { border-radius: 0 8px 8px 0; }
         .nav-container-right .nav-item { border-radius: 8px 0 0 8px; }
-
-        .nav-item:hover { background-color: var(--primary); }
+        .nav-item:hover { background: var(--primary); }
         .nav-container-left .nav-item:hover { transform: translateX(5px); }
         .nav-container-right .nav-item:hover { transform: translateX(-5px); }
-        .nav-item img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 8px; }
-        .active { background-color: var(--accent); font-weight: bold; }
+        .nav-item img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 5px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); }
+        .active { background: var(--accent); font-weight: 600; }
 
-        /* ===== Page Wrapper & Header (from slimegame.html) ===== */
-        .page-wrapper { 
-            max-width: 1000px; margin: 0 auto; padding: 20px 0; position: relative;
+        /* --- Main Page --- */
+        .page-wrapper { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .container {
+            background: rgba(255,255,255,0.95); border-radius: 20px; padding: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3); position: relative;
         }
-        header {
-            background-color: var(--primary); color: white; padding: 20px; font-size: 2em;
-            text-transform: uppercase; font-weight: bold; border-radius: 12px;
-            margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative;
-        }
-        /* This will be the main content area holding the anime features */
-        .main-content-area { 
-            width: 100%; padding: 20px; background-color: white;
-            border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            margin-bottom: 40px; position: relative;
-            display: flex; flex-direction: column; align-items: center;
-        }
-
-        /* Feature Wrapper (like slime-game-wrapper) */
-        .feature-wrapper {
-             display: flex;
-             flex-direction: column;
-             align-items: center;
-             width: 100%;
-             max-width: 600px; /* Adjust as needed for anime content */
-             margin: 0 auto; 
-        }
+        h1 { color: var(--primary); font-family: 'Pacifico', cursive; margin-bottom: 15px; font-size: 2.2rem; }
+        .intro-text { text-align: center; margin-bottom: 20px; color: #555; font-size: 1rem; }
         
-        /* Bows & Hearts (from slimegame.html) */
-        .bow { position: absolute; width: 40px; height: 40px; background: url('https://i.imgur.com/tA7aPg4.png') center/contain no-repeat; z-index: 10; }
-        .hearts-container { position: fixed; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: -1; overflow: hidden; }
-        .heart { position: absolute; width: 30px; height: 30px; color: var(--secondary); font-size: 30px; opacity: 0.7; animation: floatUp 15s linear infinite; }
-        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; } 10% { opacity: 0.7; } 90% { opacity: 0.7; } 100% { transform: translateY(-20vh) scale(1.2) rotate(360deg); opacity: 0; } }
-        .header-bow-left { top: -15px; left: -15px; } .header-bow-right { top: -15px; right: -15px; }
-        .main-bow-tl { top: -15px; left: -15px; } .main-bow-tr { top: -15px; right: -15px; }
-        .main-bow-bl { bottom: -15px; left: -15px; } .main-bow-br { bottom: -15px; right: -15px; }
-
-
         /* --- ANIME PAGE SPECIFIC STYLES --- */
-        .anime-page-title { /* For "Sui's Anime Roulette!" */
-            font-family: 'Pacifico', cursive;
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-        .anime-intro-text {
-            margin-bottom: 25px;
-            font-size: 1rem;
-            color: #555;
-        }
+        .anime-page-title { font-family: 'Pacifico', cursive; font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
+        .anime-intro-text { margin-bottom: 25px; font-size: 1rem; color: #555; }
 
-        .sui-animation-container {
-            width: 150px; /* Adjust size */
-            height: 120px;
-            position: relative;
+        .sui-and-wheel-section { /* New container for Sui and Wheel to be side-by-side */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px; /* Space between Sui and the wheel */
             margin-bottom: 20px;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
         }
-        .sui-body-img { width: 100%; height: auto; display: block; position: relative; z-index: 1; animation: body-jiggle 3s infinite ease-in-out; }
-        .sui-arm-img {
-            position: absolute; width: 40px; height: auto;
-            top: 55%; left: 72%; /* YOU WILL LIKELY NEED TO TWEAK THESE */
-            transform: translateY(-50%); z-index: 2;
-            transform-origin: 10% 90%; /* CRUCIAL PIVOT POINT - TWEAK THIS */
-            animation: wave-arm 1.3s infinite ease-in-out alternate;
-        }
-        @keyframes wave-arm { 0% { transform: translateY(-50%) rotate(-20deg); } 100% { transform: translateY(-50%) rotate(15deg); } }
-        @keyframes body-jiggle { 0%,100% {transform:scale(1,1) translateY(0);} 25% {transform:scale(1.03,0.97) translateY(1px);} 50% {transform:scale(0.97,1.03) translateY(-1px);} 75% {transform:scale(1.02,0.98) translateY(0.5px);} }
 
-        .wheel-section { margin-bottom: 20px; width: 100%; display: flex; flex-direction: column; align-items: center;}
-        .wheel-mode-selector { display: flex; justify-content: center; gap: 10px; margin-bottom: 15px; }
-        .wheel-mode-btn {
-            background: var(--secondary); color: white; border: none; padding: 8px 18px;
-            font-size: 0.9em; border-radius: 20px; cursor: pointer; transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .sui-gif-container {
+            width: 120px; /* Adjust size of Sui GIF as desired */
+            height: 120px; /* Adjust height to match width or content */
+            display: flex;
+            align-items: center; /* Vertically center Sui if container is taller */
+            justify-content: center;
         }
-        .wheel-mode-btn.active { background: var(--primary); font-weight: 600; }
-        .wheel-mode-btn:hover:not(.active) { background-color: #e67fa1; }
+        .sui-gif-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
 
+        .wheel-controls-container { display: flex; flex-direction: column; align-items: center; gap: 10px; }
         #wheelContainer { position: relative; width: 300px; height: 300px; cursor: pointer; margin-bottom:15px;}
         #interactiveWheelCanvas { display: block; border-radius: 50%; box-shadow: 0 0 12px rgba(0,0,0,0.15); width:100%; height:100%;}
         #wheelPointer {
@@ -150,8 +104,17 @@
         #challengeDescriptionDisplay { background-color: #fff8e1; border-left: 3px solid #ffb74d; }
         #suiCommentDisplay { background-color: #e3f2fd; border-left: 3px solid #64b5f6; font-style: italic; }
 
-        .add-content-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; margin-bottom: 10px; flex-wrap: wrap;}
-        .admin-action-btn { /* Using a more generic name as it's for adding content */
+        .wheel-mode-selector { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .wheel-mode-btn {
+            background: var(--secondary); color: white; border: none; padding: 8px 18px;
+            font-size: 0.9em; border-radius: 20px; cursor: pointer; transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .wheel-mode-btn.active { background: var(--primary); font-weight: 600; }
+        .wheel-mode-btn:hover:not(.active) { background-color: #e67fa1; }
+
+        .add-content-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 25px; margin-bottom: 10px; flex-wrap: wrap;}
+        .admin-action-btn {
             background: linear-gradient(135deg, #6a4d9b, #4d7c9b); color: white; border: none;
             padding: 10px 20px; font-size: 0.95em; border-radius: 8px; cursor: pointer;
             transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;
@@ -159,14 +122,14 @@
         .admin-action-btn:hover { transform: translateY(-2px); box-shadow: 0 3px 7px rgba(0,0,0,0.15); }
         .admin-action-btn i { margin-right: 5px; }
 
-        /* Modal Styles (consistent with bookdate.html) */
+        /* Modals, Forms, Hearts, Bows (styles remain the same) */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; padding:15px; }
         .modal-content { background-color: #fff; margin: auto; padding: 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); width: 90%; max-width: 550px; position: relative; animation: modalopen 0.3s ease-out; }
         @keyframes modalopen { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         .modal-content h3 { font-family: 'Pacifico', cursive; color: var(--primary); margin-bottom: 20px; text-align: center;}
         .close-modal-btn { color: #aaa; position:absolute; top:10px; right:15px; font-size: 28px; font-weight: bold; cursor: pointer; }
         .close-modal-btn:hover, .close-modal-btn:focus { color: var(--dark); text-decoration: none; }
-        .admin-form .form-group { margin-bottom: 15px; text-align: left; } /* Re-using admin-form class name for modal forms */
+        .admin-form .form-group { margin-bottom: 15px; text-align: left; } 
         .admin-form label { display: block; margin-bottom: 6px; font-weight: 600; color: var(--dark); font-size: 0.9em;}
         .admin-form input[type="text"], .admin-form input[type="url"], .admin-form textarea, .admin-form select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95em; }
         .admin-form textarea { min-height: 80px; resize: vertical; }
@@ -174,10 +137,16 @@
         .form-buttons button { padding: 10px 20px; color:white; }
         .form-buttons button[type="submit"] { background-color: var(--success); }
         .form-buttons button[type="button"] { background-color: var(--secondary); color: var(--dark); }
-
         .loading-indicator { text-align: center; font-style: italic; color: var(--primary); padding: 10px; font-size: 0.9em; }
-        
-        @media (max-width: 768px) {
+        .bow { position: absolute; width: 40px; height: 40px; background: url('https://i.imgur.com/tA7aPg4.png') center/contain no-repeat; z-index: 10; }
+        .hearts-container { position: fixed; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: -1; overflow: hidden; }
+        .heart { position: absolute; color: var(--secondary); font-size: 24px; opacity: 0; bottom: -50px; animation: floatUpAnimePage 8s linear infinite; } 
+        @keyframes floatUpAnimePage { 0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-120vh) scale(1.2) rotate(360deg); opacity: 0; } }
+        .header-bow-left { top: -15px; left: -15px; } .header-bow-right { top: -15px; right: -15px; }
+        .main-bow-tl { top: -15px; left: -15px; } .main-bow-tr { top: -15px; right: -15px; }
+        .main-bow-bl { bottom: -15px; left: -15px; } .main-bow-br { bottom: -15px; right: -15px; }
+
+        @media (max-width: 768px) { /* Start adjusting for tablet and below */
             body { padding-left: 0; padding-right: 0; padding-bottom: 80px; }
             .nav-container-left, .nav-container-right { width: 100%; height: 80px; flex-direction: row; padding-top: 0; bottom: 0; top: auto; border-right: none; border-left: none; border-top: 3px solid var(--secondary); justify-content: space-around; }
             .nav-container-right { display: none; } 
@@ -187,21 +156,20 @@
             .nav-item img { width: 30px; height: 30px; margin-bottom: 0; }
             .page-wrapper { padding: 10px; } .container { padding: 15px; }
             h1 { font-size: 1.8rem; }
-            .sui-animation-container { width: 120px; height: 100px; }
-            .sui-arm-img { width: 35px; top: 50%; left: 68%; }
-            #wheelContainer { width: 250px; height: 250px; } 
+            .sui-and-wheel-section { flex-direction: column; } /* Stack Sui and wheel on smaller screens */
+            .sui-gif-container { margin-bottom: 15px; width: 100px; height: 100px; }
+            #wheelContainer { width: 280px; height: 280px; } 
             .wheel-mode-selector { flex-direction: column; gap: 8px; }
             .wheel-mode-btn { width: 70%; margin: 0 auto; font-size: 0.85em; padding: 8px 15px;}
             .add-content-buttons { flex-direction: column; gap: 10px; }
             .admin-action-btn { width: 70%; margin: 0 auto; font-size: 0.9em; padding: 8px 18px;}
             .bow {display:none;}
         }
-         @media (max-width: 480px) {
+         @media (max-width: 480px) { /* Further adjustments for small phones */
             .page-wrapper { padding: 5px;} .container {padding:10px;}
             h1 { font-size: 1.6rem; }
-            .sui-animation-container { width: 100px; height: 80px; }
-            .sui-arm-img { width: 30px; top: 50%; left: 65%; }
-            #wheelContainer { width: 200px; height: 200px; }
+            .sui-gif-container { width: 80px; height: 80px; }
+            #wheelContainer { width: 220px; height: 220px; }
             #wheelResult { font-size: 1.1em; }
             .modal-content { padding: 15px; }
             .modal-content h3 { font-size: 1.3rem; }
@@ -223,54 +191,52 @@
     <!-- Main Content -->
     <div class="page-wrapper">
         <header>
-            Our Anime Journey 🌸 <!-- Page Title -->
+            Our Anime Journey 🌸
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-left">
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-right">
         </header>
 
-        <div class="main-content-area"> <!-- Main content area like slimegame.html -->
+        <main class="container">
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tl">
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tr">
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-bl">
             <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-br">
+
+            <h1 class="anime-page-title">Sui's Anime Roulette!</h1>
+            <p class="anime-intro-text">Let our favorite slime help us pick our next adventure!</p>
+
+            <div class="sui-and-wheel-section">
+                <div class="sui-gif-container">
+                    <img src="https://i.imgur.com/XE9Jilo.gif" alt="Sui the Slime GIF">
+                </div>
+                <div class="wheel-controls-container">
+                    <div id="wheelContainer">
+                        <canvas id="interactiveWheelCanvas" width="300" height="300"></canvas>
+                        <div id="wheelPointer"></div>
+                    </div>
+                    <button id="spinWheelBtn" disabled>Spin for a <span id="spinBtnText">Challenge</span>!</button>
+                    <div id="wheelResult">Loading data...</div>
+                </div>
+            </div>
             
-            <div class="feature-wrapper"> <!-- Wrapper for anime features -->
-                <h1 class="anime-page-title">Sui's Anime Roulette!</h1>
-                <p class="anime-intro-text">Let Sui help us pick our next anime adventure or a fun challenge!</p>
+            <div id="challengeDescriptionDisplay"></div>
+            <div id="suiCommentDisplay"></div>
+            
+            <div class="wheel-mode-selector">
+                <button id="challengeModeBtn" class="wheel-mode-btn active">Challenge Roulette</button>
+                <button id="seriesModeBtn" class="wheel-mode-btn">Anime Series Roulette</button>
+            </div>
+            
+            <div class="add-content-buttons">
+                <button id="showAddChallengeFormBtn" class="admin-action-btn"><i class="fas fa-plus-circle"></i> Add New Challenge</button>
+                <button id="showAddAnimeFormBtn" class="admin-action-btn"><i class="fas fa-film"></i> Add New Anime to List</button>
+            </div>
+            <div class="loading-indicator" id="loadingIndicator" style="display: none;">Loading...</div>
 
-                <div class="anime-interactive-section">
-                    <div class="sui-animation-container">
-                        <img src="https://i.imgur.com/sYAd5HD.png" alt="Sui the Slime" class="sui-body-img">
-                        <img src="https://i.imgur.com/iuAY7a2.png" alt="Sui's Waving Arm" class="sui-arm-img">
-                    </div>
+        </main>
+    </div>
 
-                    <div class="wheel-controls-container">
-                        <div id="wheelContainer">
-                            <canvas id="interactiveWheelCanvas" width="300" height="300"></canvas>
-                            <div id="wheelPointer"></div>
-                        </div>
-                        <button id="spinWheelBtn" disabled>Spin for a <span id="spinBtnText">Challenge</span>!</button>
-                        <div id="wheelResult">Loading data...</div>
-                        <div id="challengeDescriptionDisplay"></div>
-                        <div id="suiCommentDisplay"></div>
-                    </div>
-                </div>
-                
-                <div class="wheel-mode-selector">
-                    <button id="challengeModeBtn" class="wheel-mode-btn active">Challenge Roulette</button>
-                    <button id="seriesModeBtn" class="wheel-mode-btn">Anime Series Roulette</button>
-                </div>
-                
-                <div class="add-content-buttons">
-                    <button id="showAddChallengeFormBtn" class="admin-action-btn"><i class="fas fa-plus-circle"></i> Add New Challenge</button>
-                    <button id="showAddAnimeFormBtn" class="admin-action-btn"><i class="fas fa-film"></i> Add New Anime to List</button>
-                </div>
-                <div class="loading-indicator" id="loadingIndicator" style="display: none;">Loading...</div>
-            </div> <!-- End of feature-wrapper -->
-        </div> <!-- End of main-content-area -->
-    </div> <!-- End of page-wrapper -->
-
-    <!-- Modals (same as previous anime.html) -->
+    <!-- Add Challenge Modal -->
     <div id="addChallengeModal" class="modal">
         <div class="modal-content">
             <span class="close-modal-btn" onclick="closeModal('addChallengeModal')">×</span>
@@ -284,6 +250,8 @@
             </form>
         </div>
     </div>
+
+    <!-- Add Anime Modal -->
     <div id="addAnimeModal" class="modal">
         <div class="modal-content">
             <span class="close-modal-btn" onclick="closeModal('addAnimeModal')">×</span>
@@ -300,7 +268,7 @@
     <!-- Right Navigation Bar -->
     <div class="nav-container-right">
         <a href="slimegame.html" class="nav-item slimegame"> <img src="https://i.imgur.com/yFzLbfM.png" alt="Slime Game Icon"> Slime Game </a>
-        <a href="anime.html" class="nav-item anime active"> <!-- Active for this page -->
+        <a href="anime.html" class="nav-item anime active"> 
             <img src="https://i.imgur.com/7zP0YwP.png" alt="Anime Journey Icon"> <!-- Your Placeholder Anime Icon -->
             Anime Journey
         </a>
@@ -311,26 +279,6 @@
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx7ZJD95q3L0nWY1zVdGsIgKkqmc8DPOvTYoZhpctCWRhkJT0Wh9fCzz0KpAp8qovhHBw/exec"; 
         
-        // --- (ALL JavaScript from the previous anime.html response goes here) ---
-        // This includes:
-        // - fetchedChallenges, fetchedAnimeSeries, currentWheelMode, wheelSegmentsData
-        // - canvas, ctx, spinWheelBtn, wheelResultDiv, etc. DOM element selections
-        // - Wheel parameters (numSegments, arcSize, centerX, centerY, radius, colors, currentAngle, etc.)
-        // - fetchDataForWheel(type)
-        // - initializePageData()
-        // - loadWheelData()
-        // - drawWheel()
-        // - spin(), rotateWheel(), easeOutCubic() - or simplified spin, stopRotateWheel()
-        // - Mode Switching button event listeners
-        // - Modal & Form Logic (openModal, closeModal, form submission handlers for addChallenge and addAnime)
-        // - createHearts()
-        // - setActiveNav()
-        // - window.onload event listener calling initializePageData() and setActiveNav()
-        // --- PASTE THE FULL SCRIPT FROM THE PREVIOUS "anime.html" RESPONSE HERE ---
-
-        // For completeness, I am pasting the JavaScript again.
-        // In a real project, you might put this in a separate .js file.
-
         let fetchedChallenges = [];
         let fetchedAnimeSeries = []; 
         let currentWheelMode = 'challenges'; 
@@ -349,9 +297,9 @@
         let arcSize = 0;
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
-        const radius = canvas.width / 2 - 10; // Keep some padding
+        const radius = canvas.width / 2 - 10; 
         const colors = ["#FFC0CB", "#ADD8E6", "#90EE90", "#FFD700", "#FFA07A", "#DDA0DD", "#87CEFA", "#F08080", "#FFB6C1", "#AFEEEE", "#E6E6FA", "#FFDEAD", "#dda0dd", "#b0e0e6", "#ff7f50", "#deb887"];
-        let currentAngle = Math.PI / 2; // Start with pointer effectively at the top
+        let currentAngle = Math.PI / 2; 
         let spinAngleStart = 0;
         let spinTime = 0;
         let spinTimeTotal = 0;
@@ -373,7 +321,6 @@
                 const data = await response.json();
                 if (data.status === "error") throw new Error(`Script error for ${type}: ${data.message}`);
                 if (loadingIndicator) loadingIndicator.style.display = 'none';
-                // spinWheelBtn will be enabled by loadWheelData if data is present
                 return data;
             } catch (error) {
                 console.error(`Failed to load ${type}:`, error);
@@ -421,7 +368,7 @@
             numSegments = wheelSegmentsData.length;
             arcSize = (2 * Math.PI) / numSegments;
             if (spinWheelBtn) spinWheelBtn.disabled = false;
-            currentAngle =  Math.PI / 2 - (arcSize/2); // Adjust so pointer aims at middle of a segment initially
+            currentAngle =  Math.PI / 2 - (arcSize/2); 
             drawWheel();
         }
 
@@ -435,36 +382,31 @@
             for(let i = 0; i < numSegments; i++) {
                 const angle = currentAngle + i * arcSize;
                 ctx.fillStyle = colors[i % colors.length];
-
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
                 ctx.arc(centerX, centerY, radius, angle, angle + arcSize, false);
                 ctx.lineTo(centerX, centerY);
                 ctx.fill();
                 ctx.stroke();
-
                 ctx.save();
                 ctx.fillStyle = var(--dark); 
                 ctx.translate(centerX + Math.cos(angle + arcSize / 2) * radius * 0.65, 
                               centerY + Math.sin(angle + arcSize / 2) * radius * 0.65);
                 ctx.rotate(angle + arcSize / 2 + Math.PI / 2); 
-                
                 const text = wheelSegmentsData[i].title;
                 let clippedText = text;
-                const maxTextWidth = radius * 0.6; // Max width for text within segment
-                
+                const maxTextWidth = radius * 0.6; 
                 if (ctx.measureText(text).width > maxTextWidth) {
                     let a = 0; let b = text.length; let t = "";
                     while(a <= b) {
                       let m = Math.floor((a+b)/2);
-                      if (m === 0) { b = -1; break; } // Prevent infinite loop on very short allowance
+                      if (m === 0) { b = -1; break; } 
                       if(ctx.measureText(text.substring(0,m)).width <= maxTextWidth) { t = text.substring(0,m); a = m + 1;}
                       else { b = m - 1; }
                     }
                     clippedText = t + (t.length < text.length ? ".." : "");
                 }
-                ctx.textAlign = 'center'; 
-                ctx.textBaseline = 'middle';
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                 ctx.fillText(clippedText, 0, 0);
                 ctx.restore();
             }
@@ -477,10 +419,8 @@
             if (wheelResultDiv) wheelResultDiv.textContent = "Spinning...";
             if (challengeDescriptionDisplay) challengeDescriptionDisplay.style.display = 'none';
             if (suiCommentDisplay) suiCommentDisplay.style.display = 'none';
-
-            spinAngleStart = Math.random() * 10 + 15; // Base revolutions
+            spinAngleStart = Math.random() * 10 + 15; 
             spinTime = 0;
-            // Adjust total spin time, more segments might need slightly longer to feel right
             spinTimeTotal = Math.random() * 2000 + (numSegments > 6 ? 4500 : 3500); 
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
             rotateWheel();
@@ -489,16 +429,11 @@
         function rotateWheel() {
             spinTime += 16; 
             if(spinTime >= spinTimeTotal) {
-                stopRotateWheel();
-                return;
+                stopRotateWheel(); return;
             }
-            // Ease-out function: starts fast, slows down
-            // (1 - (1-x)^N) where N is power (e.g., 3 for cubic, 4 for quartic)
-            // Or: (1 - x)^N for deceleration amount directly
             let t = spinTime / spinTimeTotal;
-            let spinFactor = Math.pow(1 - t, 3); // Cubic ease-out for deceleration speed
-
-            currentAngle += (spinAngleStart * spinFactor * Math.PI * 2 / 60 ); // 60 is arbitrary speed factor
+            let spinFactor = Math.pow(1 - t, 3); 
+            currentAngle += (spinAngleStart * spinFactor * Math.PI * 2 / 60 ); 
             currentAngle %= (2 * Math.PI); 
             drawWheel();
             animationFrameId = requestAnimationFrame(rotateWheel);
@@ -508,23 +443,13 @@
             if (animationFrameId) cancelAnimationFrame(animationFrameId);
             isSpinning = false;
             if (spinWheelBtn) spinWheelBtn.disabled = (numSegments === 0);
-            
-            // Pointer is at 3 o'clock (0 radians on canvas if not rotated)
-            // currentAngle is the angle of the start of segment 0 from the positive x-axis
-            const pointerFixedAngle = 0; // Pointer at 3 o'clock
+            const pointerFixedAngle = 0; 
             let finalAngle = currentAngle % (2 * Math.PI);
             if (finalAngle < 0) finalAngle += (2 * Math.PI);
-
-            // Which segment is under the pointer (0 radians)?
-            // We need to find i such that: finalAngle + i * arcSize <= 0 < finalAngle + (i+1) * arcSize (all modulo 2PI)
-            // Or, easier: (2*PI - finalAngle) / arcSize gives how many full segments have passed the pointer
             let effectiveAngle = (2 * Math.PI) - finalAngle + pointerFixedAngle;
-            effectiveAngle = (effectiveAngle % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI); // Normalize
-            
-            const selectedIndex = Math.floor(effectiveAngle / arcSize) % numSegments; // Ensure index is within bounds
-            
+            effectiveAngle = (effectiveAngle % (2 * Math.PI) + (2 * Math.PI)) % (2 * Math.PI); 
+            const selectedIndex = Math.floor(effectiveAngle / arcSize) % numSegments; 
             const selectedItem = wheelSegmentsData[selectedIndex];
-
             if (selectedItem) {
                 if(wheelResultDiv) wheelResultDiv.textContent = selectedItem.title;
                 if (currentWheelMode === 'challenges' && selectedItem.fullData) {
@@ -627,8 +552,7 @@
         
         function createHearts() { 
             const heartsContainer = document.getElementById('hearts-container');
-            if (!heartsContainer) return; 
-            if (heartsContainer.children.length > 30) return; // Limit total hearts
+            if (!heartsContainer || heartsContainer.children.length > 30) return; 
             const heart = document.createElement('div'); heart.className = 'heart'; 
             heart.innerHTML = ['💜','💖','💕','💞','💓','💗'][Math.floor(Math.random()*6)];
             heart.style.left = Math.random()*100+'vw'; 
@@ -636,7 +560,6 @@
             heart.style.animationDelay = Math.random()*5+'s'; 
             heart.style.fontSize = (18+Math.random()*22)+'px';
             heartsContainer.appendChild(heart);
-            // Remove heart after animation + a little buffer
             setTimeout(()=>heart.remove(), (parseFloat(heart.style.animationDuration.replace('s','')) + parseFloat(heart.style.animationDelay.replace('s',''))) * 1000 + 500 );
         }
         
@@ -649,20 +572,23 @@
             
             allNavItems.forEach(item => {
                 item.classList.remove('active');
-                // Check if the item's href matches the current page's filename
-                if (item.getAttribute('href') === path) {
-                    // If it's the anime.html page, ensure the anime link in the right nav is active
+                if (item.getAttribute('href') === path) { 
                     if (path === "anime.html" && item.closest('.nav-container-right') && item.classList.contains('anime')) {
                          item.classList.add('active');
-                    } else if (path !== "anime.html") { // For other pages, default behavior
+                    } else if (path !== "anime.html") { 
                         item.classList.add('active');
                     }
                 }
             });
-             // Explicitly set anime link active if on anime.html (covers cases where initial logic might miss)
             if (path === "anime.html") {
                 const animeLinkRight = document.querySelector('.nav-container-right .nav-item.anime');
-                if (animeLinkRight) animeLinkRight.classList.add('active');
+                if (animeLinkRight && !animeLinkRight.classList.contains('active')) animeLinkRight.classList.add('active');
+                // Deactivate other links in right nav if anime.html is active
+                rightNavItems.forEach(item => {
+                    if (!item.classList.contains('anime') && item.classList.contains('active')) {
+                        item.classList.remove('active');
+                    }
+                });
             }
         }
 
