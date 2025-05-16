@@ -12,7 +12,8 @@
             --light: #fce4ec; --accent: #e91e63; --success: #4CAF50;
         }
         body {
-            font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #f5d6e8, #f1a1c2);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffdde1, #ee9ca7); /* Pinker background */
             color: #333; min-height: 100vh; padding-left: 100px; padding-right: 100px;
             line-height: 1.6; overflow-x: hidden; text-align: center;
         }
@@ -46,34 +47,56 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.3); position: relative;
         }
-        h1 { color: var(--primary); font-family: 'Pacifico', cursive; margin-bottom: 15px; font-size: 2.2rem; }
-        .intro-text { text-align: center; margin-bottom: 20px; color: #555; font-size: 1rem; }
+        header { /* Header for the page itself */
+            background-color: var(--primary); color: white; padding: 20px; font-size: 2em;
+            text-transform: uppercase; font-weight: bold; border-radius: 12px;
+            margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative;
+        }
+        .main-content-area { 
+            width: 100%; padding: 20px; /* Padding inside the white box */
+            /* background-color: white; This is now handled by .container */
+            /* border-radius: 12px; */
+            /* box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
+            /* margin-bottom: 40px; */
+            position: relative;
+            display: flex; flex-direction: column; align-items: center;
+        }
         
-        /* --- ANIME PAGE SPECIFIC STYLES --- */
-        .anime-page-title { font-family: 'Pacifico', cursive; font-size: 2rem; color: var(--primary); margin-bottom: 10px; }
-        .anime-intro-text { margin-bottom: 25px; font-size: 1rem; color: #555; }
+        /* Feature Wrapper within main-content-area */
+        .feature-wrapper {
+             display: flex;
+             flex-direction: column;
+             align-items: flex-start; /* Aligns content to the left */
+             width: 100%;
+             margin: 0 auto; 
+        }
+        
+        /* ANIME PAGE SPECIFIC TITLES */
+        .anime-page-title { 
+            font-family: 'Pacifico', cursive; font-size: 2rem; 
+            color: var(--primary); margin-bottom: 10px; 
+            width: 100%; text-align: center; 
+        }
+        .anime-intro-text { 
+            margin-bottom: 25px; font-size: 1rem; color: #555; 
+            width: 100%; text-align: center; 
+        }
 
-        .sui-and-wheel-section { /* New container for Sui and Wheel to be side-by-side */
+        .sui-and-wheel-section { 
             display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px; /* Space between Sui and the wheel */
+            justify-content: flex-start; /* Aligns this group to the left */
+            align-items: center; 
+            gap: 20px; 
             margin-bottom: 20px;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            flex-wrap: nowrap; 
+            width: 100%; 
         }
-
         .sui-gif-container {
-            width: 120px; /* Adjust size of Sui GIF as desired */
-            height: 120px; /* Adjust height to match width or content */
-            display: flex;
-            align-items: center; /* Vertically center Sui if container is taller */
-            justify-content: center;
+            width: 120px; height: 120px; 
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; 
         }
-        .sui-gif-container img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
+        .sui-gif-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
         .wheel-controls-container { display: flex; flex-direction: column; align-items: center; gap: 10px; }
         #wheelContainer { position: relative; width: 300px; height: 300px; cursor: pointer; margin-bottom:15px;}
@@ -104,7 +127,9 @@
         #challengeDescriptionDisplay { background-color: #fff8e1; border-left: 3px solid #ffb74d; }
         #suiCommentDisplay { background-color: #e3f2fd; border-left: 3px solid #64b5f6; font-style: italic; }
 
-        .wheel-mode-selector { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .wheel-mode-selector { display: flex; justify-content: center; gap: 10px; margin-top: 20px; margin-bottom: 20px; width:100%; }
+        .add-content-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 20px; margin-bottom: 10px; flex-wrap: wrap; width:100%;}
+        
         .wheel-mode-btn {
             background: var(--secondary); color: white; border: none; padding: 8px 18px;
             font-size: 0.9em; border-radius: 20px; cursor: pointer; transition: all 0.3s ease;
@@ -112,8 +137,6 @@
         }
         .wheel-mode-btn.active { background: var(--primary); font-weight: 600; }
         .wheel-mode-btn:hover:not(.active) { background-color: #e67fa1; }
-
-        .add-content-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 25px; margin-bottom: 10px; flex-wrap: wrap;}
         .admin-action-btn {
             background: linear-gradient(135deg, #6a4d9b, #4d7c9b); color: white; border: none;
             padding: 10px 20px; font-size: 0.95em; border-radius: 8px; cursor: pointer;
@@ -121,8 +144,6 @@
         }
         .admin-action-btn:hover { transform: translateY(-2px); box-shadow: 0 3px 7px rgba(0,0,0,0.15); }
         .admin-action-btn i { margin-right: 5px; }
-
-        /* Modals, Forms, Hearts, Bows (styles remain the same) */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; padding:15px; }
         .modal-content { background-color: #fff; margin: auto; padding: 25px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); width: 90%; max-width: 550px; position: relative; animation: modalopen 0.3s ease-out; }
         @keyframes modalopen { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
@@ -146,7 +167,13 @@
         .main-bow-tl { top: -15px; left: -15px; } .main-bow-tr { top: -15px; right: -15px; }
         .main-bow-bl { bottom: -15px; left: -15px; } .main-bow-br { bottom: -15px; right: -15px; }
 
-        @media (max-width: 768px) { /* Start adjusting for tablet and below */
+        @media (max-width: 960px) { 
+            .feature-wrapper { align-items: center; }
+            .sui-and-wheel-section { flex-direction: column; align-items: center; }
+            .sui-gif-container { margin-bottom: 15px; }
+            .wheel-controls-container { margin-top:15px; }
+        }
+        @media (max-width: 768px) {
             body { padding-left: 0; padding-right: 0; padding-bottom: 80px; }
             .nav-container-left, .nav-container-right { width: 100%; height: 80px; flex-direction: row; padding-top: 0; bottom: 0; top: auto; border-right: none; border-left: none; border-top: 3px solid var(--secondary); justify-content: space-around; }
             .nav-container-right { display: none; } 
@@ -155,21 +182,22 @@
             .nav-item { padding: 10px 0; font-size: 0; margin: 0; }
             .nav-item img { width: 30px; height: 30px; margin-bottom: 0; }
             .page-wrapper { padding: 10px; } .container { padding: 15px; }
-            h1 { font-size: 1.8rem; }
-            .sui-and-wheel-section { flex-direction: column; } /* Stack Sui and wheel on smaller screens */
-            .sui-gif-container { margin-bottom: 15px; width: 100px; height: 100px; }
-            #wheelContainer { width: 280px; height: 280px; } 
+            header { font-size: 1.8em; padding: 15px; }
+            .anime-page-title { font-size: 1.8rem; } 
+            .sui-gif-container { width: 100px; height: 100px; }
+            #wheelContainer { width: 250px; height: 250px; } 
             .wheel-mode-selector { flex-direction: column; gap: 8px; }
             .wheel-mode-btn { width: 70%; margin: 0 auto; font-size: 0.85em; padding: 8px 15px;}
             .add-content-buttons { flex-direction: column; gap: 10px; }
             .admin-action-btn { width: 70%; margin: 0 auto; font-size: 0.9em; padding: 8px 18px;}
             .bow {display:none;}
         }
-         @media (max-width: 480px) { /* Further adjustments for small phones */
+         @media (max-width: 480px) {
             .page-wrapper { padding: 5px;} .container {padding:10px;}
-            h1 { font-size: 1.6rem; }
+            header { font-size: 1.5em; }
+            .anime-page-title { font-size: 1.6rem; }
             .sui-gif-container { width: 80px; height: 80px; }
-            #wheelContainer { width: 220px; height: 220px; }
+            #wheelContainer { width: 200px; height: 200px; }
             #wheelResult { font-size: 1.1em; }
             .modal-content { padding: 15px; }
             .modal-content h3 { font-size: 1.3rem; }
@@ -192,49 +220,44 @@
     <div class="page-wrapper">
         <header>
             Our Anime Journey 🌸
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-left">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow header-bow-right">
         </header>
 
-        <main class="container">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tl">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-tr">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-bl">
-            <img src="https://i.imgur.com/tA7aPg4.png" class="bow main-bow-br">
+        <div class="main-content-area">
+            <div class="feature-wrapper"> <!-- Wrapper for all anime features -->
+                <h1 class="anime-page-title">Sui's Anime Roulette!</h1>
+                <p class="anime-intro-text">Let our favorite slime help us pick our next adventure!</p>
 
-            <h1 class="anime-page-title">Sui's Anime Roulette!</h1>
-            <p class="anime-intro-text">Let our favorite slime help us pick our next adventure!</p>
-
-            <div class="sui-and-wheel-section">
-                <div class="sui-gif-container">
-                    <img src="https://i.imgur.com/XE9Jilo.gif" alt="Sui the Slime GIF">
-                </div>
-                <div class="wheel-controls-container">
-                    <div id="wheelContainer">
-                        <canvas id="interactiveWheelCanvas" width="300" height="300"></canvas>
-                        <div id="wheelPointer"></div>
+                <div class="sui-and-wheel-section">
+                    <div class="sui-gif-container">
+                        <img src="https://i.imgur.com/XE9Jilo.gif" alt="Sui the Slime GIF">
                     </div>
-                    <button id="spinWheelBtn" disabled>Spin for a <span id="spinBtnText">Challenge</span>!</button>
-                    <div id="wheelResult">Loading data...</div>
+                    <div class="wheel-controls-container">
+                        <div id="wheelContainer">
+                            <canvas id="interactiveWheelCanvas" width="300" height="300"></canvas>
+                            <div id="wheelPointer"></div>
+                        </div>
+                        <button id="spinWheelBtn" disabled>Spin for a <span id="spinBtnText">Challenge</span>!</button>
+                        <div id="wheelResult">Loading data...</div>
+                    </div>
                 </div>
-            </div>
-            
-            <div id="challengeDescriptionDisplay"></div>
-            <div id="suiCommentDisplay"></div>
-            
-            <div class="wheel-mode-selector">
-                <button id="challengeModeBtn" class="wheel-mode-btn active">Challenge Roulette</button>
-                <button id="seriesModeBtn" class="wheel-mode-btn">Anime Series Roulette</button>
-            </div>
-            
-            <div class="add-content-buttons">
-                <button id="showAddChallengeFormBtn" class="admin-action-btn"><i class="fas fa-plus-circle"></i> Add New Challenge</button>
-                <button id="showAddAnimeFormBtn" class="admin-action-btn"><i class="fas fa-film"></i> Add New Anime to List</button>
-            </div>
-            <div class="loading-indicator" id="loadingIndicator" style="display: none;">Loading...</div>
+                
+                <div id="challengeDescriptionDisplay" style="width:100%; max-width: 450px; margin: 10px auto;"></div>
+                <div id="suiCommentDisplay" style="width:100%; max-width: 450px; margin: 10px auto;"></div>
+                
+                <div class="wheel-mode-selector">
+                    <button id="challengeModeBtn" class="wheel-mode-btn active">Challenge Roulette</button>
+                    <button id="seriesModeBtn" class="wheel-mode-btn">Anime Series Roulette</button>
+                </div>
+                
+                <div class="add-content-buttons">
+                    <button id="showAddChallengeFormBtn" class="admin-action-btn"><i class="fas fa-plus-circle"></i> Add New Challenge</button>
+                    <button id="showAddAnimeFormBtn" class="admin-action-btn"><i class="fas fa-film"></i> Add New Anime to List</button>
+                </div>
+                <div class="loading-indicator" id="loadingIndicator" style="display: none;">Loading...</div>
 
-        </main>
-    </div>
+            </div> <!-- End of feature-wrapper -->
+        </div> <!-- End of main-content-area -->
+    </div> <!-- End of page-wrapper -->
 
     <!-- Add Challenge Modal -->
     <div id="addChallengeModal" class="modal">
@@ -269,7 +292,7 @@
     <div class="nav-container-right">
         <a href="slimegame.html" class="nav-item slimegame"> <img src="https://i.imgur.com/yFzLbfM.png" alt="Slime Game Icon"> Slime Game </a>
         <a href="anime.html" class="nav-item anime active"> 
-            <img src="https://i.imgur.com/7zP0YwP.png" alt="Anime Journey Icon"> <!-- Your Placeholder Anime Icon -->
+            <img src="https://i.imgur.com/7zP0YwP.png" alt="Anime Journey Icon"> <!-- Placeholder Anime Icon -->
             Anime Journey
         </a>
     </div>
@@ -406,7 +429,8 @@
                     }
                     clippedText = t + (t.length < text.length ? ".." : "");
                 }
-                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.textAlign = 'center'; 
+                ctx.textBaseline = 'middle';
                 ctx.fillText(clippedText, 0, 0);
                 ctx.restore();
             }
@@ -573,23 +597,9 @@
             allNavItems.forEach(item => {
                 item.classList.remove('active');
                 if (item.getAttribute('href') === path) { 
-                    if (path === "anime.html" && item.closest('.nav-container-right') && item.classList.contains('anime')) {
-                         item.classList.add('active');
-                    } else if (path !== "anime.html") { 
-                        item.classList.add('active');
-                    }
+                    item.classList.add('active');
                 }
             });
-            if (path === "anime.html") {
-                const animeLinkRight = document.querySelector('.nav-container-right .nav-item.anime');
-                if (animeLinkRight && !animeLinkRight.classList.contains('active')) animeLinkRight.classList.add('active');
-                // Deactivate other links in right nav if anime.html is active
-                rightNavItems.forEach(item => {
-                    if (!item.classList.contains('anime') && item.classList.contains('active')) {
-                        item.classList.remove('active');
-                    }
-                });
-            }
         }
 
         window.onload = function() {
